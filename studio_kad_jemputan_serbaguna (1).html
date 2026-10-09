@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penjana Kad Jemputan Digital Serbaguna | Digital Event Card Studio</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fbf8ee',
+              100: '#f5efd5',
+              500: '#c59b27',
+              600: '#b8860b',
+              700: '#8c6506',
+              900: '#231802',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Cormorant Garamond"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar for Builder */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(184,134,11,0.3); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(184,134,11,0.6); }
+
+    /* Phone Mockup Frame */
+    .phone-mockup {
+      width: 380px;
+      height: 750px;
+      border: 12px solid #1e293b;
+      border-radius: 46px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 2px #334155;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 24px;
+      background: #1e293b;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .phone-speaker { width: 44px; height: 4px; background: #334155; border-radius: 2px; }
+    .phone-camera { width: 8px; height: 8px; background: #0f172a; border-radius: 50%; border: 1.5px solid #334155; }
+
+    /* Hide tab content by default */
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div id="headerIcon" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-300 flex items-center justify-center text-slate-950 font-bold text-xl shadow-lg shadow-brand-500/20">
+        💌
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
+          Studio Kad Jemputan Digital
+          <span class="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-brand-500/15 text-brand-500 border border-brand-500/30">Serbaguna V3.0</span>
+        </h1>
+        <p class="text-xs text-slate-400">Kahwin, Persaraan, Hari Jadi, Aqiqah, Doa Selamat & Apresiasi</p>
+      </div>
+    </div>
+
+    <!-- Top Action Buttons -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button onclick="salinKodHTML()" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+        <span>📋</span> <span class="hidden sm:inline">Salin Kod HTML</span><span class="sm:hidden">Salin</span>
+      </button>
+
+      <button onclick="muatTurunHTML()" type="button" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-gradient-to-r from-brand-600 to-amber-500 hover:from-brand-500 hover:to-amber-400 text-slate-950 shadow-md shadow-brand-500/25 transition transform active:scale-95">
+        <span>💾</span> <span>Muat Turun .html</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden">
+    
+    <!-- LEFT PANEL: Editor & Form Controls (7 cols on desktop) -->
+    <div class="lg:col-span-7 flex flex-col border-r border-slate-800 bg-slate-900/40 h-full overflow-hidden">
+      
+      <!-- Selector Jenis Majlis Global -->
+      <div class="p-3.5 bg-slate-900/90 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-amber-400">✨ Jenis Majlis:</span>
+          <select id="selectJenisMajlis" onchange="tukarJenisMajlis(this.value)" class="text-xs font-medium bg-slate-950 border border-amber-500/40 rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-amber-400">
+            <option value="kahwin">💍 Majlis Perkahwinan / Walimatulurus</option>
+            <option value="persaraan">🎓 Majlis Persaraan & Jasamu Dikenang</option>
+            <option value="harijadi">🎂 Majlis Hari Jadi / Ulang Tahun</option>
+            <option value="aqiqah">👶 Majlis Aqiqah, Kesyukuran & Doa Selamat</option>
+            <option value="apresiasi">🏆 Majlis Apresiasi / Makan Malam / Reunion</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-[11px] text-slate-400 cursor-pointer flex items-center gap-1.5">
+            <input type="checkbox" id="checkDuaPenama" onchange="toggleModPenama()" checked class="rounded border-slate-700 bg-slate-900 text-brand-500">
+            <span>Guna 2 Penama (cth: Pasangan)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Stepper / Category Navigation Tabs -->
+      <div class="flex items-center gap-1 border-b border-slate-800 px-4 py-2.5 overflow-x-auto bg-slate-950/60 no-scrollbar">
+        <button onclick="tukarTab('pengantin')" id="tabBtn-pengantin" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition bg-brand-500/20 text-brand-500 border border-brand-500/30">
+          🎉 Butiran & Yang Diraikan
+        </button>
+        <button onclick="tukarTab('acara')" id="tabBtn-acara" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          📅 Tarikh & Tempat
+        </button>
+        <button onclick="tukarTab('aturcara')" id="tabBtn-aturcara" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          🕌 Aturcara Majlis
+        </button>
+        <button onclick="tukarTab('kenalan')" id="tabBtn-kenalan" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          📞 Hubungi / RSVP
+        </button>
+        <button onclick="tukarTab('rekaan')" id="tabBtn-rekaan" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          🎨 Tema & Lagu
+        </button>
+      </div>
+
+      <!-- Scrollable Form Container -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: MAKLUMAT YANG DIRAIKAN / MAJLIS     -->
+        <!-- ========================================== -->
+        <div id="tab-pengantin" class="tab-pane active space-y-5">
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">Tajuk Majlis & Teks Utama</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Tajuk / Subtitle Majlis</label>
+                <input type="text" id="inTajukMajlis" value="Walimatulurus / Raikan Cinta" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Ungkapan Pembuka / Doa Atas</label>
+                <input type="text" id="inUngkapanAtas" value="بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Mod 1: DUA PENAMA (Untuk Kahwin/Pasangan) -->
+          <div id="sectionDuaPenama" class="space-y-4">
+            <!-- Penama 1 -->
+            <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+              <div class="flex items-center gap-2">
+                <span id="labelIconP" class="w-6 h-6 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-xs">👰</span>
+                <h3 id="labelTajukP" class="text-sm font-semibold text-slate-200">Pengantin Perempuan / Pihak Pertama</h3>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Nama Panggilan (Cover)</label>
+                  <input type="text" id="inNamaP" value="Syazwani" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Nama Penuh / Bin / Binti</label>
+                  <input type="text" id="inSubP" value="binti Abdullah" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+                </div>
+              </div>
+            </div>
+
+            <!-- Penama 2 -->
+            <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+              <div class="flex items-center gap-2">
+                <span id="labelIconL" class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs">🤵</span>
+                <h3 id="labelTajukL" class="text-sm font-semibold text-slate-200">Pengantin Lelaki / Pihak Kedua</h3>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Nama Panggilan (Cover)</label>
+                  <input type="text" id="inNamaL" value="Hassan" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Nama Penuh / Bin / Binti</label>
+                  <input type="text" id="inSubL" value="bin Ibrahim" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mod 2: SATU PENAMA (Untuk Persaraan, Hari Jadi, Aqiqah, Apresiasi) -->
+          <div id="sectionSatuPenama" class="hidden p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <div class="flex items-center gap-2">
+              <span id="labelIconSolo" class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">🌟</span>
+              <h3 id="labelTajukSolo" class="text-sm font-semibold text-slate-200">Individu / Yang Diraikan</h3>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Nama Utama / Panggilan (Cover)</label>
+                <input type="text" id="inNamaSolo" value="Cikgu Noraini" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Gelaran / Jawatan / Keterangan</label>
+                <input type="text" id="inSubSolo" value="Penolong Kanan Pentadbiran (Bersara)" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Nama Penuh Rasmi / Penganjur</label>
+              <input type="text" id="inNamaPenuhSolo" value="Puan Hajah Noraini binti Mohd Salleh" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+          </div>
+
+          <!-- Teks Kata Jemputan -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Teks Kata Aluan Jemputan</label>
+            <textarea id="inTeksJemputan" rows="3" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput Tuan / Puan / Encik / Cik sekeluarga hadir menyerikan majlis perkahwinan anakanda kami:</textarea>
+          </div>
+
+          <!-- Teks Petikan / Mutiara Kata / Footer Note -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Petikan Doa / Pantun / Mutiara Kata (Footer)</label>
+            <textarea id="inTeksFooter" rows="2" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri." — Surah Ar-Rum: 21</textarea>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: TARIKH, MASA & TEMPAT               -->
+        <!-- ========================================== -->
+        <div id="tab-acara" class="tab-pane space-y-5">
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">📅 Tarikh & Jamuan</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Paparan Tarikh</label>
+                <input type="text" id="inTarikhPapar" value="15 November 2026" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Hari Majlis</label>
+                <input type="text" id="inHariMajlis" value="Sabtu" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Tarikh Hijrah (Pilihan)</label>
+                <input type="text" id="inTarikhHijrah" value="25 Jamadilawal 1448H" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Masa Mula</label>
+                <input type="text" id="inMasaMula" value="11:00 pagi" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Masa Tamat</label>
+                <input type="text" id="inMasaTamat" value="4:00 petang" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-amber-300 mb-1">Target Countdown Timer (Format: YYYY-MM-DDTHH:mm:ss)</label>
+              <input type="datetime-local" id="inCountdownTarget" value="2026-11-15T11:00" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Digunakan untuk jam undur detik (countdown) automatik.</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">📍 Lokasi & Peta Navigasi</h3>
+            
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Nama Tempat / Dewan</label>
+              <input type="text" id="inNamaTempat" value="Dewan Sri Kenanga, Kelab Golf Sultan Abdul Halim" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Alamat Penuh</label>
+              <textarea id="inAlamatTempat" rows="2" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">Jalan Kenanga Utama, Seksyen 4, 06000 Jitra, Kedah Darul Aman</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Navigasi Waze</label>
+                <input type="url" id="inLinkWaze" value="https://www.waze.com/ul?ll=6.2699,100.4186&navigate=yes" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Google Maps</label>
+                <input type="url" id="inLinkGmaps" value="https://maps.google.com" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Google Maps Embed URL (iframe src)</label>
+              <input type="text" id="inMapsEmbed" value="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966!2d100.4186!3d6.2699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2smy!4v1" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Buka Google Maps > Tekan Share > Embed a map > Salin nilai di dalam `src="..."` sahaja.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: ATURCARA MAJLIS                     -->
+        <!-- ========================================== -->
+        <div id="tab-aturcara" class="tab-pane space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-semibold text-brand-500">🕌 Jadual Aturcara Majlis</h3>
+              <p class="text-xs text-slate-400">Tambah, ubahsuai atau padam tentatif majlis.</p>
+            </div>
+            <button onclick="tambahItemAturcara()" type="button" class="px-2.5 py-1.5 rounded-lg bg-brand-500/20 text-brand-400 hover:bg-brand-500/30 text-xs font-medium border border-brand-500/40 flex items-center gap-1">
+              <span>+</span> Tambah Aturcara
+            </button>
+          </div>
+
+          <div id="senaraiAturcaraInputs" class="space-y-3">
+            <!-- Dynamic items injected via JS -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: HUBUNGI KELUARGA & RSVP             -->
+        <!-- ========================================== -->
+        <div id="tab-kenalan" class="tab-pane space-y-5">
+          <!-- Hubungi / WhatsApp -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-4">
+            <h3 class="text-sm font-semibold text-brand-500">📞 Hubungi Wakil Keluarga</h3>
+
+            <!-- Pihak Perempuan -->
+            <div class="space-y-2 border-b border-slate-700/60 pb-3">
+              <span class="text-xs font-semibold text-pink-400">👰 Wakil Pihak Perempuan</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="inPihakPNama" placeholder="Nama (cth: Ayah Pengantin)" value="Encik Abdullah" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <input type="text" id="inPihakPLabel" placeholder="Panggilan/Gelaran" value="Bapa Pengantin" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <input type="text" id="inPihakPPhone" placeholder="Nombor WhatsApp (cth: 60123456789)" value="60123456789" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+              </div>
+            </div>
+
+            <!-- Pihak Lelaki -->
+            <div class="space-y-2">
+              <span class="text-xs font-semibold text-blue-400">🤵 Wakil Pihak Lelaki</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="inPihakLNama" placeholder="Nama (cth: Ayah Pengantin)" value="Encik Ibrahim" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <input type="text" id="inPihakLLabel" placeholder="Panggilan/Gelaran" value="Bapa Pengantin" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <input type="text" id="inPihakLPhone" placeholder="Nombor WhatsApp (cth: 60198765432)" value="60198765432" class="text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+              </div>
+            </div>
+          </div>
+
+          <!-- RSVP & Google Sheets Integration -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">💌 Tetapan RSVP & Google Sheets</h3>
+            
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Tarikh Akhir Pengesahan (Deadline)</label>
+              <input type="text" id="inRsvpDeadline" value="5 November 2026" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-amber-300 mb-1">URL Google Apps Script (Web App Exec URL)</label>
+              <input type="url" id="inRsvpScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" value="" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
+                * Masukkan Web App URL dari Google Apps Script jika mahu data RSVP terus masuk ke Google Sheets. Jika dibiarkan kosong, butang RSVP kad tetap akan memberi feedback respons kepada tetamu.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: TEMA REKAAN, CORAK & LAGU           -->
+        <!-- ========================================== -->
+        <div id="tab-rekaan" class="tab-pane space-y-5">
+          <!-- Preset Palet Warna -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">🎨 Pilihan Warna Tema</h3>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <button type="button" onclick="pilihTemaPreset('gold')" class="p-2.5 rounded-lg border border-amber-500/40 bg-amber-950/30 text-left hover:border-amber-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#b8860b]"></span>
+                <span class="text-xs font-medium text-amber-200">Emas Diraja</span>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('rose')" class="p-2.5 rounded-lg border border-pink-500/40 bg-pink-950/30 text-left hover:border-pink-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#c97a7e]"></span>
+                <span class="text-xs font-medium text-pink-200">Ros Emas</span>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('emerald')" class="p-2.5 rounded-lg border border-emerald-500/40 bg-emerald-950/30 text-left hover:border-emerald-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#0f766e]"></span>
+                <span class="text-xs font-medium text-emerald-200">Zamrud Hijau</span>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('navy')" class="p-2.5 rounded-lg border border-indigo-500/40 bg-indigo-950/30 text-left hover:border-indigo-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#1e3a8a]"></span>
+                <span class="text-xs font-medium text-indigo-200">Biru Nilam</span>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('sage')" class="p-2.5 rounded-lg border border-teal-500/40 bg-teal-950/30 text-left hover:border-teal-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#52796f]"></span>
+                <span class="text-xs font-medium text-teal-200">Sage Minimalis</span>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('purple')" class="p-2.5 rounded-lg border border-purple-500/40 bg-purple-950/30 text-left hover:border-purple-400 transition flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-[#7c3aed]"></span>
+                <span class="text-xs font-medium text-purple-200">Ungu Anggun</span>
+              </button>
+            </div>
+
+            <!-- Custom Hex Input -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Warna Utama (Primary)</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="inColorPrimary" value="#b8860b" class="w-8 h-8 rounded border-0 bg-transparent cursor-pointer">
+                  <input type="text" id="inColorPrimaryHex" value="#b8860b" class="flex-1 text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Warna Sentuhan (Accent)</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="inColorAccent" value="#c9a84c" class="w-8 h-8 rounded border-0 bg-transparent cursor-pointer">
+                  <input type="text" id="inColorAccentHex" value="#c9a84c" class="flex-1 text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Corak Latar Belakang (Pattern) -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">✨ Corak Latar Belakang</h3>
+            
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer">
+                <input type="radio" name="bgPattern" value="islamic" checked class="peer sr-only">
+                <div class="p-2 text-center rounded-lg border border-slate-700 bg-slate-900 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 transition">
+                  <span class="block text-base mb-1">🕌</span>
+                  <span class="text-[11px] text-slate-300">Geometrik Klasik</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="bgPattern" value="floral" class="peer sr-only">
+                <div class="p-2 text-center rounded-lg border border-slate-700 bg-slate-900 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 transition">
+                  <span class="block text-base mb-1">🌿</span>
+                  <span class="text-[11px] text-slate-300">Bunga Motif</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="radio" name="bgPattern" value="stars" class="peer sr-only">
+                <div class="p-2 text-center rounded-lg border border-slate-700 bg-slate-900 peer-checked:border-brand-500 peer-checked:bg-brand-500/10 transition">
+                  <span class="block text-base mb-1">✨</span>
+                  <span class="text-[11px] text-slate-300">Bintang & Kilauan</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="pt-2">
+              <label class="block text-xs font-medium text-slate-400 mb-1">Gambar Latar Belakang Kustom (URL)</label>
+              <input type="text" id="inCustomBgUrl" placeholder="https://contoh.com/gambar-corak.jpg (Pilihan)" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Jika diisi, gambar ini akan dijadikan background cover kad jemputan.</span>
+            </div>
+          </div>
+
+          <!-- Pilihan Lagu Latar Belakang Mengikut Tema Majlis -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-sm font-semibold text-brand-500">🎵 Lagu Latar Belakang (Pelbagai Acara)</h3>
+            
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Pilih Lagu Sesuai Mengikut Kategori</label>
+              <select id="selectLaguPreset" onchange="tukarLaguPreset(this.value)" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+                <optgroup label="💍 Perkahwinan & Pertunangan">
+                  <option value="https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3?filename=romantic-wedding-122477.mp3">Romantic Wedding Piano & Strings</option>
+                  <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitar-loop-f-91bpm-112187.mp3">Acoustic Guitar Gentle Warmth</option>
+                  <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=sweet-love-110029.mp3">Sweet Love Melodic</option>
+                </optgroup>
+                <optgroup label="🎓 Persaraan & Perpisahan (Gamelan / Keroncong / Nostalgia)">
+                  <option value="https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3c3a9df82.mp3?filename=traditional-asian-melody-125026.mp3">Alunan Gamelan & Serunai Tradisional Lembut</option>
+                  <option value="https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c39f15.mp3?filename=memories-piano-acoustic-nostalgia-7467.mp3">Nostalgia Jasamu Dikenang (Akustik Emosi)</option>
+                </optgroup>
+                <optgroup label="🎂 Hari Jadi & Ulang Tahun">
+                  <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=happy-birthday-celebration-acoustic-17684.mp3">Happy Birthday / Sanah Helwah Melodi Ceria</option>
+                  <option value="https://cdn.pixabay.com/download/audio/2022/08/02/audio_884b2c1248.mp3?filename=cheerful-party-acoustic-ukulele-116035.mp3">Ceria Santai & Kanak-kanak</option>
+                </optgroup>
+                <optgroup label="👶 Aqiqah, Kesyukuran & Doa Selamat">
+                  <option value="https://cdn.pixabay.com/download/audio/2023/04/24/audio_3d1ef0f324.mp3?filename=peaceful-oriental-lullaby-147363.mp3">Alunan Tenang Selawat / Dondang Sayang</option>
+                  <option value="https://cdn.pixabay.com/download/audio/2022/02/07/audio_d92634d026.mp3?filename=peaceful-garden-ambient-harp-19012.mp3">Petikan Harpa Kedamaian Rohani</option>
+                </optgroup>
+                <optgroup label="🏆 Apresiasi & Jamuan Korporat">
+                  <option value="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c322d7a960.mp3?filename=cinematic-inspiring-piano-orchestra-10940.mp3">Grand Cinematic Inspiring Orchestra</option>
+                </optgroup>
+                <option value="custom">🔗 Masukkan Pautan Fail MP3 Kustom Sendiri</option>
+              </select>
+            </div>
+
+            <div id="wrapperCustomMusic" class="hidden">
+              <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Terus Fail MP3 (.mp3 URL)</label>
+              <input type="url" id="inCustomMusicUrl" placeholder="https://domain-anda.com/lagu.mp3" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Pastikan pautan adalah direct link terus ke fail .mp3 yang boleh diakses orang awam.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Butang Kemas Kini Pratonton -->
+        <div class="pt-2">
+          <button onclick="kemaskiniPratonton()" type="button" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-brand-400 font-semibold text-xs border border-brand-500/30 flex items-center justify-center gap-2 shadow-sm transition">
+            <span>🔄</span> Kemas Kini Paparan Pratonton
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Live Phone Preview Simulator (5 cols on desktop) -->
+    <div class="lg:col-span-5 bg-slate-950 p-4 sm:p-8 flex flex-col items-center justify-center relative overflow-hidden">
+      
+      <!-- Top controls above device -->
+      <div class="w-full max-w-[380px] flex items-center justify-between mb-3 text-xs text-slate-400">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Pratonton Langsung Skrin Telefon
+        </span>
+        <button onclick="bukaPratontonTabBaharu()" type="button" class="hover:text-brand-400 transition flex items-center gap-1">
+          Buka Tab Penuh ↗
+        </button>
+      </div>
+
+      <!-- Smartphone Frame Container -->
+      <div class="phone-mockup">
+        <!-- Phone Top Notch -->
+        <div class="phone-notch">
+          <div class="phone-speaker"></div>
+          <div class="phone-camera"></div>
+        </div>
+
+        <!-- Simulated Screen iframe -->
+        <iframe id="previewIframe" class="w-full h-full border-0 bg-[#0f0a02]" title="Kad Kahwin Preview"></iframe>
+      </div>
+
+      <p class="text-[11px] text-slate-500 text-center mt-3 max-w-xs">
+        Borang di sebelah kiri menyunting kod kad kahwin secara langsung. Tekan "Kemas Kini" atau buat sebarang perubahan.
+      </p>
+    </div>
+
+  </main>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl shadow-2xl bg-slate-800 text-white text-xs border border-slate-700 flex items-center gap-2">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Maklumat berjaya dikemas kini!</span>
+  </div>
+
+  <script>
+    /* ============================================================ */
+    /* DATA PRESET PELBAGAI MAJLIS                                  */
+    /* ============================================================ */
+    const PRESET_MAJLIS = {
+      kahwin: {
+        duaPenama: true,
+        headerIcon: "💍",
+        tajuk: "Walimatulurus / Raikan Cinta",
+        ungkapanAtas: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+        teksAluan: "Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput Tuan / Puan / Encik / Cik sekeluarga hadir menyerikan majlis perkahwinan anakanda kami:",
+        teksFooter: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri." — Surah Ar-Rum: 21',
+        namaP: "Syazwani",
+        subP: "binti Abdullah",
+        namaL: "Hassan",
+        subL: "bin Ibrahim",
+        namaSolo: "",
+        subSolo: "",
+        namaPenuhSolo: "",
+        aturcara: [
+          { masa: "11:00 pagi", emoji: "🎊", nama: "Ketibaan Para Tetamu", keterangan: "Pendaftaran & jemputan menjamu selera" },
+          { masa: "12:00 tgh", emoji: "👰", nama: "Perarakan Masuk Pengantin", keterangan: "Upacara bersanding di pelamin" },
+          { masa: "12:45 tgh", emoji: "🍽️", nama: "Jamuan Makan Beradab", keterangan: "Sesi memotong kek pengantin" },
+          { masa: "2:00 ptg", emoji: "📸", nama: "Sesi Bergambar & Ramah Mesra", keterangan: "Bersama keluarga dan sahabat handai" },
+          { masa: "4:00 ptg", emoji: "🙏", nama: "Majlis Bersurai", keterangan: "Ucapan terima kasih daripada tuan rumah" }
+        ],
+        tema: "gold",
+        lagu: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3?filename=romantic-wedding-122477.mp3"
+      },
+      persaraan: {
+        duaPenama: false,
+        headerIcon: "🎓",
+        tajuk: "Majlis Sanjungan Budi, Lambaian Kasih",
+        ungkapanAtas: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+        teksAluan: "Dengan sukacitanya kami menjemput seluruh warga kerja, sahabat taulan dan kenalan bagi meraikan persaraan insan yang amat kami kasihi:",
+        teksFooter: '"Tuai padi antara masak, esok jangan layu-layuan. Intai kami antara nampak, esok jangan rindu-rinduan." — Terima Kasih Atas Segala Jasa',
+        namaP: "",
+        subP: "",
+        namaL: "",
+        subL: "",
+        namaSolo: "Cikgu Noraini",
+        subSolo: "Penolong Kanan Pentadbiran (Bersara)",
+        namaPenuhSolo: "Puan Hajah Noraini binti Mohd Salleh",
+        aturcara: [
+          { masa: "11:30 pagi", emoji: "🚗", nama: "Ketibaan Tetamu & Yang Diraikan", keterangan: "Penyambutan dengan paluan kompang" },
+          { masa: "12:00 tgh", emoji: "🎙️", nama: "Ucapan Aluan & Tayangan Montaj", keterangan: "Sorotan kenangan sepanjang berkhidmat" },
+          { masa: "12:45 tgh", emoji: "🎤", nama: "Ucapan Yang Diraikan", keterangan: "Amanat dan ucapan perpisahan" },
+          { masa: "1:15 ptg", emoji: "🎁", nama: "Penyampaian Cenderahati & Jamuan", keterangan: "Menikmati juadah istimewa" },
+          { masa: "3:00 ptg", emoji: "💐", nama: "Lambaian Kasih & Bersurai", keterangan: "Sesi salam restu dan bergambar" }
+        ],
+        tema: "emerald",
+        lagu: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3c3a9df82.mp3?filename=traditional-asian-melody-125026.mp3"
+      },
+      harijadi: {
+        duaPenama: false,
+        headerIcon: "🎂",
+        tajuk: "Sambutan Hari Jadi & Sanah Helwah",
+        ungkapanAtas: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+        teksAluan: "Mari bersama kami memeriahkan majlis ulang tahun kelahiran dan meraikan hari yang penuh bermakna ini bagi:",
+        teksFooter: '"Barakallahu Fii Umrik. Semoga dipanjangkan umur, dimurahkan rezeki, sentiasa dalam lindungan serta rahmat Allah SWT."',
+        namaP: "",
+        subP: "",
+        namaL: "",
+        subL: "",
+        namaSolo: "Aisyah Humaira",
+        subSolo: "Ulang Tahun Kelahiran Ke-7",
+        namaPenuhSolo: "Aisyah Humaira binti Khairul Anuar",
+        aturcara: [
+          { masa: "2:30 ptg", emoji: "🎈", nama: "Ketibaan Tetamu & Rakan-Rakan", keterangan: "Pendaftaran & sesi permainan mini" },
+          { masa: "3:30 ptg", emoji: "🎂", nama: "Upacara Memotong Kek", keterangan: "Nyanyian lagu Sanah Helwah & doa selamat" },
+          { masa: "4:00 ptg", emoji: "🍕", nama: "Jamuan Selera Kanak-Kanak", keterangan: "Juadah istimewa & gula-gula" },
+          { masa: "5:00 ptg", emoji: "🎁", nama: "Agihan Goodies & Bersurai", keterangan: "Terima kasih atas kehadiran & doa" }
+        ],
+        tema: "rose",
+        lagu: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=happy-birthday-celebration-acoustic-17684.mp3"
+      },
+      aqiqah: {
+        duaPenama: false,
+        headerIcon: "👶",
+        tajuk: "Majlis Aqiqah, Cukur Jambul & Doa Selamat",
+        ungkapanAtas: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+        teksAluan: "Dengan penuh rasa kesyukuran ke hadrat Ilahi, kami sekeluarga menjemput para tetamu hadir ke majlis aqiqah permata hati kami:",
+        teksFooter: '"Semoga anakanda membesar menjadi anak yang soleh/solehah, berbakti kepada kedua ibu bapa serta berakhlak mulia."',
+        namaP: "",
+        subP: "",
+        namaL: "",
+        subL: "",
+        namaSolo: "Muhammad Rayyan",
+        subSolo: "Putera Tercinta",
+        namaPenuhSolo: "Muhammad Rayyan bin Muhammad Farhan",
+        aturcara: [
+          { masa: "10:30 pagi", emoji: "🕌", nama: "Majlis Bacaan Tahlil & Selawat", keterangan: "Dipimpin oleh imam dan jemaah surau" },
+          { masa: "11:30 pagi", emoji: "✂️", nama: "Upacara Berzanji & Cukur Jambul", keterangan: "Doa keberkatan untuk bayi" },
+          { masa: "12:30 tgh", emoji: "🍛", nama: "Jamuan Makan Tengah Hari", keterangan: "Hidangan gulai kawah dan manisan" },
+          { masa: "3:30 ptg", emoji: "🤲", nama: "Doa Penutup & Bersurai", keterangan: "Jutaan terima kasih atas doa anda" }
+        ],
+        tema: "sage",
+        lagu: "https://cdn.pixabay.com/download/audio/2023/04/24/audio_3d1ef0f324.mp3?filename=peaceful-oriental-lullaby-147363.mp3"
+      },
+      apresiasi: {
+        duaPenama: false,
+        headerIcon: "🏆",
+        tajuk: "Malam Apresiasi & Anugerah Kecemerlangan",
+        ungkapanAtas: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+        teksAluan: "Pihak pengurusan berbesar hati menjemput Tuan/Puan ke majlis meraikan kejayaan, dedikasi dan kerjasama cemerlang sepanjang tahun ini:",
+        teksFooter: '"Kecemerlangan adalah hasil daripada komitmen, usaha berterusan dan semangat kerjasama yang tidak berbelah bahagi."',
+        namaP: "",
+        subP: "",
+        namaL: "",
+        subL: "",
+        namaSolo: "Gala Gemilang 2026",
+        subSolo: "Malam Apresiasi Tahunan Warga Korporat",
+        namaPenuhSolo: "Kelab Rekreasi & Kebajikan Synergy",
+        aturcara: [
+          { masa: "7:30 mlm", emoji: "📸", nama: "Ketibaan Para Tetamu & Red Carpet", keterangan: "Sesi fotografi & koktel pembuka" },
+          { masa: "8:15 mlm", emoji: "🎤", nama: "Ucapan Perasmian & Tayangan Video", keterangan: "Amanat pengerusi dan sorotan kejayaan" },
+          { masa: "8:45 mlm", emoji: "🍽️", nama: "Jamuan Makan Malam Berhidang", keterangan: "Persembahan muzik akustik live" },
+          { masa: "9:30 mlm", emoji: "🏆", nama: "Penyampaian Anugerah Khas & Cabutan", keterangan: "Pengiktirafan staf terbaik tahunan" },
+          { masa: "11:00 mlm", emoji: "🎉", nama: "Sesi Bergambar & Bersurai", keterangan: "Penutup malam gilang gemilang" }
+        ],
+        tema: "navy",
+        lagu: "https://cdn.pixabay.com/download/audio/2022/03/24/audio_c322d7a960.mp3?filename=cinematic-inspiring-piano-orchestra-10940.mp3"
+      }
+    };
+
+    /* Palet Tema Preset */
+    const TEMA_PRESET = {
+      gold: { primary: "#b8860b", accent: "#c9a84c" },
+      rose: { primary: "#c97a7e", accent: "#e5a9ad" },
+      emerald: { primary: "#0f766e", accent: "#2dd4bf" },
+      navy: { primary: "#1d4ed8", accent: "#60a5fa" },
+      sage: { primary: "#52796f", accent: "#84a98c" },
+      purple: { primary: "#7c3aed", accent: "#c084fc" }
+    };
+
+    /* Data Aturcara Aktif */
+    let dataAturcara = JSON.parse(JSON.stringify(PRESET_MAJLIS.kahwin.aturcara));
+
+    /* ============================================================ */
+    /* FUNGSI NAVIGASI TAB & MOD PENAMA                             */
+    /* ============================================================ */
+    function tukarTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-500/20', 'text-brand-500', 'border', 'border-brand-500/30');
+        btn.classList.add('text-slate-400');
+      });
+
+      const selectedTab = document.getElementById('tab-' + tabId);
+      const selectedBtn = document.getElementById('tabBtn-' + tabId);
+      if (selectedTab && selectedBtn) {
+        selectedTab.classList.add('active');
+        selectedBtn.classList.remove('text-slate-400');
+        selectedBtn.classList.add('bg-brand-500/20', 'text-brand-500', 'border', 'border-brand-500/30');
+      }
+    }
+
+    function toggleModPenama() {
+      const isDua = document.getElementById('checkDuaPenama').checked;
+      const secDua = document.getElementById('sectionDuaPenama');
+      const secSatu = document.getElementById('sectionSatuPenama');
+
+      if (isDua) {
+        secDua.classList.remove('hidden');
+        secSatu.classList.add('hidden');
+      } else {
+        secDua.classList.add('hidden');
+        secSatu.classList.remove('hidden');
+      }
+      kemaskiniPratonton();
+    }
+
+    function tukarJenisMajlis(jenis) {
+      const preset = PRESET_MAJLIS[jenis];
+      if (!preset) return;
+
+      document.getElementById('headerIcon').textContent = preset.headerIcon;
+      document.getElementById('inTajukMajlis').value = preset.tajuk;
+      document.getElementById('inUngkapanAtas').value = preset.ungkapanAtas;
+      document.getElementById('inTeksJemputan').value = preset.teksAluan;
+      document.getElementById('inTeksFooter').value = preset.teksFooter;
+
+      // Mode 1 penama vs 2 penama
+      document.getElementById('checkDuaPenama').checked = preset.duaPenama;
+      if (preset.duaPenama) {
+        document.getElementById('inNamaP').value = preset.namaP;
+        document.getElementById('inSubP').value = preset.subP;
+        document.getElementById('inNamaL').value = preset.namaL;
+        document.getElementById('inSubL').value = preset.subL;
+      } else {
+        document.getElementById('inNamaSolo').value = preset.namaSolo;
+        document.getElementById('inSubSolo').value = preset.subSolo;
+        document.getElementById('inNamaPenuhSolo').value = preset.namaPenuhSolo;
+      }
+      toggleModPenama();
+
+      // Salin aturcara
+      dataAturcara = JSON.parse(JSON.stringify(preset.aturcara));
+      renderAturcaraInputs();
+
+      // Pilih tema
+      pilihTemaPreset(preset.tema);
+
+      // Pilih lagu
+      document.getElementById('selectLaguPreset').value = preset.lagu;
+      tukarLaguPreset(preset.lagu);
+
+      kemaskiniPratonton();
+      tunjukToast(`Templat ditukar: ${preset.tajuk}!`);
+    }
+
+    /* ============================================================ */
+    /* PENGURUSAN ATURCARA & TEMA WARNA                             */
+    /* ============================================================ */
+    function renderAturcaraInputs() {
+      const container = document.getElementById('senaraiAturcaraInputs');
+      container.innerHTML = dataAturcara.map((item, index) => `
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <input type="text" value="${item.emoji}" onchange="updateAturcara(${index}, 'emoji', this.value)" class="w-10 text-center text-xs rounded bg-slate-800 border border-slate-700 py-1.5 text-white" title="Emoji">
+            <input type="text" value="${item.masa}" onchange="updateAturcara(${index}, 'masa', this.value)" class="w-28 text-xs rounded bg-slate-800 border border-slate-700 px-2 py-1.5 text-white" placeholder="Masa">
+          </div>
+          <div class="flex-1 w-full sm:w-auto grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input type="text" value="${item.nama}" onchange="updateAturcara(${index}, 'nama', this.value)" class="text-xs rounded bg-slate-800 border border-slate-700 px-2 py-1.5 text-white" placeholder="Tajuk Aktiviti">
+            <input type="text" value="${item.keterangan}" onchange="updateAturcara(${index}, 'keterangan', this.value)" class="text-xs rounded bg-slate-800 border border-slate-700 px-2 py-1.5 text-slate-300" placeholder="Keterangan">
+          </div>
+          <button type="button" onclick="padamAturcara(${index})" class="text-xs text-red-400 hover:text-red-300 p-1.5 rounded hover:bg-slate-800 ml-auto" title="Padam Baris">
+            ✕
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function updateAturcara(idx, field, val) {
+      if (dataAturcara[idx]) {
+        dataAturcara[idx][field] = val;
+        kemaskiniPratonton();
+      }
+    }
+
+    function tambahItemAturcara() {
+      dataAturcara.push({ masa: "3:00 ptg", emoji: "✨", nama: "Aktiviti Baharu", keterangan: "Keterangan aktiviti" });
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+    }
+
+    function padamAturcara(idx) {
+      if (dataAturcara.length <= 1) {
+        tunjukToast("⚠️ Minimum sekurang-kurangnya satu aturcara.", "warning");
+        return;
+      }
+      dataAturcara.splice(idx, 1);
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+    }
+
+    function pilihTemaPreset(namaTema) {
+      const tema = TEMA_PRESET[namaTema];
+      if (!tema) return;
+      document.getElementById('inColorPrimary').value = tema.primary;
+      document.getElementById('inColorPrimaryHex').value = tema.primary;
+      document.getElementById('inColorAccent').value = tema.accent;
+      document.getElementById('inColorAccentHex').value = tema.accent;
+      kemaskiniPratonton();
+    }
+
+    function tukarLaguPreset(val) {
+      const customWrap = document.getElementById('wrapperCustomMusic');
+      if (val === 'custom') {
+        customWrap.classList.remove('hidden');
+      } else {
+        customWrap.classList.add('hidden');
+      }
+      kemaskiniPratonton();
+    }
+
+    function tunjukToast(mesej, jenis = "success") {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.textContent = mesej;
+      toastIcon.textContent = jenis === "warning" ? "⚠️" : "✅";
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    /* ============================================================ */
+    /* PENJANA KOD HTML KAD JEMPUTAN (STANDALONE HTML OUTPUT)       */
+    /* ============================================================ */
+    function binaHTMLKadKahwin() {
+      const isDuaPenama = document.getElementById('checkDuaPenama').checked;
+      const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan Majlis';
+      const ungkapanAtas = document.getElementById('inUngkapanAtas').value.trim();
+      const teksJemputan = document.getElementById('inTeksJemputan').value.trim();
+      const teksFooter = document.getElementById('inTeksFooter').value.trim();
+
+      let namaCoverHTML = '';
+      let namaTengahHTML = '';
+      let fileTitle = '';
+
+      if (isDuaPenama) {
+        const namaP = document.getElementById('inNamaP').value.trim() || 'Syazwani';
+        const subP = document.getElementById('inSubP').value.trim() || 'binti Abdullah';
+        const namaL = document.getElementById('inNamaL').value.trim() || 'Hassan';
+        const subL = document.getElementById('inSubL').value.trim() || 'bin Ibrahim';
+
+        fileTitle = `${namaP} & ${namaL}`;
+        namaCoverHTML = `
+          <div class="couple-names">
+            <span class="pengantin-name">${namaP}</span>
+            <span class="pengantin-sub">${subP}</span>
+            <span class="ampersand">&amp;</span>
+            <span class="pengantin-name">${namaL}</span>
+            <span class="pengantin-sub">${subL}</span>
+          </div>
+        `;
+        namaTengahHTML = `
+          <div style="text-align:center; margin:16px 0;">
+            <span class="nama-besar">${namaP} &amp; ${namaL}</span>
+            <span style="font-family:var(--font-heading); font-size:12px; color:var(--color-primary); letter-spacing:2px; text-transform:uppercase;">~ ${tajuk} ~</span>
+          </div>
+        `;
+      } else {
+        const namaSolo = document.getElementById('inNamaSolo').value.trim() || 'Yang Diraikan';
+        const subSolo = document.getElementById('inSubSolo').value.trim() || '';
+        const namaPenuhSolo = document.getElementById('inNamaPenuhSolo').value.trim() || '';
+
+        fileTitle = namaSolo;
+        namaCoverHTML = `
+          <div class="couple-names">
+            <span class="pengantin-name" style="font-size:clamp(42px, 12vw, 68px);">${namaSolo}</span>
+            ${subSolo ? `<span class="pengantin-sub" style="letter-spacing:2px; font-size:14px; margin-top:8px;">${subSolo}</span>` : ''}
+          </div>
+        `;
+        namaTengahHTML = `
+          <div style="text-align:center; margin:16px 0;">
+            <span class="nama-besar">${namaSolo}</span>
+            ${namaPenuhSolo ? `<span style="font-family:var(--font-heading); font-size:15px; color:var(--color-text-light); display:block; margin-top:4px; font-weight:600;">${namaPenuhSolo}</span>` : ''}
+            <span style="font-family:var(--font-heading); font-size:12px; color:var(--color-primary); letter-spacing:2px; text-transform:uppercase; display:block; margin-top:6px;">~ ${tajuk} ~</span>
+          </div>
+        `;
+      }
+
+      const tarikhPapar = document.getElementById('inTarikhPapar').value.trim() || '15 November 2026';
+      const hariMajlis = document.getElementById('inHariMajlis').value.trim() || 'Sabtu';
+      const tarikhHijrah = document.getElementById('inTarikhHijrah').value.trim();
+      const masaMula = document.getElementById('inMasaMula').value.trim() || '11:00 pagi';
+      const masaTamat = document.getElementById('inMasaTamat').value.trim() || '4:00 petang';
+      const countdownTarget = document.getElementById('inCountdownTarget').value || '2026-11-15T11:00';
+
+      const namaTempat = document.getElementById('inNamaTempat').value.trim() || 'Dewan Serbaguna';
+      const alamatTempat = document.getElementById('inAlamatTempat').value.trim() || '';
+      const linkWaze = document.getElementById('inLinkWaze').value.trim() || '#';
+      const linkGmaps = document.getElementById('inLinkGmaps').value.trim() || '#';
+      const mapsEmbed = document.getElementById('inMapsEmbed').value.trim();
+
+      const pihakPNama = document.getElementById('inPihakPNama').value.trim();
+      const pihakPLabel = document.getElementById('inPihakPLabel').value.trim();
+      const pihakPPhone = document.getElementById('inPihakPPhone').value.trim();
+
+      const pihakLNama = document.getElementById('inPihakLNama').value.trim();
+      const pihakLLabel = document.getElementById('inPihakLLabel').value.trim();
+      const pihakLPhone = document.getElementById('inPihakLPhone').value.trim();
+
+      const rsvpDeadline = document.getElementById('inRsvpDeadline').value.trim() || '5 November 2026';
+      const rsvpScriptUrl = document.getElementById('inRsvpScriptUrl').value.trim();
+
+      const colPrimary = document.getElementById('inColorPrimaryHex').value.trim() || '#b8860b';
+      const colAccent = document.getElementById('inColorAccentHex').value.trim() || '#c9a84c';
+
+      const patternType = document.querySelector('input[name="bgPattern"]:checked')?.value || 'islamic';
+      const customBg = document.getElementById('inCustomBgUrl').value.trim();
+
+      let musicUrl = document.getElementById('selectLaguPreset').value;
+      if (musicUrl === 'custom') {
+        musicUrl = document.getElementById('inCustomMusicUrl').value.trim();
+      }
+
+      /* Background Pattern CSS */
+      let patternCSS = `
+        background-image: 
+          repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px),
+          repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px);
+      `;
+      if (patternType === 'floral') {
+        patternCSS = `
+          background-image: radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px), radial-gradient(rgba(255,255,255,0.04) 1.5px, transparent 1.5px);
+          background-size: 32px 32px;
+          background-position: 0 0, 16px 16px;
+        `;
+      } else if (patternType === 'stars') {
+        patternCSS = `
+          background-image: radial-gradient(${colAccent}25 1px, transparent 1px);
+          background-size: 24px 24px;
+        `;
+      }
+
+      /* Aturcara list HTML */
+      const aturcaraHTML = dataAturcara.map(a => `
+        <li class="aturcara-item">
+          <span class="ac-masa">${a.masa}</span>
+          <div class="ac-dot"></div>
+          <div>
+            <div class="ac-nama">${a.emoji} <strong>${a.nama}</strong></div>
+            <div class="ac-keterangan">${a.keterangan}</div>
+          </div>
+        </li>
+      `).join('\\n');
+
+      return `<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${tajuk} | ${fileTitle}</title>
+  <meta name="description" content="Jemputan ${tajuk} bagi ${fileTitle} pada ${tarikhPapar}. Tekan pautan untuk butiran lengkap." />
+  <meta property="og:title" content="${tajuk} | ${fileTitle}" />
+  <meta property="og:description" content="${tajuk} ${fileTitle}. Kehadiran dan doa restu amat kami hargai." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-primary:      ${colPrimary};
+      --color-primary-light:${colAccent};
+      --color-primary-dark: #654904;
+      --color-accent:       ${colAccent};
+      --color-bg:           #faf7f0;
+      --color-bg-dark:      #120c03;
+      --color-text:         #2d2002;
+      --color-text-light:   #6b5230;
+      --color-white:        #fffef9;
+      --color-card:         rgba(255, 252, 242, 0.95);
+      --color-divider:      ${colPrimary}55;
+
+      --font-title:   'Great Vibes', cursive;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body:    'Outfit', sans-serif;
+
+      --radius-card: 20px;
+      --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.25);
+      --transition:  all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg-dark);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .page-wrapper {
+      position: relative;
+      min-height: 100vh;
+      background: 
+        radial-gradient(ellipse at top, ${colPrimary}25 0%, transparent 60%),
+        radial-gradient(ellipse at bottom, ${colAccent}15 0%, transparent 60%),
+        linear-gradient(135deg, #0a0601 0%, #150d03 50%, #0a0601 100%);
+      ${customBg ? `background-image: url('${customBg}'); background-size: cover; background-position: center; background-attachment: fixed;` : ''}
+    }
+
+    .page-wrapper::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      ${patternCSS}
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 0 60px;
+    }
+
+    .music-player {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+    }
+
+    .music-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--color-primary);
+      background: rgba(10,7,2,0.85);
+      backdrop-filter: blur(10px);
+      color: var(--color-primary-light);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .music-btn.playing { animation: pulse-ring 2s infinite; }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0  0  ${colPrimary}88; }
+      70%  { box-shadow: 0 0 0 12px rgba(184,134,11,0); }
+      100% { box-shadow: 0 0 0  0  rgba(184,134,11,0); }
+    }
+
+    .cover {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .bismillah {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      color: var(--color-accent);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .gold-divider .line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(to right, transparent, var(--color-primary));
+    }
+    .gold-divider .line.right {
+      background: linear-gradient(to left, transparent, var(--color-primary));
+    }
+    .gold-divider .diamond {
+      width: 8px; height: 8px;
+      background: var(--color-primary);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .pengantin-name {
+      font-family: var(--font-title);
+      font-size: clamp(48px, 14vw, 72px);
+      color: var(--color-white);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+      line-height: 1.1;
+      display: block;
+    }
+
+    .pengantin-sub {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--color-accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: block;
+      margin: 4px 0 8px;
+    }
+
+    .ampersand {
+      font-family: var(--font-title);
+      font-size: 42px;
+      color: var(--color-primary-light);
+      display: block;
+      margin: 4px 0;
+    }
+
+    .cover-sub {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      color: var(--color-accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 18px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .scroll-hint span {
+      font-size: 9px;
+      color: var(--color-accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+
+    .section-card {
+      margin: 14px 14px;
+      background: var(--color-card);
+      border-radius: var(--radius-card);
+      padding: 28px 22px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid ${colPrimary}40;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-divider);
+    }
+
+    .jemputan-text {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--color-text-light);
+      text-align: center;
+    }
+
+    .nama-besar {
+      font-family: var(--font-title);
+      font-size: 40px;
+      color: var(--color-text);
+      display: block;
+      line-height: 1.2;
+      margin: 12px 0 4px;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .event-box {
+      background: linear-gradient(135deg, ${colPrimary}10, transparent);
+      border: 1px solid ${colPrimary}30;
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .event-box.full { grid-column: 1 / -1; }
+    .ev-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+
+    .ev-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-family: var(--font-heading);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .ev-value {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+    .ev-value.big { font-size: 22px; }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .cd-box {
+      text-align: center;
+      background: linear-gradient(135deg, ${colPrimary}15, ${colPrimary}05);
+      border-radius: 12px;
+      padding: 14px 6px;
+      border: 1px solid ${colPrimary}35;
+    }
+
+    .cd-num {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: block;
+      line-height: 1;
+    }
+
+    .cd-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-top: 4px;
+    }
+
+    .aturcara-list { list-style: none; }
+    .aturcara-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--color-divider);
+      align-items: flex-start;
+    }
+    .aturcara-item:last-child { border-bottom: none; }
+
+    .ac-masa {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--color-primary);
+      font-weight: 600;
+      min-width: 76px;
+      padding-top: 2px;
+    }
+
+    .ac-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      margin-top: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px ${colPrimary}66;
+    }
+
+    .ac-nama {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .ac-keterangan {
+      font-size: 12px;
+      color: var(--color-text-light);
+      margin-top: 2px;
+    }
+
+    .map-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1.5px solid ${colPrimary}40;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border: none;
+    }
+
+    .map-addr {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text-light);
+      text-align: center;
+      line-height: 1.7;
+      margin: 10px 0 14px;
+    }
+
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: white;
+      box-shadow: 0 4px 16px ${colPrimary}55;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--color-primary);
+      border: 1.5px solid var(--color-primary);
+    }
+
+    .contact-grid { display: grid; gap: 10px; }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, ${colPrimary}10, transparent);
+      border: 1px solid ${colPrimary}30;
+      border-radius: 14px;
+      padding: 14px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .contact-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      color: white;
+    }
+    .contact-role {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-family: var(--font-heading);
+      font-weight: 600;
+    }
+    .contact-name {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .rsvp-form { display: grid; gap: 12px; }
+    .form-ctrl {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid ${colPrimary}44;
+      background: rgba(255,255,255,0.7);
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text);
+      outline: none;
+    }
+    .form-ctrl:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px ${colPrimary}22;
+    }
+
+    .hadir-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hadir-opt { position: relative; }
+    .hadir-opt input { position: absolute; opacity: 0; }
+    .hadir-opt label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px;
+      border-radius: 12px;
+      border: 1.5px solid ${colPrimary}44;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--color-text);
+      transition: var(--transition);
+    }
+    .hadir-opt input:checked + label {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: white;
+      border-color: transparent;
+    }
+
+    .rsvp-msg {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 10px;
+      display: none;
+    }
+    .rsvp-msg.ok { background: rgba(34,197,94,0.15); color: #15803d; border: 1px solid rgba(34,197,94,0.3); }
+
+    .footer {
+      text-align: center;
+      padding: 40px 24px 20px;
+      color: var(--color-accent);
+      font-family: var(--font-heading);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    @keyframes bounce { 0%,100% { transform:translateY(0) } 50% { transform:translateY(6px) } }
+  </style>
+</head>
+<body>
+
+  <div class="music-player">
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Main/Henti Muzik">♪</button>
+  </div>
+  <audio id="bgAudio" loop preload="none" src="${musicUrl}"></audio>
+
+  <div class="page-wrapper">
+    <div class="container">
+
+      <section class="cover" id="cover">
+        ${ungkapanAtas ? `<p class="bismillah">${ungkapanAtas}</p>` : ''}
+
+        <div class="gold-divider">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+
+        ${namaCoverHTML}
+
+        <div class="gold-divider">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+
+        <p class="cover-sub">~ ${tajuk} ~</p>
+
+        <div class="scroll-hint" onclick="document.getElementById('sJemputan').scrollIntoView({behavior:'smooth'})">
+          <span>Tatal ke bawah</span>
+          <div class="scroll-dot"></div>
+        </div>
+      </section>
+
+      <div class="section-card" id="sJemputan">
+        <div class="section-label">📜 Jemputan</div>
+        <p class="jemputan-text">${teksJemputan}</p>
+        ${namaTengahHTML}
+        <p class="jemputan-text">Kehadiran dan doa restu para tetamu amatlah kami hargai.</p>
+      </div>
+
+      <div class="section-card" id="sTarikhMasa">
+        <div class="section-label">📅 Tarikh &amp; Masa</div>
+        <div class="event-grid">
+          <div class="event-box">
+            <span class="ev-icon">📅</span>
+            <div class="ev-label">Tarikh</div>
+            <div class="ev-value big">${tarikhPapar}</div>
+            <div class="ev-value" style="font-size:13px; color:var(--color-primary)">${hariMajlis}</div>
+            ${tarikhHijrah ? `<div style="font-size:11px; color:var(--color-text-light); margin-top:2px;">${tarikhHijrah}</div>` : ''}
+          </div>
+
+          <div class="event-box">
+            <span class="ev-icon">🕐</span>
+            <div class="ev-label">Masa</div>
+            <div class="ev-value">${masaMula}</div>
+            <div class="ev-value" style="font-size:11px; color:var(--color-text-light)">hingga</div>
+            <div class="ev-value">${masaTamat}</div>
+          </div>
+
+          <div class="event-box full">
+            <span class="ev-icon">📍</span>
+            <div class="ev-label">Tempat Majlis</div>
+            <div class="ev-value">${namaTempat}</div>
+            <div style="font-size:12px; color:var(--color-text-light); margin-top:4px;">${alamatTempat}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card" id="sCountdown">
+        <div class="section-label">⏳ Kiraan Masa</div>
+        <div class="countdown" id="cdGrid">
+          <div class="cd-box"><span class="cd-num" id="cdHari">--</span><div class="cd-label">Hari</div></div>
+          <div class="cd-box"><span class="cd-num" id="cdJam">--</span><div class="cd-label">Jam</div></div>
+          <div class="cd-box"><span class="cd-num" id="cdMinit">--</span><div class="cd-label">Minit</div></div>
+          <div class="cd-box"><span class="cd-num" id="cdSaat">--</span><div class="cd-label">Saat</div></div>
+        </div>
+        <p id="cdMsg" style="text-align:center;font-family:var(--font-heading);color:var(--color-primary);font-size:14px;display:none;margin-top:12px;">
+          ✨ Majlis sedang berlangsung! Selamat datang!
+        </p>
+      </div>
+
+      <div class="section-card" id="sAturcara">
+        <div class="section-label">🕌 Aturcara Majlis</div>
+        <ul class="aturcara-list">
+          ${aturcaraHTML}
+        </ul>
+      </div>
+
+      <div class="section-card" id="sLokasi">
+        <div class="section-label">📍 Lokasi Majlis</div>
+        ${mapsEmbed ? `
+        <div class="map-wrap">
+          <iframe src="${mapsEmbed}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi Majlis"></iframe>
+        </div>` : ''}
+        <p class="map-addr">
+          <strong>${namaTempat}</strong><br/>
+          ${alamatTempat}
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="${linkWaze}" target="_blank" rel="noopener">🗺️ Buka Waze</a>
+          <a class="btn btn-outline" href="${linkGmaps}" target="_blank" rel="noopener">📍 Google Maps</a>
+        </div>
+      </div>
+
+      <div class="section-card" id="sTelefon">
+        <div class="section-label">📞 Hubungi Urusetia</div>
+        <div class="contact-grid">
+          ${pihakPNama ? `
+          <a class="contact-item" href="https://wa.me/${pihakPPhone}" target="_blank" rel="noopener">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div class="contact-role">${pihakPLabel || 'Wakil Penganjur'}</div>
+              <div class="contact-name">${pihakPNama}</div>
+              <div style="font-size:12px; color:var(--color-text-light);">${pihakPPhone}</div>
+            </div>
+          </a>` : ''}
+
+          ${pihakLNama ? `
+          <a class="contact-item" href="https://wa.me/${pihakLPhone}" target="_blank" rel="noopener">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div class="contact-role">${pihakLLabel || 'Wakil Kedua'}</div>
+              <div class="contact-name">${pihakLNama}</div>
+              <div style="font-size:12px; color:var(--color-text-light);">${pihakLPhone}</div>
+            </div>
+          </a>` : ''}
+        </div>
+      </div>
+
+      <div class="section-card" id="sRsvp">
+        <div class="section-label">✅ RSVP Kehadiran</div>
+        <p style="font-family:var(--font-heading);font-size:14px;color:var(--color-text-light);margin-bottom:14px;line-height:1.7;">
+          Mohon sahkan kehadiran anda sebelum <strong style="color:var(--color-primary)">${rsvpDeadline}</strong>
+        </p>
+
+        <form class="rsvp-form" onsubmit="submitRSVP(event)">
+          <div>
+            <label style="font-size:11px; text-transform:uppercase; color:var(--color-primary); font-family:var(--font-heading); display:block; margin-bottom:4px;">Nama Anda</label>
+            <input type="text" id="rNama" name="nama" class="form-ctrl" placeholder="Masukkan nama penuh" required />
+          </div>
+
+          <div>
+            <label style="font-size:11px; text-transform:uppercase; color:var(--color-primary); font-family:var(--font-heading); display:block; margin-bottom:4px;">Status Kehadiran</label>
+            <div class="hadir-row">
+              <div class="hadir-opt">
+                <input type="radio" name="hadir" id="hYa" value="Hadir" checked />
+                <label for="hYa">✅ Hadir</label>
+              </div>
+              <div class="hadir-opt">
+                <input type="radio" name="hadir" id="hTidak" value="Tidak Hadir" />
+                <label for="hTidak">❌ Tidak Hadir</label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:11px; text-transform:uppercase; color:var(--color-primary); font-family:var(--font-heading); display:block; margin-bottom:4px;">Bilangan Tetamu</label>
+            <select id="rBil" name="bilangan" class="form-ctrl">
+              <option value="1">1 orang</option>
+              <option value="2">2 orang</option>
+              <option value="3">3 orang</option>
+              <option value="4">4 orang</option>
+              <option value="5+">5 orang ke atas</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:11px; text-transform:uppercase; color:var(--color-primary); font-family:var(--font-heading); display:block; margin-bottom:4px;">Ucapan / Doa</label>
+            <textarea id="rPesan" name="pesanan" class="form-ctrl" rows="3" placeholder="Ucapan tahniah dan doa restu..."></textarea>
+          </div>
+
+          <div id="rsvpMsg" class="rsvp-msg"></div>
+
+          <button type="submit" class="btn btn-primary" id="rsvpBtn">
+            💌 Hantar Pengesahan (RSVP)
+          </button>
+        </form>
+      </div>
+
+      <div class="footer">
+        <div class="gold-divider" style="justify-content:center; margin-bottom:16px;">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+        <strong>${fileTitle}</strong>
+        ${teksFooter ? `
+        <p style="margin-top:10px; font-size:12px; opacity:0.85; max-width:380px; margin-left:auto; margin-right:auto; line-height:1.7;">
+          ${teksFooter}
+        </p>` : ''}
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const targetDate = new Date("${countdownTarget}").getTime();
+    function updateCountdown() {
+      const diff = targetDate - new Date().getTime();
+      if (diff <= 0) {
+        const grid = document.getElementById('cdGrid');
+        const msg = document.getElementById('cdMsg');
+        if (grid) grid.style.display = 'none';
+        if (msg) msg.style.display = 'block';
+        return;
+      }
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cdHari').textContent = pad(Math.floor(diff / (1000 * 60 * 60 * 24)));
+      document.getElementById('cdJam').textContent = pad(Math.floor((diff / (1000 * 60 * 60)) % 24));
+      document.getElementById('cdMinit').textContent = pad(Math.floor((diff / (1000 * 60)) % 60));
+      document.getElementById('cdSaat').textContent = pad(Math.floor((diff / 1000) % 60));
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    let isAudioPlaying = false;
+    const audioEl = document.getElementById('bgAudio');
+    const musicBtnEl = document.getElementById('musicBtn');
+
+    function toggleMusic() {
+      if (!isAudioPlaying) {
+        audioEl.play().then(() => {
+          isAudioPlaying = true;
+          musicBtnEl.textContent = '⏸';
+          musicBtnEl.classList.add('playing');
+        }).catch(console.error);
+      } else {
+        audioEl.pause();
+        isAudioPlaying = false;
+        musicBtnEl.textContent = '♪';
+        musicBtnEl.classList.remove('playing');
+      }
+    }
+
+    document.addEventListener('click', function autoPlay() {
+      if (!isAudioPlaying && audioEl.src) {
+        audioEl.play().then(() => {
+          isAudioPlaying = true;
+          musicBtnEl.textContent = '⏸';
+          musicBtnEl.classList.add('playing');
+        }).catch(() => {});
+      }
+      document.removeEventListener('click', autoPlay);
+    }, { once: true });
+
+    async function submitRSVP(e) {
+      e.preventDefault();
+      const btn = document.getElementById('rsvpBtn');
+      const msg = document.getElementById('rsvpMsg');
+      const scriptUrl = "${rsvpScriptUrl}";
+
+      const payload = {
+        nama: document.getElementById('rNama').value,
+        hadir: document.querySelector('input[name="hadir"]:checked').value,
+        bilangan: document.getElementById('rBil').value,
+        pesanan: document.getElementById('rPesan').value,
+        masaHantar: new Date().toISOString()
+      };
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Menghantar...';
+
+      if (scriptUrl) {
+        try {
+          await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.warn('RSVP note:', err);
+        }
+      }
+
+      msg.textContent = '✅ Terima kasih! RSVP anda telah berjaya direkodkan.';
+      msg.className = 'rsvp-msg ok';
+      msg.style.display = 'block';
+      btn.textContent = '💌 Dihantar';
+      e.target.reset();
+    }
+  <\/script>
+</body>
+</html>`;
+    }
+
+    /* ============================================================ */
+    /* KEMAS KINI PRATONTON & EKSPORT                               */
+    /* ============================================================ */
+    function kemaskiniPratonton() {
+      const htmlCode = binaHTMLKadKahwin();
+      const iframe = document.getElementById('previewIframe');
+      if (iframe) {
+        iframe.srcdoc = htmlCode;
+      }
+    }
+
+    function muatTurunHTML() {
+      const htmlContent = binaHTMLKadKahwin();
+      const isDua = document.getElementById('checkDuaPenama').checked;
+      let namaSlug = '';
+      if (isDua) {
+        const p = document.getElementById('inNamaP').value.trim() || 'pihak1';
+        const l = document.getElementById('inNamaL').value.trim() || 'pihak2';
+        namaSlug = `${p}-${l}`;
+      } else {
+        namaSlug = document.getElementById('inNamaSolo').value.trim() || 'jemputan';
+      }
+      const safeName = namaSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const fileName = `kad-jemputan-${safeName}.html`;
+
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      tunjukToast(`🎉 Fail ${fileName} sedia dimuat turun!`);
+    }
+
+    function salinKodHTML() {
+      const htmlContent = binaHTMLKadKahwin();
+      const textarea = document.createElement('textarea');
+      textarea.value = htmlContent;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      
+      try {
+        document.execCommand('copy');
+        tunjukToast("📋 Kod HTML berjaya disalin ke papan klip!");
+      } catch (err) {
+        tunjukToast("❌ Gagal menyalin kod.", "warning");
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function bukaPratontonTabBaharu() {
+      const htmlContent = binaHTMLKadKahwin();
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }
+
+    /* Inisialisasi Apabila Laman Dimuatkan */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Pasang listener warna Hex
+      const inColP = document.getElementById('inColorPrimary');
+      const inColPHex = document.getElementById('inColorPrimaryHex');
+      const inColA = document.getElementById('inColorAccent');
+      const inColAHex = document.getElementById('inColorAccentHex');
+
+      if (inColP && inColPHex) {
+        inColP.addEventListener('input', (e) => { inColPHex.value = e.target.value; kemaskiniPratonton(); });
+        inColPHex.addEventListener('input', (e) => { inColP.value = e.target.value; kemaskiniPratonton(); });
+      }
+
+      if (inColA && inColAHex) {
+        inColA.addEventListener('input', (e) => { inColAHex.value = e.target.value; kemaskiniPratonton(); });
+        inColAHex.addEventListener('input', (e) => { inColA.value = e.target.value; kemaskiniPratonton(); });
+      }
+
+      // Input listener untuk kod majlis di tab dashboard
+      const dashKodIn = document.getElementById('dashKodInput');
+      if (dashKodIn) {
+        dashKodIn.addEventListener('input', (e) => {
+          renderDashboardData(e.target.value);
+        });
+      }
+
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+
+      // Pasang listener auto-update pada semua input
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        if (input.id !== 'dashKodInput') {
+          input.addEventListener('input', () => {
+            kemaskiniPratonton();
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
