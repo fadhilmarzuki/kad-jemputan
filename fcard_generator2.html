@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyKadJemputan — Hub Sehenti Penjanaan Kad Jemputan Digital</title>
+<meta name="description" content="Cipta kad jemputan digital yang cantik untuk pelbagai majlis. Personalkan, pratonton, dan muat turun sebagai fail HTML.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   RESET & BASE
+================================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:   #080d1c;
+  --navy2:  #0f1628;
+  --navy3:  #1a2236;
+  --navy4:  #242d45;
+  --gold:   #f59e0b;
+  --gold2:  #fbbf24;
+  --gold3:  #d97706;
+  --teal:   #0d9488;
+  --teal2:  #14b8a6;
+  --rose:   #e11d48;
+  --purple: #7c3aed;
+  --text:   #f1f5f9;
+  --text2:  #94a3b8;
+  --text3:  #64748b;
+  --border: rgba(255,255,255,0.08);
+  --card:   rgba(255,255,255,0.04);
+  --card2:  rgba(255,255,255,0.07);
+  --r:      16px;
+  --rsm:    10px;
+  --tr:     all 0.28s cubic-bezier(.4,0,.2,1);
+}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ================================================================
+   SCROLLBAR
+================================================================ */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(245,158,11,.4);border-radius:3px}
+
+/* ================================================================
+   NAVBAR
+================================================================ */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(8,13,28,.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);text-decoration:none;cursor:pointer;letter-spacing:.5px}
+.nav-logo span{color:var(--text);font-style:italic}
+.nav-acts{display:flex;gap:10px;align-items:center}
+.nav-btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:var(--tr);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.nb-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}
+.nb-ghost:hover{color:var(--text);border-color:var(--gold)}
+.nb-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-weight:700;box-shadow:0 4px 14px rgba(245,158,11,.3)}
+.nb-gold:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.4)}
+
+/* ================================================================
+   SECTIONS
+================================================================ */
+#heroSection,#builderSection,#dashSection{display:none}
+
+/* ================================================================
+   HERO
+================================================================ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:90px 24px 60px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 15%,rgba(245,158,11,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 50% at 85% 85%,rgba(124,58,237,.07) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,rgba(13,148,136,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-orbs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);animation:float 8s ease-in-out infinite}
+.orb1{width:300px;height:300px;background:rgba(245,158,11,.05);top:-80px;left:-100px;animation-delay:0s}
+.orb2{width:250px;height:250px;background:rgba(124,58,237,.05);bottom:-60px;right:-80px;animation-delay:-3s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);
+  border-radius:50px;padding:6px 18px;font-size:12px;color:var(--gold);
+  margin-bottom:28px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,6vw,76px);line-height:1.12;margin-bottom:22px;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,var(--gold2) 80%,#fff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{font-size:clamp(15px,2.5vw,18px);color:var(--text2);max-width:580px;line-height:1.75;margin-bottom:38px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:56px}
+.btn-hero-p{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 34px;background:linear-gradient(135deg,var(--gold),var(--gold3));
+  color:#000;font-weight:700;font-size:15px;border-radius:12px;border:none;cursor:pointer;
+  transition:var(--tr);box-shadow:0 8px 24px rgba(245,158,11,.35);
+}
+.btn-hero-p:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(245,158,11,.45)}
+.btn-hero-g{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 34px;background:transparent;color:var(--text);font-size:15px;
+  border-radius:12px;border:1.5px solid var(--border);cursor:pointer;transition:var(--tr);
+}
+.btn-hero-g:hover{border-color:var(--gold);color:var(--gold)}
+.ev-chips{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ev-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:50px;padding:8px 16px;font-size:13px;color:var(--text2);transition:var(--tr);
+}
+.ev-chip:hover{border-color:var(--gold);color:var(--text)}
+
+/* Feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;max-width:900px;width:100%;margin:60px auto 0;padding:0 24px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:left;transition:var(--tr)}
+.feat-card:hover{border-color:rgba(245,158,11,.3);transform:translateY(-3px)}
+.feat-icon{font-size:28px;margin-bottom:12px}
+.feat-title{font-size:14px;font-weight:600;margin-bottom:6px}
+.feat-desc{font-size:12px;color:var(--text3);line-height:1.6}
+
+/* ================================================================
+   BUILDER
+================================================================ */
+#builderSection{padding:90px 0 60px}
+.builder-wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.builder-top{text-align:center;margin-bottom:36px}
+.builder-top h2{font-family:'Playfair Display',serif;font-size:30px;color:var(--gold);margin-bottom:6px}
+.builder-top p{font-size:14px;color:var(--text3)}
+
+/* Steps nav */
+.steps-row{display:flex;align-items:center;justify-content:center;margin-bottom:44px;gap:0}
+.sn-item{display:flex;flex-direction:column;align-items:center;gap:7px;position:relative}
+.sn-num{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;
+  border:2px solid var(--border);color:var(--text3);
+  background:var(--navy2);transition:var(--tr);z-index:1;
+}
+.sn-item.active .sn-num{background:var(--gold);border-color:var(--gold);color:#000;box-shadow:0 0 22px rgba(245,158,11,.5)}
+.sn-item.done  .sn-num{background:var(--teal);border-color:var(--teal);color:#fff}
+.sn-lbl{font-size:10px;color:var(--text3);text-align:center;white-space:nowrap;letter-spacing:.3px}
+.sn-item.active .sn-lbl{color:var(--gold)}
+.sn-item.done  .sn-lbl{color:var(--teal)}
+.sn-line{flex:1;height:2px;background:var(--border);min-width:36px;margin:0;margin-bottom:25px;transition:var(--tr)}
+.sn-line.done{background:var(--teal)}
+
+/* Step panels */
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* Step footer */
+.step-foot{display:flex;justify-content:space-between;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+
+/* ================================================================
+   STEP 1 — EVENT TYPE
+================================================================ */
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;margin-bottom:28px}
+.ev-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--r);
+  padding:24px 16px;text-align:center;cursor:pointer;transition:var(--tr);position:relative;
+}
+.ev-card:hover{border-color:var(--gold);background:rgba(245,158,11,.05);transform:translateY(-4px);box-shadow:0 12px 30px rgba(245,158,11,.1)}
+.ev-card.sel{border-color:var(--gold);background:rgba(245,158,11,.08)}
+.ev-chk{position:absolute;top:10px;right:10px;width:22px;height:22px;background:var(--gold);border-radius:50%;display:none;align-items:center;justify-content:center;color:#000;font-size:11px;font-weight:700}
+.ev-card.sel .ev-chk{display:flex}
+.ev-ico{font-size:38px;margin-bottom:12px}
+.ev-lbl{font-weight:600;font-size:14px;color:var(--text);line-height:1.3}
+.ev-dsc{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* ================================================================
+   STEP 2 — FORM
+================================================================ */
+.form-secs{display:grid;gap:18px}
+.form-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.form-sec-ttl{font-weight:600;font-size:13px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px;letter-spacing:.3px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.fg{grid-template-columns:1fr}}
+.fgi{display:flex;flex-direction:column;gap:5px}
+.fgi.full{grid-column:1/-1}
+.fgl{font-size:11px;font-weight:500;color:var(--text2);letter-spacing:.3px}
+.fgl .req{color:#f87171;margin-left:2px}
+.fi,.fsel,.fta{
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+  border-radius:var(--rsm);color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+  padding:10px 13px;transition:var(--tr);outline:none;width:100%;
+}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--gold);background:rgba(245,158,11,.05);box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.fi::placeholder,.fta::placeholder{color:var(--text3)}
+.fta{resize:vertical;min-height:72px}
+.fsel option{background:var(--navy2);color:var(--text)}
+
+/* Aturcara rows */
+.ac-rows{display:grid;gap:8px}
+.ac-row{display:grid;grid-template-columns:100px 52px 1fr 1fr auto;gap:7px;align-items:start}
+@media(max-width:640px){.ac-row{grid-template-columns:1fr 1fr;}.ac-row>.fi:nth-child(1){grid-column:1;}.ac-row>.fi:nth-child(2){grid-column:2;max-width:60px}.ac-row>.fi:nth-child(3){grid-column:1/-1;}.ac-row>.fi:nth-child(4){grid-column:1/-1;}.ac-del{grid-column:2;justify-self:end;}}
+.ac-del{width:32px;height:32px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);border-radius:7px;color:#f87171;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0;margin-top:0}
+.ac-del:hover{background:rgba(248,113,113,.2)}
+.btn-add{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(245,158,11,.08);border:1px dashed rgba(245,158,11,.35);border-radius:7px;color:var(--gold);font-size:12px;cursor:pointer;transition:var(--tr);margin-top:8px}
+.btn-add:hover{background:rgba(245,158,11,.15)}
+
+/* ================================================================
+   STEP 3 — PERSONALISE
+================================================================ */
+.pers-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:680px){.pers-grid{grid-template-columns:1fr}}
+.pers-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.pers-box.wide{grid-column:1/-1}
+.ph{font-weight:600;font-size:13px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:7px;letter-spacing:.2px}
+
+/* Themes */
+.th-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.th-chip{border-radius:9px;padding:10px 6px;text-align:center;cursor:pointer;border:2px solid transparent;transition:var(--tr);font-size:11px;font-weight:600;letter-spacing:.2px}
+.th-chip:hover{transform:scale(1.05)}
+.th-chip.sel{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.th-custom{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.clr-grp{display:flex;flex-direction:column;gap:5px}
+.clr-grp label{font-size:11px;color:var(--text3)}
+.clr-grp input[type="color"]{width:100%;height:36px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;padding:2px}
+
+/* Patterns */
+.pat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pat-item{border-radius:9px;padding:12px;cursor:pointer;text-align:center;font-size:12px;color:var(--text2);border:2px solid var(--border);transition:var(--tr)}
+.pat-item:hover{border-color:rgba(245,158,11,.4)}
+.pat-item.sel{border-color:var(--gold);color:var(--gold)}
+
+/* Image */
+.img-drop{border:2px dashed var(--border);border-radius:var(--rsm);padding:24px;text-align:center;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden}
+.img-drop:hover{border-color:var(--gold);background:rgba(245,158,11,.03)}
+.img-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+.img-prev{width:100%;max-height:200px;object-fit:cover;border-radius:9px;margin-top:12px;display:none}
+
+/* Music */
+.mu-lib{display:grid;gap:7px;margin-bottom:12px;max-height:280px;overflow-y:auto}
+.mu-item{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.03);border:1.5px solid transparent;border-radius:9px;padding:11px;cursor:pointer;transition:var(--tr)}
+.mu-item:hover{border-color:var(--border)}
+.mu-item.sel{border-color:var(--gold);background:rgba(245,158,11,.07)}
+.mu-ico{font-size:20px;flex-shrink:0}
+.mu-info .mn{font-size:13px;font-weight:500;color:var(--text)}
+.mu-info .mc{font-size:11px;color:var(--text3)}
+.mu-badge{margin-left:auto;font-size:10px;padding:2px 7px;border-radius:50px;flex-shrink:0}
+.mb-ok{background:rgba(13,148,136,.2);color:var(--teal2)}
+.mb-warn{background:rgba(245,158,11,.15);color:var(--gold)}
+.mu-manual{display:grid;grid-template-columns:1fr 2fr auto;gap:8px;align-items:end}
+@media(max-width:540px){.mu-manual{grid-template-columns:1fr}}
+.custom-mu-list{display:grid;gap:6px;margin-top:8px}
+
+/* ================================================================
+   STEP 4 — PREVIEW & DOWNLOAD
+================================================================ */
+.prev-layout{display:grid;grid-template-columns:1fr 310px;gap:20px}
+@media(max-width:780px){.prev-layout{grid-template-columns:1fr}}
+.prev-frame{background:var(--navy3);border-radius:var(--r);overflow:hidden}
+.prev-bar{background:var(--navy2);padding:11px 15px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border)}
+.prev-dot{width:11px;height:11px;border-radius:50%}
+.prev-bar span{font-size:11px;color:var(--text3);flex:1;text-align:center}
+#prevFrame{width:100%;height:620px;border:none;background:#fff}
+.dl-col{display:flex;flex-direction:column;gap:14px}
+.dl-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.dl-card h4{font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.dl-card p{font-size:12px;color:var(--text3);line-height:1.65}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px}
+.info-row:last-child{border-bottom:none}
+.ir-k{color:var(--text3)}
+.ir-v{color:var(--text);font-weight:500}
+
+/* ================================================================
+   BUTTONS (reusable)
+================================================================ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:var(--tr);text-decoration:none;width:100%}
+.btn-sm{padding:8px 16px;font-size:12.5px;width:auto}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;box-shadow:0 4px 16px rgba(245,158,11,.3)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(245,158,11,.4)}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#0f766e);color:#fff}
+.btn-teal:hover{transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-danger{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.25)}
+
+/* ================================================================
+   DASHBOARD
+================================================================ */
+#dashSection{padding:90px 0 60px}
+.dash-wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.dash-top{text-align:center;margin-bottom:36px}
+.dash-top h2{font-family:'Playfair Display',serif;font-size:30px;color:var(--gold);margin-bottom:6px}
+.dash-search{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:20px}
+.dash-row{display:grid;grid-template-columns:2fr 1fr auto auto;gap:10px;align-items:end;margin-top:12px}
+@media(max-width:560px){.dash-row{grid-template-columns:1fr}}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:560px){.stats-row{grid-template-columns:1fr 1fr}}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--rsm);padding:16px;text-align:center}
+.stat-n{font-size:30px;font-weight:800;color:var(--gold);display:block;line-height:1}
+.stat-l{font-size:11px;color:var(--text3);margin-top:4px}
+.tab-row{display:flex;gap:8px;margin-bottom:14px}
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.tbl-head{background:rgba(245,158,11,.07);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.tbl-head h4{font-size:13px;font-weight:600;color:var(--text)}
+table.dt{width:100%;border-collapse:collapse}
+table.dt th{background:rgba(255,255,255,.03);padding:9px 13px;text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+table.dt td{padding:11px 13px;font-size:12.5px;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.03)}
+table.dt tr:last-child td{border-bottom:none}
+table.dt tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-flex;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:500}
+.b-green{background:rgba(74,222,128,.15);color:#4ade80}
+.b-red{background:rgba(248,113,113,.15);color:#f87171}
+.b-blue{background:rgba(96,165,250,.15);color:#60a5fa}
+.b-gold{background:rgba(245,158,11,.15);color:var(--gold)}
+.dash-empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.dash-empty .de-ico{font-size:52px;margin-bottom:16px}
+
+/* ================================================================
+   MODAL (Google Script)
+================================================================ */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:26px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.modal h3{font-size:17px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.modal p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.modal ol{padding-left:18px;font-size:13px;color:var(--text2);line-height:1.9}
+.modal pre{background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:11.5px;color:#7dd3fc;overflow-x:auto;margin:12px 0;line-height:1.65}
+.modal-x{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px}
+.modal-x:hover{color:var(--text)}
+
+/* ================================================================
+   UTILS
+================================================================ */
+.divider{height:1px;background:var(--border);margin:14px 0}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}
+.hint{font-size:11px;color:var(--text3);line-height:1.6;margin-top:4px}
+.gold-txt{color:var(--gold)}
+.toast{
+  position:fixed;bottom:22px;right:22px;
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:11px;padding:12px 18px;font-size:13px;color:var(--text);
+  z-index:400;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:none}
+.toast.ok{border-color:rgba(74,222,128,.4)}
+.toast.err{border-color:rgba(248,113,113,.4)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ===============================================================
+     NAVBAR
+=============================================================== -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="goSection('hero')">My<span>KadJemputan</span></div>
+  <div class="nav-acts">
+    <button class="nav-btn nb-ghost" onclick="goSection('dash')">📊 Dashboard</button>
+    <button class="nav-btn nb-gold"  onclick="goSection('builder')">✨ Buat Kad</button>
+  </div>
+</nav>
+
+<!-- ===============================================================
+     HERO
+=============================================================== -->
+<section id="heroSection">
+  <div class="hero">
+    <div class="hero-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <div class="hero-badge">✨ Hub Sehenti Penjanaan Kad Jemputan Digital</div>
+    <h1>Kad Jemputan Digital<br/>Profesional &amp; Menakjubkan</h1>
+    <p>Cipta kad jemputan digital yang cantik untuk pelbagai majlis. Personalkan tema, muzik, gambar — pratonton dan muat turun sebagai fail HTML yang boleh dikongsi di seluruh dunia.</p>
+    <div class="hero-cta">
+      <button class="btn-hero-p" onclick="goSection('builder')">✨ Mula Buat Kad Sekarang</button>
+      <button class="btn-hero-g" onclick="goSection('dash')">📊 Lihat Dashboard Data</button>
+    </div>
+    <div class="ev-chips">
+      <div class="ev-chip">💍 Perkahwinan</div>
+      <div class="ev-chip">🎂 Hari Jadi</div>
+      <div class="ev-chip">🍼 Akikah</div>
+      <div class="ev-chip">👋 Perpisahan</div>
+      <div class="ev-chip">🏆 Apresiasi</div>
+      <div class="ev-chip">🎓 Graduasi</div>
+      <div class="ev-chip">✨ Lain-lain</div>
+    </div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">🎨</div><div class="feat-title">7 Tema Warna</div><div class="feat-desc">Pilih dari tema pratetap atau sesuaikan warna sendiri mengikut citarasa</div></div>
+    <div class="feat-card"><div class="feat-icon">🎵</div><div class="feat-title">Perpustakaan Muzik</div><div class="feat-desc">Muzik berbeza mengikut jenis majlis. Tambah link lagu sendiri</div></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Dashboard RSVP</div><div class="feat-desc">Pantau kehadiran dan ucapan melalui Google Sheets dengan Kod Acara unik</div></div>
+    <div class="feat-card"><div class="feat-icon">💬</div><div class="feat-title">Dinding Ucapan</div><div class="feat-desc">Tetamu boleh hantar ucapan terus dalam kad — disimpan ke Google Sheets</div></div>
+    <div class="feat-card"><div class="feat-icon">🖼️</div><div class="feat-title">Muat Naik Gambar</div><div class="feat-desc">Gambar disematkan terus dalam fail HTML — tidak perlu hosting luaran</div></div>
+    <div class="feat-card"><div class="feat-icon">📥</div><div class="feat-title">Muat Turun HTML</div><div class="feat-desc">Host di GitHub Pages, Netlify, atau mana-mana platform hosting percuma</div></div>
+  </div>
+</section>
+
+<!-- ===============================================================
+     BUILDER
+=============================================================== -->
+<section id="builderSection">
+<div class="builder-wrap">
+  <div class="builder-top">
+    <h2>✨ Buat Kad Jemputan</h2>
+    <p>Ikuti 4 langkah mudah untuk menjana kad jemputan digital anda</p>
+  </div>
+
+  <!-- Steps nav -->
+  <div class="steps-row">
+    <div class="sn-item active" id="sn1"><div class="sn-num">1</div><div class="sn-lbl">Jenis Majlis</div></div>
+    <div class="sn-line" id="sl1"></div>
+    <div class="sn-item" id="sn2"><div class="sn-num">2</div><div class="sn-lbl">Maklumat Acara</div></div>
+    <div class="sn-line" id="sl2"></div>
+    <div class="sn-item" id="sn3"><div class="sn-num">3</div><div class="sn-lbl">Tema &amp; Muzik</div></div>
+    <div class="sn-line" id="sl3"></div>
+    <div class="sn-item" id="sn4"><div class="sn-num">4</div><div class="sn-lbl">Pratonton &amp; Muat Turun</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-panel active" id="sp1">
+    <div class="ev-grid" id="evGrid"></div>
+    <div class="step-foot">
+      <button class="btn btn-ghost btn-sm" onclick="goSection('hero')">← Kembali</button>
+      <button class="btn btn-gold btn-sm" onclick="nextStep()">Seterusnya →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-panel" id="sp2">
+    <div class="form-secs" id="formSecs"></div>
+    <div class="step-foot">
+      <button class="btn btn-ghost btn-sm" onclick="prevStep()">← Sebelum</button>
+      <button class="btn btn-gold btn-sm" onclick="nextStep()">Seterusnya →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-panel" id="sp3">
+    <div class="pers-grid">
+      <!-- Theme -->
+      <div class="pers-box">
+        <div class="ph">🎨 Tema Warna</div>
+        <div class="th-presets" id="thPresets"></div>
+        <div class="th-custom">
+          <div class="clr-grp"><label>Warna Utama</label><input type="color" id="clrP" value="#b8860b" oninput="customTheme()"></div>
+          <div class="clr-grp"><label>Warna Latar</label><input type="color" id="clrB" value="#0f0a02" oninput="customTheme()"></div>
+        </div>
+      </div>
+      <!-- Pattern -->
+      <div class="pers-box">
+        <div class="ph">✦ Corak Latar</div>
+        <div class="pat-grid" id="patGrid"></div>
+        <p class="hint mt8">Corak akan dipaparkan pada latar belakang kad</p>
+      </div>
+      <!-- Image -->
+      <div class="pers-box wide">
+        <div class="ph">🖼️ Gambar / Banner Kad</div>
+        <div class="img-drop" id="imgDrop">
+          <input type="file" accept="image/*" id="imgIn" onchange="uploadImg(event)">
+          <div id="imgPH">
+            <div style="font-size:34px;margin-bottom:8px">📷</div>
+            <div style="font-size:14px;color:var(--text2)">Klik atau seret gambar ke sini</div>
+            <div class="hint mt8">JPG, PNG, WebP — max 5MB. Gambar akan disematkan terus dalam fail HTML (base64)</div>
+          </div>
+          <img id="imgPrev" class="img-prev" alt="Preview">
+        </div>
+        <div class="mt8" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-ghost btn-sm" onclick="clearImg()" style="width:auto">✕ Buang Gambar</button>
+          <span class="hint">Atau masukkan URL gambar:</span>
+          <input type="url" id="imgUrl" class="fi" style="flex:1;min-width:200px" placeholder="https://..." oninput="setImgUrl(this.value)">
+        </div>
+      </div>
+      <!-- Music -->
+      <div class="pers-box wide">
+        <div class="ph">🎵 Lagu Latar Belakang</div>
+        <div class="mu-lib" id="muLib"></div>
+        <div class="divider"></div>
+        <div class="ph" style="font-size:12px;color:var(--text3)">+ Masukkan Link Lagu Sendiri (URL fail .mp3/.ogg)</div>
+        <div class="mu-manual">
+          <input type="text" id="muName" class="fi" placeholder="Nama lagu">
+          <input type="url"  id="muUrl"  class="fi" placeholder="https://... (URL fail audio)">
+          <button class="btn btn-ghost btn-sm" onclick="addManualMu()" style="width:auto;align-self:flex-end">+ Tambah</button>
+        </div>
+        <div class="custom-mu-list" id="cusMuList"></div>
+      </div>
+    </div>
+    <div class="step-foot">
+      <button class="btn btn-ghost btn-sm" onclick="prevStep()">← Sebelum</button>
+      <button class="btn btn-gold btn-sm" onclick="goPreview()">👁️ Pratonton Kad →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-panel" id="sp4">
+    <div class="prev-layout">
+      <div class="prev-frame">
+        <div class="prev-bar">
+          <div class="prev-dot" style="background:#ff5f57"></div>
+          <div class="prev-dot" style="background:#febc2e"></div>
+          <div class="prev-dot" style="background:#28c840"></div>
+          <span id="prevFn">kad_jemputan.html</span>
+        </div>
+        <iframe id="prevFrame" title="Pratonton Kad Jemputan"></iframe>
+      </div>
+      <div class="dl-col">
+        <div class="dl-card">
+          <h4>📋 Ringkasan Kad</h4>
+          <div id="cardSum"></div>
+        </div>
+        <div class="dl-card">
+          <h4>⬇️ Muat Turun Kad</h4>
+          <p>Fail HTML ini boleh dihoskan di mana-mana platform web.</p>
+          <button class="btn btn-gold mt12" onclick="dlCard()">⬇️ Muat Turun (.html)</button>
+        </div>
+        <div class="dl-card">
+          <h4>📊 Google Sheets</h4>
+          <p>RSVP dan ucapan tetamu akan disimpan otomatik ke Google Sheets anda.</p>
+          <button class="btn btn-ghost mt8" onclick="showScriptModal()">📋 Kod Google Apps Script</button>
+        </div>
+        <div class="dl-card">
+          <h4>🔗 Cara Host</h4>
+          <p><strong>GitHub Pages:</strong> Upload → Settings → Pages<br><strong>Netlify Drop:</strong> Drag & drop di netlify.com/drop<br><strong>Google Sites:</strong> Embed melalui HTML</p>
+        </div>
+      </div>
+    </div>
+    <div class="step-foot">
+      <button class="btn btn-ghost btn-sm" onclick="prevStep()">← Edit Semula</button>
+      <button class="btn btn-teal btn-sm" onclick="goSection('dash')" style="width:auto">📊 Pergi Dashboard</button>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ===============================================================
+     DASHBOARD
+=============================================================== -->
+<section id="dashSection">
+<div class="dash-wrap">
+  <div class="dash-top">
+    <h2>📊 Dashboard RSVP &amp; Ucapan</h2>
+    <p style="font-size:13px;color:var(--text3)">Pantau data RSVP dan ucapan tetamu menggunakan Kod Acara</p>
+  </div>
+  <div class="dash-search">
+    <div class="fgi">
+      <label class="fgl">URL Google Apps Script</label>
+      <input type="url" id="dScriptUrl" class="fi" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div class="dash-row mt12">
+      <div class="fgi">
+        <label class="fgl">Kod Acara</label>
+        <input type="text" id="dKod" class="fi" placeholder="Contoh: KW2025ABC">
+      </div>
+      <button class="btn btn-gold btn-sm" onclick="loadDash()" style="align-self:flex-end">🔍 Cari</button>
+      <button class="btn btn-ghost btn-sm" onclick="expCSV()" style="align-self:flex-end">⬇️ CSV</button>
+    </div>
+  </div>
+
+  <div id="dashData" style="display:none">
+    <div class="stats-row">
+      <div class="stat"><span class="stat-n" id="stTotal">0</span><div class="stat-l">Jumlah Respons</div></div>
+      <div class="stat"><span class="stat-n" id="stHadir" style="color:#4ade80">0</span><div class="stat-l">Hadir</div></div>
+      <div class="stat"><span class="stat-n" id="stTidak" style="color:#f87171">0</span><div class="stat-l">Tidak Hadir</div></div>
+      <div class="stat"><span class="stat-n" id="stUcapan" style="color:#60a5fa">0</span><div class="stat-l">Ucapan</div></div>
+    </div>
+    <div class="tab-row">
+      <button class="btn btn-gold btn-sm" id="tRsvpBtn" onclick="showTab('rsvp')" style="width:auto">✅ RSVP</button>
+      <button class="btn btn-ghost btn-sm" id="tUcapanBtn" onclick="showTab('ucapan')" style="width:auto">💬 Ucapan</button>
+    </div>
+    <div class="tbl-wrap" id="tRsvp">
+      <div class="tbl-head"><h4>✅ Senarai RSVP</h4></div>
+      <div style="overflow-x:auto"><table class="dt"><thead><tr><th>#</th><th>Masa</th><th>Nama</th><th>Hadir</th><th>Bilangan</th><th>Pesanan</th></tr></thead><tbody id="rsvpBody"></tbody></table></div>
+    </div>
+    <div class="tbl-wrap mt16" id="tUcapan" style="display:none">
+      <div class="tbl-head"><h4>💬 Dinding Ucapan</h4></div>
+      <div style="overflow-x:auto"><table class="dt"><thead><tr><th>#</th><th>Masa</th><th>Pengirim</th><th>Ucapan</th></tr></thead><tbody id="ucapanBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="dash-empty" id="dashEmpty">
+    <div class="de-ico">📊</div>
+    <p>Masukkan URL Google Apps Script dan Kod Acara untuk melihat data</p>
+    <p class="hint mt8">Belum ada script? Klik butang di bawah untuk dapatkan kod</p>
+    <button class="btn btn-ghost btn-sm mt12" onclick="showScriptModal()" style="width:auto;margin:12px auto 0">📋 Dapatkan Kod Google Apps Script</button>
+  </div>
+
+  <div class="step-foot">
+    <button class="btn btn-ghost btn-sm" onclick="goSection('hero')">← Utama</button>
+    <button class="btn btn-gold btn-sm" onclick="goSection('builder')" style="width:auto">✨ Buat Kad Baru</button>
+  </div>
+</div>
+</section>
+
+<!-- ===============================================================
+     GOOGLE APPS SCRIPT MODAL
+=============================================================== -->
+<div class="modal-bg" id="scriptModal">
+  <div class="modal">
+    <button class="modal-x" onclick="hideModal()">✕</button>
+    <h3>📋 Kod Google Apps Script</h3>
+    <ol>
+      <li>Buka <strong>Google Sheets</strong> baharu di <a href="https://sheets.google.com" target="_blank" style="color:var(--gold)">sheets.google.com</a></li>
+      <li>Klik <strong>Extensions → Apps Script</strong></li>
+      <li>Padam semua kod sedia ada</li>
+      <li>Tampal kod di bawah</li>
+      <li>Klik <strong>Deploy → New deployment → Web app</strong></li>
+      <li>Execute as: <strong>Me</strong> | Who has access: <strong>Anyone</strong></li>
+      <li>Klik Deploy → Salin URL → Tampal dalam Builder</li>
+    </ol>
+    <pre id="scriptPre"></pre>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-gold btn-sm" onclick="copyScript()" style="width:auto">📋 Salin Kod</button>
+      <button class="btn btn-ghost btn-sm" onclick="hideModal()" style="width:auto">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===============================================================
+     JAVASCRIPT
+=============================================================== -->
+<script>
+/* ================================================================
+   STATE
+================================================================ */
+const S = {
+  step: 1,
+  evType: null,
+  data: {},
+  theme: null,
+  customC: { p: '#b8860b', b: '#0f0a02' },
+  pattern: 'geometric',
+  imgSrc: null,
+  selMusic: [],
+  cusMusic: [],
+  html: '',
+};
+
+/* ================================================================
+   EVENT TYPE CONFIG
+================================================================ */
+const EV = {
+  kahwin: {
+    lbl:'Walimatulurus', ico:'💍', desc:'Majlis Perkahwinan',
+    ucapan:'Ucapan kepada Pengantin', defTheme:'emas', hasPasangan:true,
+    groups:[
+      { ttl:'💍 Pasangan Pengantin', fields:[
+        {id:'namaPP',lbl:'Nama Pengantin Perempuan',ph:'Syazwani',req:true},
+        {id:'subNP',lbl:'Binti / Nama Keluarga',ph:'binti Abdullah'},
+        {id:'namaPL',lbl:'Nama Pengantin Lelaki',ph:'Hassan',req:true},
+        {id:'subNL',lbl:'Bin / Nama Keluarga',ph:'bin Ibrahim'},
+      ]},
+      { ttl:'📅 Tarikh & Masa', fields:[
+        {id:'tarikh',lbl:'Tarikh Majlis',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Sabtu'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat Majlis', fields:[
+        {id:'tempat',lbl:'Nama Tempat / Dewan',ph:'Dewan Serbaguna Sri Kenanga',req:true,full:true},
+        {id:'alamat',lbl:'Alamat Lengkap',type:'ta',ph:'No. 1, Jalan...',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL (src=...)',type:'url',ph:'https://www.google.com/maps/embed?pb=...',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url',ph:'https://waze.com/ul?ll=...'},
+        {id:'gmapsUrl',lbl:'Link Google Maps',type:'url',ph:'https://goo.gl/maps/...'},
+      ]},
+      { ttl:'📞 Hubungi', fields:[
+        {id:'namaHP',lbl:'Nama Wakil Pihak Perempuan',ph:'Encik Abdullah'},
+        {id:'telP',lbl:'No. Telefon',type:'tel',ph:'012-3456789'},
+        {id:'waP',lbl:'No. WhatsApp (tanpa + atau tanda)',type:'tel',ph:'60123456789'},
+        {id:'namaHL',lbl:'Nama Wakil Pihak Lelaki',ph:'Encik Ibrahim'},
+        {id:'telL',lbl:'No. Telefon',type:'tel',ph:'019-8765432'},
+        {id:'waL',lbl:'No. WhatsApp (tanpa + atau tanda)',type:'tel',ph:'60198765432'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara (identifier unik)',ph:'KW2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',ph:'https://script.google.com/macros/s/.../exec',full:true},
+      ]},
+      { ttl:'📋 Aturcara Majlis', type:'ac', defAc:[
+        {masa:'11:00',em:'🎊',nm:'Ketibaan Tetamu',ket:'Pendaftaran & Penyambutan'},
+        {masa:'12:00',em:'👰',nm:'Ketibaan Pengantin',ket:'Bersanding di Pelamin'},
+        {masa:'12:30',em:'🍽️',nm:'Jamuan Makan',ket:'Hidangan disediakan'},
+        {masa:'14:00',em:'📸',nm:'Sesi Bergambar',ket:'Bersama pengantin & keluarga'},
+        {masa:'17:00',em:'🙏',nm:'Majlis Tamat',ket:'Terima kasih kerana hadir'},
+      ]},
+    ],
+    music:[
+      {nm:'Instrumen Melayu Tradisional',cat:'Melayu',url:''},
+      {nm:'Ya Habibal Qalbi (Nasheed)',cat:'Religius',url:''},
+      {nm:'Lagu Inang / Zapin',cat:'Tradisional',url:''},
+    ]
+  },
+  harijadi: {
+    lbl:'Hari Jadi / Ulang Tahun', ico:'🎂', desc:'Sambutan Hari Jadi',
+    ucapan:'Ucapan Hari Jadi', defTheme:'ros',
+    groups:[
+      { ttl:'🎂 Individu yang Diraikan', fields:[
+        {id:'namaInd',lbl:'Nama Penuh',ph:'Nurul Ain binti Ahmad',req:true,full:true},
+        {id:'umur',lbl:'Umur / Tahun Ke-',type:'number',ph:'10'},
+        {id:'tajuk',lbl:'Tajuk Sambutan (pilihan)',ph:'Sambutan Hari Jadi Ke-10'},
+      ]},
+      { ttl:'📅 Tarikh & Masa', fields:[
+        {id:'tarikh',lbl:'Tarikh',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Ahad'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat', fields:[
+        {id:'tempat',lbl:'Nama Tempat',ph:'Restoran / Rumah',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',ph:'No. 1, Jalan...',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi Penganjur', fields:[
+        {id:'namaH',lbl:'Nama Penganjur / Ibu Bapa',ph:'Ahmad bin Ali'},
+        {id:'tel',lbl:'No. Telefon',type:'tel',ph:'012-3456789'},
+        {id:'waNo',lbl:'No. WhatsApp (tanpa + atau tanda)',type:'tel',ph:'60123456789'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'HJ2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+      { ttl:'📋 Aktiviti / Program', type:'ac', defAc:[
+        {masa:'14:00',em:'🎊',nm:'Ketibaan Tetamu',ket:'Penyambutan'},
+        {masa:'14:30',em:'🎂',nm:'Potong Kek',ket:'Nyanyian Happy Birthday'},
+        {masa:'15:00',em:'🍽️',nm:'Jamuan Makan',ket:'Hidangan disediakan'},
+        {masa:'17:00',em:'🙏',nm:'Majlis Tamat',ket:'Terima kasih kerana hadir'},
+      ]},
+    ],
+    music:[
+      {nm:'Happy Birthday to You (Piano)',cat:'Hari Jadi',url:'https://upload.wikimedia.org/wikipedia/commons/e/e8/Happy_Birthday_to_You_%28Remix%29.ogg'},
+      {nm:'Allah Selamatkan Kamu',cat:'Hari Jadi',url:''},
+      {nm:'Sayang (Instrumental)',cat:'Riang',url:''},
+    ]
+  },
+  akikah: {
+    lbl:'Akikah / Cukur Jambul', ico:'🍼', desc:'Sambutan Kelahiran',
+    ucapan:'Ucapan Tahniah Kelahiran', defTheme:'langit',
+    groups:[
+      { ttl:'🍼 Maklumat Bayi', fields:[
+        {id:'namaBayi',lbl:'Nama Bayi',ph:'Muhammad Aqil',req:true,full:true},
+        {id:'jantina',lbl:'Jantina',type:'sel',opts:['Lelaki','Perempuan']},
+        {id:'tarikhLahir',lbl:'Tarikh Lahir',type:'date'},
+      ]},
+      { ttl:'👨‍👩‍👦 Ibu Bapa', fields:[
+        {id:'namaAyah',lbl:'Nama Ayah',ph:'Ahmad bin Ali'},
+        {id:'namaIbu',lbl:'Nama Ibu',ph:'Siti binti Hassan'},
+      ]},
+      { ttl:'📅 Tarikh & Masa Majlis', fields:[
+        {id:'tarikh',lbl:'Tarikh Majlis',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Ahad'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat', fields:[
+        {id:'tempat',lbl:'Nama Tempat',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi', fields:[
+        {id:'namaH',lbl:'Nama Ibu Bapa / Penganjur'},
+        {id:'tel',lbl:'No. Telefon',type:'tel'},
+        {id:'waNo',lbl:'No. WhatsApp',type:'tel'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'AK2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+    ],
+    music:[
+      {nm:'Qasidah Al-Burdah',cat:'Religius',url:''},
+      {nm:'Lagu Buaian Melayu',cat:'Tradisional',url:''},
+      {nm:'Nasyid Kelahiran',cat:'Religius',url:''},
+    ]
+  },
+  perpisahan: {
+    lbl:'Perpisahan / Persaraan', ico:'👋', desc:'Majlis Perpisahan / Persaraan',
+    ucapan:'Ucapan Selamat kepada Individu Diraikan', defTheme:'langit',
+    groups:[
+      { ttl:'👋 Individu yang Diraikan', fields:[
+        {id:'namaInd',lbl:'Nama Penuh',ph:'Encik Ahmad bin Ali',req:true,full:true},
+        {id:'jawatan',lbl:'Jawatan / Gelaran',ph:'Pengarah Jabatan XYZ'},
+        {id:'tempKerja',lbl:'Tempat Berkhidmat',ph:'Jabatan Pendidikan Kedah'},
+        {id:'tempohKhidmat',lbl:'Tempoh Perkhidmatan',ph:'1995 - 2025'},
+        {id:'jenisAc',lbl:'Jenis Acara',type:'sel',opts:['Majlis Perpisahan','Majlis Persaraan','Majlis Pelepasan']},
+        {id:'namaOrg',lbl:'Nama Organisasi / Jabatan Penganjur',full:true},
+      ]},
+      { ttl:'📅 Tarikh & Masa', fields:[
+        {id:'tarikh',lbl:'Tarikh Majlis',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Jumaat'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat', fields:[
+        {id:'tempat',lbl:'Nama Tempat',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi AJK', fields:[
+        {id:'namaH',lbl:'Nama Penganjur / AJK'},
+        {id:'tel',lbl:'No. Telefon',type:'tel'},
+        {id:'waNo',lbl:'No. WhatsApp',type:'tel'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'PP2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+      { ttl:'📋 Aturcara', type:'ac', defAc:[
+        {masa:'19:00',em:'🎊',nm:'Ketibaan Tetamu',ket:'Pendaftaran & Penyambutan'},
+        {masa:'19:30',em:'🎤',nm:'Ucapan Aluan',ket:'Kata-kata penghargaan'},
+        {masa:'20:00',em:'🍽️',nm:'Jamuan Makan Malam',ket:'Hidangan disediakan'},
+        {masa:'20:30',em:'🏆',nm:'Ucapan Penghargaan',ket:'Kepada individu diraikan'},
+        {masa:'21:00',em:'📸',nm:'Sesi Bergambar & Pelepasan',ket:''},
+      ]},
+    ],
+    music:[
+      {nm:'Bengawan Solo (Keroncong)',cat:'Keroncong',url:''},
+      {nm:'Sepanjang Jalan Kenangan',cat:'Keroncong',url:''},
+      {nm:'Gamelan Jawa (Instrumental)',cat:'Tradisional',url:''},
+      {nm:'Jalinan Kasih (Instrumental)',cat:'Melayu',url:''},
+    ]
+  },
+  apresiasi: {
+    lbl:'Apresiasi / Penghargaan', ico:'🏆', desc:'Majlis Penghargaan',
+    ucapan:'Ucapan Penghargaan', defTheme:'ungu',
+    groups:[
+      { ttl:'🏆 Maklumat Majlis', fields:[
+        {id:'tajukMajlis',lbl:'Tajuk Majlis',ph:'Majlis Apresiasi Warga Kerja 2025',req:true,full:true},
+        {id:'namaInd',lbl:'Nama Individu / Kumpulan yang Diraikan',full:true},
+        {id:'anjuran',lbl:'Anjuran Oleh',full:true},
+      ]},
+      { ttl:'📅 Tarikh & Masa', fields:[
+        {id:'tarikh',lbl:'Tarikh',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Sabtu'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat', fields:[
+        {id:'tempat',lbl:'Nama Tempat',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi', fields:[
+        {id:'namaH',lbl:'Nama AJK / Pegawai'},
+        {id:'tel',lbl:'No. Telefon',type:'tel'},
+        {id:'waNo',lbl:'No. WhatsApp',type:'tel'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'AP2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+      { ttl:'📋 Aturcara', type:'ac', defAc:[
+        {masa:'19:00',em:'🎊',nm:'Ketibaan Tetamu',ket:'Pendaftaran & Penyambutan'},
+        {masa:'19:30',em:'🎤',nm:'Ucapan Pengerusi',ket:''},
+        {masa:'20:00',em:'🏆',nm:'Penyampaian Hadiah / Penghargaan',ket:''},
+        {masa:'20:30',em:'🍽️',nm:'Jamuan Makan',ket:'Hidangan disediakan'},
+      ]},
+    ],
+    music:[
+      {nm:'Symphony Instrumental',cat:'Klasik',url:''},
+      {nm:'Lagu Patriotik (Instrumental)',cat:'Patriotik',url:''},
+      {nm:'Corporate Event Music',cat:'Moden',url:''},
+    ]
+  },
+  graduasi: {
+    lbl:'Graduasi / Konvokesyen', ico:'🎓', desc:'Majlis Graduasi',
+    ucapan:'Ucapan Tahniah Graduasi', defTheme:'biru',
+    groups:[
+      { ttl:'🎓 Maklumat Graduan', fields:[
+        {id:'namaInd',lbl:'Nama Graduan',req:true,full:true},
+        {id:'pengajian',lbl:'Program Pengajian',ph:'Sarjana Muda Pendidikan',full:true},
+        {id:'universiti',lbl:'Institusi Pengajian',ph:'Universiti Utara Malaysia',full:true},
+      ]},
+      { ttl:'📅 Tarikh & Masa Konvo', fields:[
+        {id:'tarikh',lbl:'Tarikh',type:'date',req:true},
+        {id:'hari',lbl:'Hari',ph:'Sabtu'},
+        {id:'masaMula',lbl:'Masa Sesi',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Dewan Konvo', fields:[
+        {id:'tempat',lbl:'Nama Dewan',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi', fields:[
+        {id:'namaH',lbl:'Nama Graduan / Ibu Bapa'},
+        {id:'tel',lbl:'No. Telefon',type:'tel'},
+        {id:'waNo',lbl:'No. WhatsApp',type:'tel'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'GR2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+    ],
+    music:[
+      {nm:'Pomp and Circumstance (Graduasi)',cat:'Klasik',url:''},
+      {nm:'We Are The Champions',cat:'Moden',url:''},
+      {nm:'Aku Lelaki (Instrumental)',cat:'Melayu',url:''},
+    ]
+  },
+  lain: {
+    lbl:'Majlis Lain-lain', ico:'✨', desc:'Sebarang majlis lain',
+    ucapan:'Ucapan & Pesanan', defTheme:'emas',
+    groups:[
+      { ttl:'✨ Maklumat Majlis', fields:[
+        {id:'tajukMajlis',lbl:'Tajuk Majlis',ph:'Majlis Sambutan...',req:true,full:true},
+        {id:'subTajuk',lbl:'Sub-tajuk / Tema',ph:'Bersama dalam kegembiraan',full:true},
+        {id:'namaInd',lbl:'Nama Individu / Tetamu Kehormat (pilihan)',full:true},
+        {id:'penganjur',lbl:'Anjuran Oleh',full:true},
+      ]},
+      { ttl:'📅 Tarikh & Masa', fields:[
+        {id:'tarikh',lbl:'Tarikh',type:'date',req:true},
+        {id:'hari',lbl:'Hari'},
+        {id:'masaMula',lbl:'Masa Mula',type:'time'},
+        {id:'masaTamat',lbl:'Masa Tamat',type:'time'},
+      ]},
+      { ttl:'📍 Tempat', fields:[
+        {id:'tempat',lbl:'Nama Tempat',req:true,full:true},
+        {id:'alamat',lbl:'Alamat',type:'ta',full:true},
+        {id:'gmapsEmbed',lbl:'Google Maps Embed URL',type:'url',full:true},
+        {id:'wazeUrl',lbl:'Link Waze',type:'url'},{id:'gmapsUrl',lbl:'Link Google Maps',type:'url'},
+      ]},
+      { ttl:'📞 Hubungi', fields:[
+        {id:'namaH',lbl:'Nama Penganjur'},
+        {id:'tel',lbl:'No. Telefon',type:'tel'},
+        {id:'waNo',lbl:'No. WhatsApp',type:'tel'},
+      ]},
+      { ttl:'✅ RSVP & Google Sheets', fields:[
+        {id:'tarikhRsvp',lbl:'Tarikh Tutup RSVP',type:'date'},
+        {id:'kodAcara',lbl:'Kod Acara',ph:'ML2025ABC',req:true},
+        {id:'scriptUrl',lbl:'URL Google Apps Script',type:'url',full:true},
+      ]},
+      { ttl:'📋 Aturcara / Program', type:'ac', defAc:[
+        {masa:'10:00',em:'📋',nm:'Pendaftaran Tetamu',ket:''},
+        {masa:'10:30',em:'🎊',nm:'Majlis Bermula',ket:''},
+        {masa:'12:00',em:'🍽️',nm:'Jamuan',ket:'Hidangan disediakan'},
+        {masa:'13:00',em:'🙏',nm:'Majlis Tamat',ket:''},
+      ]},
+    ],
+    music:[
+      {nm:'Lagu Melayu Instrumental',cat:'Melayu',url:''},
+      {nm:'Muzik Latar Santai',cat:'Ambient',url:''},
+    ]
+  }
+};
+
+/* ================================================================
+   THEMES
+================================================================ */
+const TH = {
+  emas:   {nm:'Emas Krim',   p:'#b8860b',pl:'#d4a017',pd:'#8b6508',acc:'#c9a84c',bg:'#0f0a02',bgd:'#1a1208',card:'rgba(255,252,240,.92)',txt:'#3d2b00',txtl:'#6b5230'},
+  ros:    {nm:'Ros Merah',   p:'#be123c',pl:'#e11d48',pd:'#9f1239',acc:'#f43f5e',bg:'#0f0209',bgd:'#1a0a0e',card:'rgba(255,240,244,.92)',txt:'#3d0010',txtl:'#7f1d1d'},
+  langit: {nm:'Langit Biru', p:'#0369a1',pl:'#0284c7',pd:'#075985',acc:'#38bdf8',bg:'#010d18',bgd:'#0a1a2e',card:'rgba(240,248,255,.92)',txt:'#0c2340',txtl:'#1e3a5f'},
+  zamrud: {nm:'Zamrud Hijau',p:'#047857',pl:'#059669',pd:'#065f46',acc:'#34d399',bg:'#010f08',bgd:'#071a10',card:'rgba(240,255,248,.92)',txt:'#052e16',txtl:'#14532d'},
+  ungu:   {nm:'Ungu Diraja', p:'#6d28d9',pl:'#7c3aed',pd:'#5b21b6',acc:'#a78bfa',bg:'#08020f',bgd:'#120920',card:'rgba(248,240,255,.92)',txt:'#2e1065',txtl:'#4c1d95'},
+  biru:   {nm:'Biru Malam',  p:'#1d4ed8',pl:'#2563eb',pd:'#1e40af',acc:'#60a5fa',bg:'#02040f',bgd:'#050a1a',card:'rgba(240,244,255,.92)',txt:'#0c1445',txtl:'#1e3a8a'},
+  silver: {nm:'Perak Elegan',p:'#475569',pl:'#64748b',pd:'#334155',acc:'#94a3b8',bg:'#0a0c10',bgd:'#111318',card:'rgba(248,250,252,.92)',txt:'#1e293b',txtl:'#334155'},
+};
+
+const PATS = {
+  geometric: 'Geometrik Islam',
+  diagonal:  'Garisan Pepenjuru',
+  dots:      'Titik-titik',
+  none:      'Tiada Corak',
+};
+
+/* ================================================================
+   GOOGLE APPS SCRIPT CODE
+================================================================ */
+const GAS_CODE = `// =====================================================
+// MyKadJemputan — Google Apps Script
+// Deploy: Web app | Execute as: Me | Access: Anyone
+// =====================================================
+const SHEET_NAME = 'KadJemputan';
+
+function doPost(e) {
+  try {
+    const sheet = getSheet();
+    const data  = JSON.parse(e.postData.contents);
+    sheet.appendRow([
+      new Date().toLocaleString('ms-MY'),
+      data.kodAcara   || '',
+      data.jenisAcara || '',
+      data.nama       || '',
+      data.jenisData  || 'rsvp',
+      data.hadir      || '',
+      data.bilangan   || '',
+      data.ucapan     || data.pesanan || '',
+    ]);
+    return out({result:'success'});
+  } catch(err) {
+    return out({result:'error', msg:err.toString()});
+  }
+}
+
+function doGet(e) {
+  try {
+    const kod   = e.parameter.kod   || '';
+    const jenis = e.parameter.jenis || '';
+    const sheet = getSheet();
+    const rows  = sheet.getDataRange().getValues();
+    const hdr   = rows[0];
+    const data  = rows.slice(1)
+      .filter(r => (!kod || r[1]===kod) && (!jenis || r[4]===jenis))
+      .map(r => { const o={}; hdr.forEach((h,i)=>o[h]=r[i]); return o; });
+    return out({result:'success', data});
+  } catch(err) {
+    return out({result:'error', data:[], msg:err.toString()});
+  }
+}
+
+function getSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh   = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    const hdr = ['Timestamp','KodAcara','JenisAcara','Nama',
+                 'JenisData','Hadir/Status','Bilangan','Ucapan/Pesanan'];
+    sh.appendRow(hdr);
+    sh.setFrozenRows(1);
+    sh.getRange(1,1,1,hdr.length)
+      .setBackground('#1a2236').setFontColor('#f59e0b').setFontWeight('bold');
+  }
+  return sh;
+}
+
+function out(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+
+/* ================================================================
+   UTILS
+================================================================ */
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+function g(id) { return document.getElementById(id); }
+function f(id) { return (S.data[id] || '').toString().trim(); }
+
+function fmtDate(ds) {
+  if (!ds) return '';
+  const d = new Date(ds + 'T00:00:00');
+  const mo = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Og','Sep','Okt','Nov','Dis'];
+  return `${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function fmtTime(ts) {
+  if (!ts) return '';
+  const [h, m] = ts.split(':').map(Number);
+  const ap = h < 12 ? 'pagi' : h < 17 ? 'petang' : 'malam';
+  return `${h===0?12:h>12?h-12:h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+function hex2rgb(hex) {
+  const h = hex.replace('#','');
+  return [0,2,4].map(i=>parseInt(h.substr(i*2,2),16)).join(',');
+}
+
+/* ================================================================
+   SECTION NAVIGATION
+================================================================ */
+function goSection(s) {
+  g('heroSection').style.display    = s==='hero'    ? 'block' : 'none';
+  g('builderSection').style.display = s==='builder' ? 'block' : 'none';
+  g('dashSection').style.display    = s==='dash'    ? 'block' : 'none';
+  if (s==='builder' && S.step===1) renderStep1();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================================================================
+   STEP NAVIGATION
+================================================================ */
+function setStep(n) {
+  for (let i=1;i<=4;i++) {
+    g('sp'+i).className = 'step-panel' + (i===n?' active':'');
+    const sn = g('sn'+i);
+    sn.className = 'sn-item' + (i===n?' active':i<n?' done':'');
+    const sl = g('sl'+i);
+    if (sl) sl.className = 'sn-line' + (i<=n-1?' done':'');
+  }
+  S.step = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextStep() {
+  if (S.step===1) {
+    if (!S.evType) { toast('Sila pilih jenis majlis dahulu','err'); return; }
+    renderStep2(); setStep(2);
+  } else if (S.step===2) {
+    collectForm(); renderStep3(); setStep(3);
+  } else if (S.step===3) {
+    goPreview();
+  }
+}
+
+function prevStep() { setStep(S.step-1); }
+
+/* ================================================================
+   STEP 1
+================================================================ */
+function renderStep1() {
+  g('evGrid').innerHTML = Object.entries(EV).map(([k,ev])=>`
+    <div class="ev-card ${S.evType===k?'sel':''}" onclick="selEv('${k}')">
+      <div class="ev-chk">✓</div>
+      <div class="ev-ico">${ev.ico}</div>
+      <div class="ev-lbl">${ev.lbl}</div>
+      <div class="ev-dsc">${ev.desc}</div>
+    </div>
+  `).join('');
+}
+
+function selEv(k) { S.evType=k; renderStep1(); }
+
+/* ================================================================
+   STEP 2
+================================================================ */
+function renderStep2() {
+  const ev = EV[S.evType];
+  g('formSecs').innerHTML = ev.groups.map((grp,gi)=>{
+    if (grp.type==='ac') return `
+      <div class="form-sec">
+        <div class="form-sec-ttl">${grp.ttl}</div>
+        <div class="ac-rows" id="acRows_${gi}"></div>
+        <button class="btn-add" onclick="addAcRow(${gi})">+ Tambah Item</button>
+      </div>`;
+    return `
+      <div class="form-sec">
+        <div class="form-sec-ttl">${grp.ttl}</div>
+        <div class="fg">${grp.fields.map(renderField).join('')}</div>
+      </div>`;
+  }).join('');
+
+  // Init aturcara
+  ev.groups.forEach((grp,gi)=>{
+    if (grp.type!=='ac') return;
+    if (!S.data['ac_'+gi]) S.data['ac_'+gi] = JSON.parse(JSON.stringify(grp.defAc||[]));
+    renderAcRows(gi);
+  });
+
+  // Restore values
+  Object.entries(S.data).forEach(([id,val])=>{
+    const el = g('f_'+id);
+    if (el && typeof val==='string') el.value = val;
+  });
+}
+
+function renderField(f) {
+  const cls = f.full ? 'fgi full' : 'fgi';
+  const req = f.req ? '<span class="req">*</span>' : '';
+  let inp = '';
+  if (f.type==='ta') {
+    inp = `<textarea id="f_${f.id}" class="fta" placeholder="${f.ph||''}" rows="3"></textarea>`;
+  } else if (f.type==='sel') {
+    inp = `<select id="f_${f.id}" class="fsel">${(f.opts||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+  } else {
+    inp = `<input type="${f.type||'text'}" id="f_${f.id}" class="fi" placeholder="${f.ph||''}" ${f.req?'required':''}>`;
+  }
+  return `<div class="${cls}"><label class="fgl">${f.lbl}${req}</label>${inp}</div>`;
+}
+
+function renderAcRows(gi) {
+  const items = S.data['ac_'+gi]||[];
+  const el = g('acRows_'+gi);
+  if (!el) return;
+  el.innerHTML = items.map((item,i)=>`
+    <div class="ac-row">
+      <input type="time" class="fi" value="${item.masa||''}" onchange="updAc(${gi},${i},'masa',this.value)">
+      <input type="text" class="fi" value="${item.em||''}"  onchange="updAc(${gi},${i},'em',this.value)" placeholder="🎊" title="Emoji">
+      <input type="text" class="fi" value="${item.nm||''}"  onchange="updAc(${gi},${i},'nm',this.value)" placeholder="Nama aturcara">
+      <input type="text" class="fi" value="${item.ket||''}" onchange="updAc(${gi},${i},'ket',this.value)" placeholder="Keterangan (pilihan)">
+      <button class="ac-del" onclick="delAc(${gi},${i})">✕</button>
+    </div>`).join('');
+}
+
+function addAcRow(gi) {
+  if (!S.data['ac_'+gi]) S.data['ac_'+gi]=[];
+  S.data['ac_'+gi].push({masa:'',em:'📌',nm:'',ket:''});
+  renderAcRows(gi);
+}
+function delAc(gi,i) { S.data['ac_'+gi].splice(i,1); renderAcRows(gi); }
+function updAc(gi,i,k,v) { if(S.data['ac_'+gi]&&S.data['ac_'+gi][i]) S.data['ac_'+gi][i][k]=v; }
+
+function collectForm() {
+  const ev = EV[S.evType];
+  ev.groups.forEach(grp=>{
+    if (grp.type==='ac') return;
+    grp.fields.forEach(field=>{
+      const el = g('f_'+field.id);
+      if (el) S.data[field.id] = el.value;
+    });
+  });
+}
+
+/* ================================================================
+   STEP 3
+================================================================ */
+function renderStep3() {
+  renderThemes(); renderPatterns(); renderMusicLib();
+}
+
+function renderThemes() {
+  g('thPresets').innerHTML = Object.entries(TH).map(([k,t])=>`
+    <div class="th-chip ${S.theme===k?'sel':''}"
+         style="background:linear-gradient(135deg,${t.bgd},${t.bg});color:${t.acc};border-color:${t.p}"
+         onclick="selTheme('${k}')">
+      <div style="font-size:16px;margin-bottom:3px">◉</div>${t.nm}
+    </div>`).join('');
+  if (!S.theme) selTheme(EV[S.evType]?.defTheme||'emas');
+}
+
+function selTheme(k) {
+  S.theme = k;
+  g('clrP').value = TH[k].p;
+  g('clrB').value = TH[k].bgd;
+  S.customC = {p:TH[k].p, b:TH[k].bgd};
+  renderThemes();
+}
+
+function customTheme() {
+  S.theme = null;
+  S.customC = {p:g('clrP').value, b:g('clrB').value};
+  renderThemes();
+}
+
+function renderPatterns() {
+  g('patGrid').innerHTML = Object.entries(PATS).map(([k,nm])=>`
+    <div class="pat-item ${S.pattern===k?'sel':''}" onclick="selPat('${k}')">
+      ${S.pattern===k?'✓ ':''} ${nm}
+    </div>`).join('');
+}
+function selPat(k) { S.pattern=k; renderPatterns(); }
+
+function renderMusicLib() {
+  const ev = EV[S.evType];
+  g('muLib').innerHTML = ev.music.map(m=>`
+    <div class="mu-item ${S.selMusic.some(s=>s.nm===m.nm)?'sel':''}"
+         onclick="togMu('${m.nm.replace(/'/g,"\\'")}','${m.url.replace(/'/g,"\\'")}')">
+      <div class="mu-ico">🎵</div>
+      <div class="mu-info"><div class="mn">${m.nm}</div><div class="mc">${m.cat}</div></div>
+      <span class="mu-badge ${m.url?'mb-ok':'mb-warn'}">${m.url?'Sedia':'Perlu URL'}</span>
+    </div>`).join('');
+}
+
+function togMu(nm,url) {
+  const i = S.selMusic.findIndex(s=>s.nm===nm);
+  if (i>=0) S.selMusic.splice(i,1);
+  else S.selMusic.push({nm,url});
+  renderMusicLib();
+}
+
+function addManualMu() {
+  const nm = g('muName').value.trim();
+  const url = g('muUrl').value.trim();
+  if (!nm||!url) { toast('Sila isi nama dan URL lagu','err'); return; }
+  S.cusMusic.push({nm,url});
+  S.selMusic.push({nm,url});
+  g('muName').value=''; g('muUrl').value='';
+  renderCusMusic();
+  toast('Lagu ditambah! 🎵');
+}
+
+function renderCusMusic() {
+  g('cusMuList').innerHTML = S.cusMusic.map((m,i)=>`
+    <div class="mu-item sel" style="padding:8px 11px">
+      <div class="mu-ico">🎵</div>
+      <div class="mu-info"><div class="mn">${m.nm}</div><div class="mc" style="word-break:break-all">${m.url}</div></div>
+      <button onclick="delCusMu(${i})" style="background:none;border:none;color:#f87171;cursor:pointer;margin-left:auto">✕</button>
+    </div>`).join('');
+}
+function delCusMu(i) {
+  const rm = S.cusMusic.splice(i,1)[0];
+  const si = S.selMusic.findIndex(s=>s.nm===rm.nm);
+  if (si>=0) S.selMusic.splice(si,1);
+  renderCusMusic();
+}
+
+/* ================================================================
+   IMAGE UPLOAD
+================================================================ */
+function uploadImg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size>5*1024*1024) { toast('Gambar terlalu besar (max 5MB)','err'); return; }
+  const r = new FileReader();
+  r.onload = ev => {
+    S.imgSrc = ev.target.result;
+    g('imgPrev').src = S.imgSrc; g('imgPrev').style.display='block';
+    g('imgPH').style.display='none';
+    toast('Gambar berjaya dimuat naik! 🖼️');
+  };
+  r.readAsDataURL(file);
+}
+function clearImg() {
+  S.imgSrc=null; g('imgPrev').style.display='none'; g('imgPH').style.display='block';
+  g('imgIn').value=''; g('imgUrl').value='';
+}
+function setImgUrl(url) { if(url) S.imgSrc=url; }
+
+/* ================================================================
+   CARD HTML GENERATOR
+================================================================ */
+function getTheme() {
+  return S.theme ? TH[S.theme] : {
+    p:S.customC.p, pl:S.customC.p, pd:S.customC.p,
+    acc:S.customC.p, bg:S.customC.b, bgd:S.customC.b,
+    card:'rgba(255,255,255,.92)', txt:'#1a1a1a', txtl:'#555'
+  };
+}
+
+function getAcItems() {
+  const ev = EV[S.evType];
+  let items = [];
+  ev.groups.forEach((g,gi)=>{ if(g.type==='ac') items=S.data['ac_'+gi]||g.defAc||[]; });
+  return items;
+}
+
+function goPreview() {
+  collectForm();
+  S.html = buildCard();
+  renderPreview();
+  setStep(4);
+}
+
+function buildCard() {
+  const ev   = EV[S.evType];
+  const th   = getTheme();
+  const ac   = getAcItems();
+  const muOk = S.selMusic.filter(m=>m.url);
+  const kod  = f('kodAcara')||'ACARA001';
+  const scr  = f('scriptUrl')||'';
+  const rgb  = hex2rgb(th.p);
+
+  // Pattern CSS
+  const patCSS = {
+    geometric:`repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(${rgb},.04) 40px,rgba(${rgb},.04) 41px),repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(${rgb},.04) 40px,rgba(${rgb},.04) 41px)`,
+    diagonal:`repeating-linear-gradient(60deg,transparent,transparent 35px,rgba(${rgb},.04) 35px,rgba(${rgb},.04) 36px)`,
+    dots:`radial-gradient(circle,rgba(${rgb},.08) 1px,transparent 1px) 0 0/24px 24px`,
+    none:''
+  }[S.pattern]||'';
+
+  // Cover
+  let cover='';
+  const mainName = f('namaPP')||f('namaInd')||f('namaBayi')||f('tajukMajlis')||ev.desc;
+  if (S.evType==='kahwin') {
+    cover=`
+      <div class="cn">
+        <span class="n1">${f('namaPP')||'Nama Pengantin Perempuan'}</span>
+        <span class="ns">${f('subNP')||''}</span>
+        <span class="amp">&amp;</span>
+        <span class="n1">${f('namaPL')||'Nama Pengantin Lelaki'}</span>
+        <span class="ns">${f('subNL')||''}</span>
+      </div>
+      <p class="ctag">~ Walimatulurus ~</p>`;
+  } else if (S.evType==='harijadi') {
+    cover=`
+      <div class="cn">
+        <span class="n1" style="font-size:clamp(44px,12vw,66px)">${f('namaInd')||'Nama'}</span>
+        ${f('umur')?`<span class="ns">🎂 Tahun Ke-${f('umur')}</span>`:''}
+      </div>
+      <p class="ctag">🎉 Selamat Hari Jadi!</p>`;
+  } else if (S.evType==='akikah') {
+    cover=`
+      <div class="cn">
+        <span style="font-family:var(--ft);font-size:clamp(44px,12vw,66px);color:var(--w);display:block;line-height:1.1">${f('namaBayi')||'Nama Bayi'}</span>
+        ${f('namaAyah')&&f('namaIbu')?`<span class="ns">Putera/Puteri ${f('namaAyah')} &amp; ${f('namaIbu')}</span>`:''}
+      </div>
+      <p class="ctag">🍼 Majlis Akikah / Cukur Jambul</p>`;
+  } else if (S.evType==='perpisahan') {
+    cover=`
+      <div style="text-align:center">
+        <p style="font-family:var(--fh);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${f('jenisAc')||'Majlis Perpisahan'}</p>
+        <span class="n1" style="font-size:clamp(38px,10vw,62px)">${f('namaInd')||'Nama Individu'}</span>
+        ${f('jawatan')?`<span class="ns">${f('jawatan')}</span>`:''}
+        ${f('tempKerja')?`<span class="ns">${f('tempKerja')}</span>`:''}
+        ${f('tempohKhidmat')?`<span style="font-family:var(--fh);font-size:13px;color:var(--acc);display:block;margin-top:8px">⏳ ${f('tempohKhidmat')}</span>`:''}
+      </div>
+      <p class="ctag">~ ${f('namaOrg')||'Penganjur'} ~</p>`;
+  } else if (S.evType==='apresiasi') {
+    cover=`
+      <div style="text-align:center">
+        <p style="font-family:var(--fh);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${f('anjuran')||''}</p>
+        <p style="font-family:var(--fh);font-size:16px;color:rgba(255,254,249,.8);margin-bottom:18px">${f('tajukMajlis')||'Tajuk Majlis'}</p>
+        ${f('namaInd')?`<span class="n1" style="font-size:clamp(36px,10vw,58px)">${f('namaInd')}</span>`:''}
+      </div>
+      <p class="ctag">🏆 Majlis Apresiasi &amp; Penghargaan</p>`;
+  } else if (S.evType==='graduasi') {
+    cover=`
+      <div style="text-align:center">
+        <p style="font-size:28px;margin-bottom:10px">🎓</p>
+        <span class="n1" style="font-size:clamp(40px,11vw,64px)">${f('namaInd')||'Nama Graduan'}</span>
+        ${f('pengajian')?`<span class="ns">${f('pengajian')}</span>`:''}
+        ${f('universiti')?`<span style="font-family:var(--fh);font-size:12px;color:var(--acc);display:block;margin-top:6px">🏛️ ${f('universiti')}</span>`:''}
+      </div>
+      <p class="ctag">~ Majlis Konvokesyen ~</p>`;
+  } else {
+    cover=`
+      <div style="text-align:center">
+        ${f('tajukMajlis')?`<p style="font-family:var(--fh);font-size:clamp(20px,6vw,36px);font-weight:600;color:var(--w);line-height:1.3">${f('tajukMajlis')}</p>`:''}
+        ${f('subTajuk')?`<p style="font-family:var(--ft);font-size:28px;color:var(--acc);margin-top:10px">${f('subTajuk')}</p>`:''}
+        ${f('namaInd')?`<span class="n1" style="font-size:clamp(34px,9vw,56px);margin-top:12px">${f('namaInd')}</span>`:''}
+      </div>
+      <p class="ctag">${f('penganjur')?'~ '+f('penganjur')+' ~':'~ Jemputan Hadir ~'}</p>`;
+  }
+
+  // Jemputan text
+  let jTxt='';
+  if (S.evType==='kahwin') {
+    jTxt=`Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke majlis perkahwinan anak kami:<br/><br/>
+      <span style="font-family:var(--ft);font-size:36px;color:var(--txt);display:block;line-height:1.3">${f('namaPP')||'-'} &amp; ${f('namaPL')||'-'}</span>
+      <span style="font-family:var(--fh);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--p)">~ Walimatulurus ~</span>`;
+  } else if (S.evType==='harijadi') {
+    jTxt=`Dengan gembiranya kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke majlis sambutan hari jadi:<br/><br/>
+      <span style="font-family:var(--ft);font-size:36px;color:var(--txt);display:block;line-height:1.3">${f('namaInd')||'-'}${f('umur')?`<br/><span style="font-size:14px;font-family:var(--fb)">Tahun Ke-${f('umur')}</span>`:''}</span>`;
+  } else if (S.evType==='akikah') {
+    jTxt=`Kami dengan sukacitanya menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke Majlis Akikah/Cukur Jambul:<br/><br/>
+      <span style="font-family:var(--ft);font-size:36px;color:var(--txt);display:block;line-height:1.3">${f('namaBayi')||'-'}</span>
+      ${f('namaAyah')&&f('namaIbu')?`<span style="font-size:13px;color:var(--p);font-family:var(--fh)">Putera/Puteri ${f('namaAyah')} &amp; ${f('namaIbu')}</span>`:''}`;
+  } else {
+    const nm = f('namaInd')||f('tajukMajlis')||ev.desc;
+    jTxt=`Kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> hadir ke <em>${ev.desc}</em>:<br/><br/>
+      ${nm?`<span style="font-family:var(--ft);font-size:32px;color:var(--txt);display:block;line-height:1.3">${nm}</span>`:''}`;
+  }
+
+  // Contact
+  let conHTML='';
+  if (S.evType==='kahwin') {
+    conHTML = [
+      f('namaHP') ? `<a class="ci" href="https://wa.me/${f('waP')}" target="_blank"><div class="cico">👰</div><div><div class="cr">Pihak Perempuan</div><div class="cn2">${f('namaHP')}</div><div class="ct">${f('telP')}</div></div></a>` : '',
+      f('namaHL') ? `<a class="ci" href="https://wa.me/${f('waL')}" target="_blank"><div class="cico">🤵</div><div><div class="cr">Pihak Lelaki</div><div class="cn2">${f('namaHL')}</div><div class="ct">${f('telL')}</div></div></a>` : '',
+    ].join('');
+  } else {
+    conHTML = f('namaH') ? `<a class="ci" href="https://wa.me/${f('waNo')}" target="_blank"><div class="cico">📞</div><div><div class="cr">Hubungi Penganjur</div><div class="cn2">${f('namaH')}</div><div class="ct">${f('tel')}</div></div></a>` : '';
+  }
+
+  // Aturcara HTML
+  const acHTML = ac.filter(a=>a.nm).length ? `
+    <div class="sc" id="sAc">
+      <div class="sl">📋 Aturcara Majlis</div>
+      <ul class="acl">${ac.filter(a=>a.nm).map(a=>`
+        <li class="aci">
+          <span class="at">${fmtTime(a.masa)||a.masa}</span>
+          <div class="ad"></div>
+          <div><div class="an">${a.em||''} <strong>${a.nm}</strong></div>${a.ket?`<div class="ak">${a.ket}</div>`:''}</div>
+        </li>`).join('')}</ul>
+    </div>` : '';
+
+  // Map
+  const mapHTML = f('gmapsEmbed') ? `<div class="mw"><iframe src="${f('gmapsEmbed')}" allowfullscreen loading="lazy" title="Lokasi"></iframe></div>` : '';
+
+  // Image
+  const imgHTML = S.imgSrc ? `<div style="margin:14px"><img src="${S.imgSrc}" alt="Gambar Majlis" style="width:100%;border-radius:16px;max-height:300px;object-fit:cover;border:2px solid rgba(${rgb},.2)"></div>` : '';
+
+  // Music playlist
+  const plHTML = muOk.map((m,i)=>`<div class="plt" id="plt${i}" onclick="playT('${m.url.replace(/'/g,"\\'")}',${i})">♪ ${m.nm}</div>`).join('');
+
+  // Footer name
+  const ftNm = S.evType==='kahwin'
+    ? `${f('namaPP')||'-'} &amp; ${f('namaPL')||'-'}`
+    : (f('namaInd')||f('namaBayi')||f('tajukMajlis')||ev.desc);
+
+  const judul = S.evType==='kahwin'
+    ? `Walimatulurus | ${f('namaPP')||'Pengantin'} & ${f('namaPL')||''}`
+    : (f('tajukMajlis')||f('namaInd')||f('namaBayi')||ev.desc);
+
+  const tarikhDisplay  = fmtDate(f('tarikh'));
+  const masaMDisplay   = fmtTime(f('masaMula'))||f('masaMula')||'';
+  const masaTDisplay   = fmtTime(f('masaTamat'))||f('masaTamat')||'';
+  const tarikhRDisplay = fmtDate(f('tarikhRsvp'))||f('tarikhRsvp')||'(tarikh ditetapkan)';
+
+  return `<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${judul}</title>
+<meta name="description" content="Jemputan hadir ke ${judul}">
+<meta property="og:title" content="${judul}">
+<meta property="og:description" content="Tekan link untuk lihat undangan">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p:${th.p};--pl:${th.pl||th.p};--pd:${th.pd||th.p};--acc:${th.acc||th.p};
+  --bg:${th.bg};--bgd:${th.bgd};--card:${th.card};--txt:${th.txt};--txtl:${th.txtl};
+  --w:#fffef9;--div:rgba(${rgb},.3);--rgb:${rgb};--shd:0 8px 40px rgba(${rgb},.18);
+  --ft:'Great Vibes',cursive;--fh:'Cormorant Garamond',serif;--fb:'Outfit',sans-serif;
+  --r:20px;--tr:all .4s cubic-bezier(.25,.8,.25,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bgd);color:var(--txt);min-height:100vh;overflow-x:hidden}
+.pbg{position:relative;min-height:100vh;background:
+  radial-gradient(ellipse at top,rgba(${rgb},.12) 0%,transparent 60%),
+  radial-gradient(ellipse at bottom,rgba(${rgb},.08) 0%,transparent 60%),
+  linear-gradient(135deg,${th.bgd} 0%,${th.bg} 50%,${th.bgd} 100%)}
+.pbg::after{content:'';position:fixed;inset:0;background-image:${patCSS||'none'};pointer-events:none;z-index:0}
+.con{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 60px}
+/* Music */
+.mp{position:fixed;top:16px;right:16px;z-index:999}
+.mb{width:46px;height:46px;border-radius:50%;border:2px solid var(--p);background:rgba(5,3,0,.85);backdrop-filter:blur(10px);color:var(--p);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);box-shadow:0 0 20px rgba(${rgb},.3)}
+.mb.pl{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(${rgb},.5)}70%{box-shadow:0 0 0 12px rgba(${rgb},0)}100%{box-shadow:0 0 0 0 rgba(${rgb},0)}}
+.ml{position:absolute;top:56px;right:0;background:rgba(5,3,0,.97);border:1px solid var(--p);border-radius:14px;padding:12px;min-width:210px;display:none;backdrop-filter:blur(16px)}
+.ml.show{display:block}
+.plt-h{font-family:var(--fh);color:var(--p);font-size:11px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--div)}
+.plt{padding:7px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--w);transition:var(--tr)}
+.plt:hover,.plt.act{background:rgba(${rgb},.2);color:var(--pl)}
+/* Cover */
+.cov{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;position:relative}
+.bsm{font-family:var(--fh);font-size:18px;color:var(--acc);margin-bottom:20px;opacity:0;animation:fid 1s ease .3s forwards;letter-spacing:1px}
+.n1{font-family:var(--ft);font-size:clamp(52px,15vw,76px);color:var(--w);text-shadow:0 2px 20px rgba(${rgb},.5);line-height:1.1;display:block}
+.ns{font-family:var(--fh);font-size:12px;color:var(--acc);letter-spacing:2.5px;text-transform:uppercase;display:block;margin:3px 0 6px}
+.amp{font-family:var(--ft);font-size:40px;color:var(--p);display:block;margin:4px 0}
+.cn{opacity:0;animation:fi 1.2s ease .9s forwards}
+.ctag{font-family:var(--fh);font-size:13px;color:var(--acc);letter-spacing:3px;text-transform:uppercase;margin-top:20px;opacity:0;animation:fiu 1s ease 1.4s forwards}
+.gdv{display:flex;align-items:center;gap:12px;margin:14px 0;opacity:0;animation:fi 1s ease .7s forwards;width:100%;max-width:280px}
+.gdv .ln{height:1px;flex:1;background:linear-gradient(to right,transparent,var(--p))}
+.gdv .ln.r{background:linear-gradient(to left,transparent,var(--p))}
+.gdv .di{width:8px;height:8px;background:var(--p);transform:rotate(45deg);flex-shrink:0}
+.sh{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:fi 1s ease 2s forwards;cursor:pointer}
+.sh span{font-size:9px;color:var(--acc);letter-spacing:2px;text-transform:uppercase}
+.sd{width:6px;height:6px;border-radius:50%;background:var(--p);animation:bn 1.5s ease-in-out infinite}
+/* Cards */
+.sc{margin:14px;background:var(--card);border-radius:var(--r);padding:28px 22px;box-shadow:var(--shd);border:1px solid rgba(${rgb},.18);backdrop-filter:blur(8px);opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.sc.vis{opacity:1;transform:translateY(0)}
+.sl{font-family:var(--fh);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--p);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sl::after{content:'';flex:1;height:1px;background:var(--div)}
+/* Event details */
+.eg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.eb{background:linear-gradient(135deg,rgba(${rgb},.07),rgba(${rgb},.02));border:1px solid rgba(${rgb},.18);border-radius:14px;padding:16px 12px;text-align:center}
+.eb.full{grid-column:1/-1}
+.ei{font-size:22px;margin-bottom:6px;display:block}
+.el{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--p);font-family:var(--fh);margin-bottom:4px}
+.ev{font-family:var(--fh);font-size:15px;font-weight:600;color:var(--txt);line-height:1.4}
+.ev.big{font-size:24px}
+/* Countdown */
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cb{text-align:center;background:linear-gradient(135deg,rgba(${rgb},.1),rgba(${rgb},.03));border-radius:12px;padding:14px 6px;border:1px solid rgba(${rgb},.18)}
+.cn3{font-family:var(--fh);font-size:30px;font-weight:700;color:var(--p);display:block;line-height:1}
+.cl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txtl);margin-top:4px}
+/* Aturcara */
+.acl{list-style:none}
+.aci{display:flex;gap:14px;padding:11px 0;border-bottom:1px dashed var(--div);align-items:flex-start}
+.aci:last-child{border-bottom:none}
+.at{font-family:var(--fh);font-size:12px;color:var(--p);font-weight:600;min-width:72px;padding-top:2px}
+.ad{width:9px;height:9px;border-radius:50%;background:var(--p);margin-top:5px;flex-shrink:0;box-shadow:0 0 8px rgba(${rgb},.4)}
+.an{font-family:var(--fb);font-size:14px;color:var(--txt);line-height:1.4}
+.ak{font-size:12px;color:var(--txtl)}
+/* Map */
+.mw{border-radius:14px;overflow:hidden;margin:12px 0;border:1.5px solid rgba(${rgb},.2)}
+.mw iframe{width:100%;height:220px;display:block;border:none}
+.ma{font-family:var(--fb);font-size:13px;color:var(--txtl);text-align:center;line-height:1.7;margin:10px 0 14px}
+.br{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;border-radius:50px;font-family:var(--fb);font-size:13px;font-weight:500;text-decoration:none;transition:var(--tr);border:none;cursor:pointer;width:100%}
+.bp{background:linear-gradient(135deg,var(--p),var(--pd));color:white;box-shadow:0 4px 18px rgba(${rgb},.3)}
+.bp:hover{transform:translateY(-2px)}
+.bo{background:transparent;color:var(--p);border:1.5px solid var(--p)}
+.bo:hover{background:rgba(${rgb},.1)}
+/* Contact */
+.cg{display:grid;gap:10px}
+.ci{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(${rgb},.05),transparent);border:1px solid rgba(${rgb},.15);border-radius:14px;padding:14px;text-decoration:none;transition:var(--tr)}
+.ci:hover{background:rgba(${rgb},.1);transform:translateX(4px)}
+.cico{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pd));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cr{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--p);font-family:var(--fh)}
+.cn2{font-family:var(--fh);font-size:15px;font-weight:600;color:var(--txt)}
+.ct{font-size:12px;color:var(--txtl)}
+/* RSVP & Ucapan */
+.rf{display:grid;gap:12px}
+.fl label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--p);font-family:var(--fh);margin-bottom:6px}
+.fc{width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(${rgb},.25);background:rgba(255,255,255,.65);font-family:var(--fb);font-size:14px;color:var(--txt);transition:var(--tr);outline:none;appearance:none}
+.fc:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(${rgb},.12)}
+.hr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ho{position:relative}.ho input{position:absolute;opacity:0}
+.ho label{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:12px;border:1.5px solid rgba(${rgb},.25);background:rgba(255,255,255,.4);cursor:pointer;font-size:13px;color:var(--txt);font-family:var(--fb);transition:var(--tr);letter-spacing:0;text-transform:none}
+.ho input:checked+label{background:linear-gradient(135deg,var(--p),var(--pd));color:white;border-color:transparent;box-shadow:0 4px 14px rgba(${rgb},.3)}
+/* Ucapan wall */
+.uw{display:grid;gap:10px;margin:12px 0;max-height:280px;overflow-y:auto}
+.ui{background:linear-gradient(135deg,rgba(${rgb},.07),rgba(${rgb},.02));border:1px solid rgba(${rgb},.15);border-radius:12px;padding:14px}
+.un{font-family:var(--fh);font-size:13px;font-weight:600;color:var(--p);margin-bottom:4px}
+.ut{font-size:13px;color:var(--txtl);line-height:1.6;font-style:italic}
+.rm{text-align:center;font-family:var(--fh);font-size:14px;padding:10px;border-radius:10px;display:none}
+.ok{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.3)}
+.er{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.3)}
+/* Footer */
+.ft{text-align:center;padding:36px 24px 20px;color:var(--acc);font-family:var(--fh);font-size:13px;line-height:1.9}
+/* Animations */
+@keyframes fi   {from{opacity:0}to{opacity:1}}
+@keyframes fid  {from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+@keyframes fiu  {from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes bn   {0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+</style>
+</head>
+<body>
+${muOk.length?`<div class="mp" id="mpW"><button class="mb" id="mpB" onclick="tMp()" title="Muzik">♪</button><div class="ml" id="mpL"><div class="plt-h">🎵 Pilih Lagu</div>${plHTML}</div></div><audio id="bgA" loop preload="none"></audio>`:''}
+<div class="pbg"><div class="con">
+
+<section class="cov" id="cov">
+  <p class="bsm">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+  ${cover}
+  <div class="gdv"><div class="ln"></div><div class="di"></div><div class="ln r"></div></div>
+  <div class="sh" onclick="document.getElementById('sJ').scrollIntoView({behavior:'smooth'})">
+    <span>Tatal ke bawah</span><div class="sd"></div>
+  </div>
+</section>
+
+${imgHTML}
+
+<div class="sc" id="sJ">
+  <div class="sl">📜 Jemputan</div>
+  <p style="font-family:var(--fh);font-size:15px;line-height:1.85;color:var(--txtl);text-align:center">${jTxt}</p>
+  <p style="font-family:var(--fh);font-size:14px;color:var(--txtl);text-align:center;margin-top:12px">Kehadiran dan doa restu Tuan/Puan amatlah kami hargai.</p>
+</div>
+
+<div class="sc" id="sT">
+  <div class="sl">📅 Tarikh &amp; Masa</div>
+  <div class="eg">
+    <div class="eb"><span class="ei">📅</span><div class="el">Tarikh</div><div class="ev big">${tarikhDisplay||'-'}</div>${f('hari')?`<div class="ev" style="font-size:13px;color:var(--p)">${f('hari')}</div>`:''}</div>
+    <div class="eb"><span class="ei">🕐</span><div class="el">Masa</div><div class="ev">${masaMDisplay||'-'}</div>${masaTDisplay?`<div class="ev" style="font-size:11px;color:var(--txtl)">hingga</div><div class="ev">${masaTDisplay}</div>`:''}</div>
+    ${f('tempat')?`<div class="eb full"><span class="ei">📍</span><div class="el">Tempat</div><div class="ev">${f('tempat')}</div>${f('alamat')?`<div style="font-size:12px;color:var(--txtl);margin-top:4px;font-family:var(--fb)">${f('alamat')}</div>`:''}</div>`:''}
+  </div>
+</div>
+
+<div class="sc" id="sCd">
+  <div class="sl">⏳ Kiraan Masa</div>
+  <div class="cd" id="cdG"><div class="cb"><span class="cn3" id="cdH">--</span><div class="cl">Hari</div></div><div class="cb"><span class="cn3" id="cdJ">--</span><div class="cl">Jam</div></div><div class="cb"><span class="cn3" id="cdM">--</span><div class="cl">Minit</div></div><div class="cb"><span class="cn3" id="cdS">--</span><div class="cl">Saat</div></div></div>
+  <p id="cdMsg" style="text-align:center;font-family:var(--fh);color:var(--p);font-size:14px;display:none;margin-top:12px">✨ Majlis sedang berlangsung!</p>
+</div>
+
+${acHTML}
+
+${f('tempat')?`<div class="sc" id="sL"><div class="sl">📍 Lokasi Majlis</div>${mapHTML}<p class="ma">${f('tempat')}${f('alamat')?'<br/>'+f('alamat'):''}</p><div class="br">${f('wazeUrl')?`<a class="btn bp" href="${f('wazeUrl')}" target="_blank">🗺️ Waze</a>`:''} ${f('gmapsUrl')?`<a class="btn bo" href="${f('gmapsUrl')}" target="_blank">📍 Google Maps</a>`:''}</div></div>`:''}
+
+${conHTML?`<div class="sc" id="sC"><div class="sl">📞 Hubungi Kami</div><div class="cg">${conHTML}</div></div>`:''}
+
+<div class="sc" id="sR">
+  <div class="sl">✅ RSVP</div>
+  <p style="font-family:var(--fh);font-size:14px;color:var(--txtl);margin-bottom:14px;line-height:1.7">Mohon sahkan kehadiran sebelum <strong style="color:var(--p)">${tarikhRDisplay}</strong></p>
+  <form class="rf" id="rF" onsubmit="doR(event)">
+    <div class="fl"><label for="rN">Nama Anda</label><input type="text" id="rN" class="fc" placeholder="Nama penuh" required></div>
+    <div class="fl"><label>Kehadiran</label><div class="hr"><div class="ho"><input type="radio" name="hr" id="hY" value="Hadir" checked><label for="hY">✅ Hadir</label></div><div class="ho"><input type="radio" name="hr" id="hT" value="Tidak Hadir"><label for="hT">❌ Tidak Hadir</label></div></div></div>
+    <div class="fl"><label for="rB">Bilangan Tetamu</label><select id="rB" class="fc"><option>1 orang</option><option>2 orang</option><option>3 orang</option><option>4 orang</option><option>5 orang</option><option>6+ orang</option></select></div>
+    <div class="fl"><label for="rP">Ucapan / Pesanan</label><textarea id="rP" class="fc" rows="3" placeholder="Ucapan tahniah atau pesanan..."></textarea></div>
+    <div id="rMsg" class="rm"></div>
+    <button type="submit" class="btn bp" id="rBtn">💌 Hantar RSVP</button>
+  </form>
+</div>
+
+<div class="sc" id="sU">
+  <div class="sl">💬 ${ev.ucapan||'Ucapan'}</div>
+  <div class="uw" id="uW"><p style="text-align:center;font-family:var(--fh);font-size:13px;color:var(--txtl);padding:20px">Belum ada ucapan lagi. Jadilah yang pertama! 💌</p></div>
+  <form class="rf" style="margin-top:12px" onsubmit="doU(event)">
+    <div class="fl"><label for="uN">Nama Anda</label><input type="text" id="uN" class="fc" placeholder="Nama anda" required></div>
+    <div class="fl"><label for="uT">${ev.ucapan||'Ucapan'}</label><textarea id="uT" class="fc" rows="3" placeholder="Taip ucapan anda di sini..." required></textarea></div>
+    <div id="uMsg" class="rm"></div>
+    <button type="submit" class="btn bo">💬 Hantar Ucapan</button>
+  </form>
+</div>
+
+<div class="ft">
+  <div class="gdv" style="justify-content:center;margin-bottom:16px"><div class="ln"></div><div class="di"></div><div class="ln r"></div></div>
+  <strong>${ftNm}</strong>
+  <p style="margin-top:10px;font-size:12px;opacity:.45">Dijana oleh <em>MyKadJemputan</em></p>
+</div>
+
+</div></div>
+<script>
+const KOD='${kod}',JENIS='${S.evType}',SCR='${scr}';
+const TRGT='${f('tarikh')}T${f('masaMula')||'00:00'}:00';
+// Countdown
+function rc(){
+  const d=new Date(TRGT)-new Date();
+  if(d<=0){g('cdG').style.display='none';g('cdMsg').style.display='block';return}
+  const p=n=>String(Math.floor(n)).padStart(2,'0');
+  g('cdH').textContent=p(d/86400000);g('cdJ').textContent=p((d%86400000)/3600000);
+  g('cdM').textContent=p((d%3600000)/60000);g('cdS').textContent=p((d%60000)/1000);
+}
+function g(id){return document.getElementById(id)}
+rc();setInterval(rc,1000);
+// Scroll anim
+document.querySelectorAll('.sc').forEach(c=>{
+  new IntersectionObserver(([e])=>{if(e.isIntersecting)e.target.classList.add('vis')},{threshold:.08}).observe(c)
+});
+// Music
+let isP=false;
+const aud=g('bgA'),mB=g('mpB'),mL=g('mpL');
+function playT(url,idx){
+  document.querySelectorAll('.plt').forEach(e=>e.classList.remove('act'));
+  const el=g('plt'+idx);if(el)el.classList.add('act');
+  if(aud){aud.src=url;aud.play().then(()=>{isP=true;if(mB){mB.textContent='⏸';mB.classList.add('pl')}if(mL)mL.classList.remove('show')}).catch(console.error)}
+}
+function tMp(){
+  if(!mB||!mL)return;
+  if(!isP)mL.classList.toggle('show');
+  else{aud.pause();isP=false;mB.textContent='♪';mB.classList.remove('pl')}
+}
+document.addEventListener('click',e=>{if(mL&&!g('mpW').contains(e.target))mL.classList.remove('show')});
+document.addEventListener('click',function ap(){
+  const f=document.querySelector('.plt');if(f){const m=f.getAttribute('onclick').match(/playT\('([^']+)',/);if(m)playT(m[1],0)}
+  document.removeEventListener('click',ap)
+},{once:true});
+// RSVP
+async function doR(e){
+  e.preventDefault();
+  const btn=g('rBtn'),msg=g('rMsg');
+  const d={kodAcara:KOD,jenisAcara:JENIS,jenisData:'rsvp',
+    nama:g('rN').value,hadir:document.querySelector('input[name="hr"]:checked').value,
+    bilangan:g('rB').value,ucapan:g('rP').value};
+  btn.disabled=true;btn.textContent='⏳ Menghantar...';msg.style.display='none';
+  try{
+    if(SCR)await fetch(SCR,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),mode:'no-cors'});
+    msg.textContent='✅ Terima kasih! RSVP anda telah direkodkan.';msg.className='rm ok';msg.style.display='block';
+    if(d.ucapan)addUW(d.nama,d.ucapan);e.target.reset();
+  }catch{msg.textContent='❌ Ralat! Sila cuba lagi.';msg.className='rm er';msg.style.display='block'}
+  finally{btn.disabled=false;btn.textContent='💌 Hantar RSVP'}
+}
+// Ucapan
+async function doU(e){
+  e.preventDefault();
+  const msg=g('uMsg'),nm=g('uN').value,tx=g('uT').value;
+  const d={kodAcara:KOD,jenisAcara:JENIS,jenisData:'ucapan',nama:nm,ucapan:tx};
+  try{
+    if(SCR)await fetch(SCR,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),mode:'no-cors'});
+    addUW(nm,tx);msg.textContent='✅ Ucapan anda telah dihantar!';msg.className='rm ok';msg.style.display='block';
+    e.target.reset();setTimeout(()=>msg.style.display='none',3000);
+  }catch{msg.textContent='❌ Ralat!';msg.className='rm er';msg.style.display='block'}
+}
+function addUW(nm,tx){
+  const w=g('uW'),p=w.querySelector('p');if(p)p.remove();
+  const d=document.createElement('div');d.className='ui';
+  d.innerHTML='<div class="un">'+nm+'</div><div class="ut">💬 '+tx+'</div>';w.prepend(d);
+}
+async function loadU(){
+  if(!SCR||!KOD)return;
+  try{
+    const r=await fetch(SCR+'?kod='+encodeURIComponent(KOD)+'&jenis=ucapan');
+    const j=await r.json();
+    if(j.data&&j.data.length)j.data.slice(-10).forEach(d=>addUW(d['Nama']||'-',d['Ucapan/Pesanan']||''));
+  }catch(e){}
+}
+loadU();
+<\/script>
+</body>
+</html>`;
+}
+
+/* ================================================================
+   PREVIEW
+================================================================ */
+function renderPreview() {
+  const blob = new Blob([S.html],{type:'text/html'});
+  g('prevFrame').src = URL.createObjectURL(blob);
+  const fn = `kad_${f('kodAcara')||'jemputan'}.html`;
+  g('prevFn').textContent = fn;
+  // Summary
+  const ev = EV[S.evType];
+  const info = [
+    {k:'Jenis Majlis', v:ev.lbl},
+    {k:'Nama/Tajuk', v:f('namaPP')||f('namaInd')||f('namaBayi')||f('tajukMajlis')||'-'},
+    {k:'Tarikh', v:fmtDate(f('tarikh'))||'-'},
+    {k:'Tempat', v:f('tempat')||'-'},
+    {k:'Kod Acara', v:f('kodAcara')||'-'},
+    {k:'Lagu Dipilih', v:S.selMusic.length+' lagu'},
+    {k:'Gambar', v:S.imgSrc?'Ada ✓':'Tiada'},
+    {k:'Google Script', v:f('scriptUrl')?'Dikonfigurasi ✓':'Belum diisi ⚠️'},
+  ];
+  g('cardSum').innerHTML = info.map(i=>`<div class="info-row"><span class="ir-k">${i.k}</span><span class="ir-v">${i.v}</span></div>`).join('');
+}
+
+function dlCard() {
+  if (!S.html) { toast('Tiada kad dijana','err'); return; }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([S.html],{type:'text/html'}));
+  a.download = `kad_${f('kodAcara')||'jemputan'}.html`;
+  a.click();
+  toast('Kad berjaya dimuat turun! 🎉');
+}
+
+/* ================================================================
+   GOOGLE SCRIPT MODAL
+================================================================ */
+function showScriptModal() {
+  g('scriptPre').textContent = GAS_CODE;
+  g('scriptModal').classList.add('show');
+}
+function hideModal() { g('scriptModal').classList.remove('show'); }
+function copyScript() {
+  navigator.clipboard.writeText(GAS_CODE).then(()=>toast('Kod disalin! 📋'));
+}
+
+/* ================================================================
+   DASHBOARD
+================================================================ */
+let DDATA=[];
+
+async function loadDash() {
+  const url = g('dScriptUrl').value.trim();
+  const kod = g('dKod').value.trim();
+  if (!url||!kod) { toast('Sila isi URL Script dan Kod Acara','err'); return; }
+  g('dashData').style.display='none';
+  g('dashEmpty').style.display='none';
+  try {
+    const r = await fetch(`${url}?kod=${encodeURIComponent(kod)}`);
+    const j = await r.json();
+    DDATA = j.data||[];
+    renderDash();
+    g('dashData').style.display='block';
+    toast(`${DDATA.length} rekod ditemui`);
+  } catch(e) {
+    toast('Gagal memuat data. Semak URL Script.','err');
+    g('dashEmpty').style.display='block';
+  }
+}
+
+function renderDash() {
+  const rsvps   = DDATA.filter(d=>d['JenisData']==='rsvp');
+  const ucapans = DDATA.filter(d=>d['JenisData']==='ucapan');
+  const hadir   = rsvps.filter(d=>d['Hadir/Status']==='Hadir');
+  const tidak   = rsvps.filter(d=>d['Hadir/Status']==='Tidak Hadir');
+  g('stTotal').textContent  = DDATA.length;
+  g('stHadir').textContent  = hadir.length;
+  g('stTidak').textContent  = tidak.length;
+  g('stUcapan').textContent = ucapans.length;
+  g('rsvpBody').innerHTML = rsvps.map((d,i)=>`<tr>
+    <td>${i+1}</td><td>${d['Timestamp']||'-'}</td><td><strong>${d['Nama']||'-'}</strong></td>
+    <td><span class="badge ${d['Hadir/Status']==='Hadir'?'b-green':'b-red'}">${d['Hadir/Status']||'-'}</span></td>
+    <td>${d['Bilangan']||'-'}</td><td>${d['Ucapan/Pesanan']||'-'}</td>
+  </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text3)">Tiada data RSVP</td></tr>';
+  g('ucapanBody').innerHTML = ucapans.map((d,i)=>`<tr>
+    <td>${i+1}</td><td>${d['Timestamp']||'-'}</td><td><strong>${d['Nama']||'-'}</strong></td>
+    <td>${d['Ucapan/Pesanan']||'-'}</td>
+  </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text3)">Tiada ucapan</td></tr>';
+}
+
+function showTab(t) {
+  g('tRsvp').style.display   = t==='rsvp'   ? 'block':'none';
+  g('tUcapan').style.display = t==='ucapan' ? 'block':'none';
+  g('tRsvpBtn').className    = 'btn btn-sm '+(t==='rsvp'?'btn-gold':'btn-ghost');
+  g('tUcapanBtn').className  = 'btn btn-sm '+(t==='ucapan'?'btn-gold':'btn-ghost');
+}
+
+function expCSV() {
+  if (!DDATA.length) { toast('Tiada data untuk dimuat turun','err'); return; }
+  const hdr = ['Timestamp','KodAcara','JenisAcara','Nama','JenisData','Hadir/Status','Bilangan','Ucapan/Pesanan'];
+  const csv = [hdr.join(','), ...DDATA.map(d=>hdr.map(h=>`"${(d[h]||'').toString().replace(/"/g,'""')}"`).join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = `dashboard_${g('dKod').value}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast('CSV dimuat turun! ⬇️');
+}
+
+/* ================================================================
+   INIT
+================================================================ */
+document.addEventListener('DOMContentLoaded',()=>{
+  goSection('hero');
+});
+</script>
+</body>
+</html>
