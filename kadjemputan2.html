@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================ -->
+  <!-- BAHAGIAN: SEO & META - Tukar mengikut pengantin              -->
+  <!-- ============================================================ -->
+  <title>Walimatulurus | [NAMA_PENGANTIN_PEREMPUAN] & [NAMA_PENGANTIN_LELAKI]</title>
+  <meta name="description" content="Jemputan Majlis Perkahwinan. Tekan link untuk lihat undangan." />
+  <meta property="og:title" content="Walimatulurus | [NAMA_PENGANTIN_PEREMPUAN] & [NAMA_PENGANTIN_LELAKI]" />
+  <meta property="og:description" content="Tekan link untuk lihat undangan." />
+  <meta property="og:image" content="[URL_GAMBAR_COVER]" />
+  <meta property="og:type" content="website" />
+  <!-- ============================================================ -->
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================ */
+    /* DESIGN TOKENS - Tukar warna/fon tema di sini sahaja          */
+    /* ============================================================ */
+    :root {
+      /* -- WARNA UTAMA (Tema semasa: Emas & Krim) -- */
+      --color-primary:      #b8860b;
+      --color-primary-light:#d4a017;
+      --color-primary-dark: #8b6508;
+      --color-accent:       #c9a84c;
+      --color-bg:           #faf7f0;
+      --color-bg-dark:      #1a1208;
+      --color-text:         #3d2b00;
+      --color-text-light:   #6b5230;
+      --color-white:        #fffef9;
+      --color-card:         rgba(255,252,240,0.92);
+      --color-divider:      rgba(184,134,11,0.35);
+
+      /* -- FON -- */
+      --font-title:   'Great Vibes', cursive;
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body:    'Outfit', sans-serif;
+
+      /* -- SAIZ -- */
+      --radius-card: 20px;
+      --shadow-card: 0 8px 40px rgba(184,134,11,0.18);
+      --transition:  all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    /* ============================================================ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg-dark);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================ */
+    /* DESIGN CORAK LATAR BELAKANG                                  */
+    /* Pilihan: 1) Gambar  2) Gradien CSS  3) Warna biasa           */
+    /* ============================================================ */
+    .page-wrapper {
+      position: relative;
+      min-height: 100vh;
+      /* PILIHAN 1: Guna gambar latar (uncomment dan isi path gambar) */
+      /* background-image: url('NAMA_FAIL_GAMBAR.jpg'); */
+      /* background-size: cover; background-attachment: fixed; */
+
+      /* PILIHAN 2: Gradien CSS (aktif sekarang) */
+      background: 
+        radial-gradient(ellipse at top,    rgba(184,134,11,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(139,101,8,0.10)  0%, transparent 60%),
+        linear-gradient(135deg, #0f0a02 0%, #1e1404 50%, #0f0a02 100%);
+    }
+
+    /* Corak geometrik Islamic CSS */
+    .page-wrapper::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(184,134,11,0.03) 40px,
+          rgba(184,134,11,0.03) 41px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(184,134,11,0.03) 40px,
+          rgba(184,134,11,0.03) 41px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 0 60px;
+    }
+
+    /* ============================================================ */
+    /* BAHAGIAN: KAWALAN LAGU LATAR BELAKANG                        */
+    /* ============================================================ */
+    .music-player {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+    }
+
+    .music-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--color-primary);
+      background: rgba(10,7,2,0.75);
+      backdrop-filter: blur(10px);
+      color: var(--color-primary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 0 20px rgba(184,134,11,0.3);
+    }
+
+    .music-btn:hover { transform: scale(1.1); }
+    .music-btn.playing { animation: pulse-ring 2s infinite; }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0  0  rgba(184,134,11,0.5); }
+      70%  { box-shadow: 0 0 0 12px rgba(184,134,11,0);   }
+      100% { box-shadow: 0 0 0  0  rgba(184,134,11,0);   }
+    }
+
+    .music-playlist {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      background: rgba(15,10,3,0.95);
+      border: 1px solid var(--color-primary);
+      border-radius: 14px;
+      padding: 12px;
+      min-width: 210px;
+      display: none;
+      backdrop-filter: blur(16px);
+    }
+
+    .music-playlist.show { display: block; }
+
+    .playlist-title {
+      font-family: var(--font-heading);
+      color: var(--color-primary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--color-divider);
+    }
+
+    .playlist-item {
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--color-white);
+      transition: var(--transition);
+    }
+
+    .playlist-item:hover,
+    .playlist-item.active { background: rgba(184,134,11,0.2); color: var(--color-primary-light); }
+    /* ============================================================ */
+
+    /* ---- COVER ---- */
+    .cover {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Ornamen bunga emas di tepi */
+    .cover::before, .cover::after {
+      content: '✦';
+      position: absolute;
+      font-size: 60px;
+      color: rgba(184,134,11,0.08);
+      pointer-events: none;
+    }
+    .cover::before { top: 40px;  left: 20px;  transform: rotate(-20deg); }
+    .cover::after  { bottom: 80px; right: 20px; transform: rotate(20deg);  }
+
+    .bismillah {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      color: var(--color-accent);
+      margin-bottom: 4px;
+      opacity: 0;
+      animation: fadeInDown 1s ease 0.3s forwards;
+      letter-spacing: 1px;
+    }
+
+    .bismillah-arabic {
+      font-size: 30px;
+      color: var(--color-primary-light);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeInDown 1s ease 0.5s forwards;
+      line-height: 1.6;
+    }
+
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 14px 0;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.7s forwards;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .gold-divider .line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(to right, transparent, var(--color-primary));
+    }
+    .gold-divider .line.right {
+      background: linear-gradient(to left, transparent, var(--color-primary));
+    }
+    .gold-divider .diamond {
+      width: 8px; height: 8px;
+      background: var(--color-primary);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================ */
+    /* BAHAGIAN: NAMA PASANGAN PENGANTIN                            */
+    /* ============================================================ */
+    .couple-names {
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.9s forwards;
+    }
+
+    .pengantin-name {
+      font-family: var(--font-title);
+      font-size: clamp(52px, 15vw, 76px);
+      color: var(--color-white);
+      text-shadow: 0 2px 20px rgba(184,134,11,0.5);
+      line-height: 1.1;
+      display: block;
+    }
+
+    .pengantin-sub {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      color: var(--color-accent);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      display: block;
+      margin: 3px 0 6px;
+    }
+
+    .ampersand {
+      font-family: var(--font-title);
+      font-size: 40px;
+      color: var(--color-primary);
+      display: block;
+      margin: 4px 0;
+    }
+    /* ============================================================ */
+
+    .cover-sub {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--color-accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.4s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeIn 1s ease 2s forwards;
+      cursor: pointer;
+    }
+
+    .scroll-hint span {
+      font-size: 9px;
+      color: var(--color-accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      animation: bounce 1.5s ease-in-out infinite;
+    }
+
+    /* ---- SECTION CARD ---- */
+    .section-card {
+      margin: 14px 14px;
+      background: var(--color-card);
+      border-radius: var(--radius-card);
+      padding: 28px 22px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(184,134,11,0.18);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .section-card.visible { opacity: 1; transform: translateY(0); }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-divider);
+    }
+
+    /* ---- JEMPUTAN ---- */
+    .jemputan-text {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--color-text-light);
+      text-align: center;
+    }
+
+    .nama-besar {
+      font-family: var(--font-title);
+      font-size: 38px;
+      color: var(--color-text);
+      display: block;
+      line-height: 1.2;
+      margin: 12px 0 4px;
+    }
+
+    .walimatulurus-label {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      color: var(--color-primary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================ */
+    /* BAHAGIAN: TARIKH, MASA DAN TEMPAT MAJLIS                     */
+    /* ============================================================ */
+    .event-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .event-box {
+      background: linear-gradient(135deg, rgba(184,134,11,0.07), rgba(184,134,11,0.02));
+      border: 1px solid rgba(184,134,11,0.18);
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .event-box.full { grid-column: 1 / -1; }
+
+    .ev-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+
+    .ev-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-family: var(--font-heading);
+      margin-bottom: 4px;
+    }
+
+    .ev-value {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .ev-value.big { font-size: 24px; }
+    /* ============================================================ */
+
+    /* ============================================================ */
+    /* BAHAGIAN: ATURCARA MAJLIS                                    */
+    /* ============================================================ */
+    .aturcara-list { list-style: none; }
+
+    .aturcara-item {
+      display: flex;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px dashed var(--color-divider);
+      align-items: flex-start;
+    }
+
+    .aturcara-item:last-child { border-bottom: none; }
+
+    .ac-masa {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      color: var(--color-primary);
+      font-weight: 600;
+      min-width: 72px;
+      padding-top: 2px;
+    }
+
+    .ac-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      margin-top: 5px;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(184,134,11,0.4);
+    }
+
+    .ac-nama {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .ac-keterangan {
+      font-size: 12px;
+      color: var(--color-text-light);
+    }
+    /* ============================================================ */
+
+    /* ---- COUNTDOWN ---- */
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .cd-box {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(184,134,11,0.10), rgba(184,134,11,0.03));
+      border-radius: 12px;
+      padding: 14px 6px;
+      border: 1px solid rgba(184,134,11,0.18);
+    }
+
+    .cd-num {
+      font-family: var(--font-heading);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: block;
+      line-height: 1;
+    }
+
+    .cd-label {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-text-light);
+      margin-top: 4px;
+    }
+
+    /* ============================================================ */
+    /* BAHAGIAN: LOKASI / PETA GOOGLE MAPS                          */
+    /* ============================================================ */
+    .map-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1.5px solid rgba(184,134,11,0.2);
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border: none;
+    }
+
+    .map-addr {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-text-light);
+      text-align: center;
+      line-height: 1.7;
+      margin: 10px 0 14px;
+    }
+
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: white;
+      box-shadow: 0 4px 18px rgba(184,134,11,0.3);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(184,134,11,0.4); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--color-primary);
+      border: 1.5px solid var(--color-primary);
+    }
+
+    .btn-outline:hover { background: rgba(184,134,11,0.1); }
+    /* ============================================================ */
+
+    /* ============================================================ */
+    /* BAHAGIAN: TELEFON / WHATSAPP KELUARGA                        */
+    /* ============================================================ */
+    .contact-grid { display: grid; gap: 10px; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, rgba(184,134,11,0.05), transparent);
+      border: 1px solid rgba(184,134,11,0.15);
+      border-radius: 14px;
+      padding: 14px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .contact-item:hover { background: rgba(184,134,11,0.1); transform: translateX(4px); }
+
+    .contact-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .contact-role {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-family: var(--font-heading);
+    }
+
+    .contact-name {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .contact-num {
+      font-size: 12px;
+      color: var(--color-text-light);
+    }
+    /* ============================================================ */
+
+    /* ============================================================ */
+    /* BAHAGIAN: RSVP PENGESAHAN KEHADIRAN                          */
+    /* ============================================================ */
+    .rsvp-form { display: grid; gap: 12px; }
+
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-family: var(--font-heading);
+      margin-bottom: 6px;
+    }
+
+    .form-ctrl {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(184,134,11,0.25);
+      background: rgba(255,252,240,0.65);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-text);
+      transition: var(--transition);
+      outline: none;
+      appearance: none;
+    }
+
+    .form-ctrl:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(184,134,11,0.12);
+    }
+
+    .hadir-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .hadir-opt { position: relative; }
+    .hadir-opt input { position: absolute; opacity: 0; }
+
+    .hadir-opt label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(184,134,11,0.25);
+      background: rgba(255,252,240,0.4);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--color-text);
+      font-family: var(--font-body);
+      transition: var(--transition);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .hadir-opt input:checked + label {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(184,134,11,0.3);
+    }
+
+    .rsvp-msg {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .rsvp-msg.ok  { background: rgba(34,197,94,0.1);  color: #16a34a; border: 1px solid rgba(34,197,94,0.3);  }
+    .rsvp-msg.err { background: rgba(239,68,68,0.1);  color: #dc2626; border: 1px solid rgba(239,68,68,0.3);  }
+    /* ============================================================ */
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 36px 24px 20px;
+      color: var(--color-accent);
+      font-family: var(--font-heading);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    /* ---- ANIMATIONS ---- */
+    @keyframes fadeIn     { from { opacity:0 } to { opacity:1 } }
+    @keyframes fadeInDown { from { opacity:0; transform:translateY(-18px) } to { opacity:1; transform:none } }
+    @keyframes fadeInUp   { from { opacity:0; transform:translateY(18px)  } to { opacity:1; transform:none } }
+    @keyframes bounce     { 0%,100% { transform:translateY(0) } 50% { transform:translateY(7px) } }
+
+    @media (max-width: 360px) {
+      .pengantin-name { font-size: 52px; }
+      .cd-num { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- KAWALAN MUZIK LATAR BELAKANG                                 -->
+<!-- ============================================================ -->
+<div class="music-player" id="musicPlayer">
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Muzik">♪</button>
+  <div class="music-playlist" id="musicPlaylist">
+    <div class="playlist-title">🎵 Pilih Lagu</div>
+    <div id="playlistItems"></div>
+  </div>
+</div>
+<!-- ============================================================ -->
+
+<audio id="bgAudio" loop preload="none"></audio>
+
+<div class="page-wrapper">
+  <div class="container">
+
+    <!-- ============================================================ -->
+    <!-- COVER / HALAMAN UTAMA                                        -->
+    <!-- ============================================================ -->
+    <section class="cover" id="cover">
+
+      <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+      <p class="bismillah-arabic" style="font-size:14px; font-family:var(--font-heading); color:var(--color-accent);">
+        Dengan nama Allah Yang Maha Pemurah lagi Maha Mengasihani
+      </p>
+
+      <div class="gold-divider">
+        <div class="line"></div>
+        <div class="diamond"></div>
+        <div class="line right"></div>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- NAMA PASANGAN PENGANTIN — edit di sini atau dalam KONFIGURASI -->
+      <!-- ============================================================ -->
+      <div class="couple-names">
+        <span class="pengantin-name" id="cvNamaP">Syazwani</span>
+        <span class="pengantin-sub" id="cvSubP">binti Abdullah</span>
+        <span class="ampersand">&amp;</span>
+        <span class="pengantin-name" id="cvNamaL">Hassan</span>
+        <span class="pengantin-sub" id="cvSubL">bin Ibrahim</span>
+      </div>
+      <!-- ============================================================ -->
+
+      <div class="gold-divider" style="animation-delay:1.2s">
+        <div class="line"></div>
+        <div class="diamond"></div>
+        <div class="line right"></div>
+      </div>
+
+      <p class="cover-sub">~ Jemputan Hadir ~</p>
+
+      <div class="scroll-hint" onclick="document.getElementById('sJemputan').scrollIntoView({behavior:'smooth'})">
+        <span>Tatal ke bawah</span>
+        <div class="scroll-dot"></div>
+      </div>
+    </section>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: UCAPAN JEMPUTAN                                    -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sJemputan">
+      <div class="section-label">📜 Jemputan</div>
+      <p class="jemputan-text">
+        Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput<br/>
+        <strong>Tuan / Puan / Encik / Cik</strong><br/>
+        ke majlis perkahwinan puteri/putera kami:
+      </p>
+      <div style="text-align:center; margin:16px 0;">
+        <!-- NAMA PENGANTIN DALAM TEKS JEMPUTAN -->
+        <span class="nama-besar" id="jNamaPasangan">Syazwani &amp; Hassan</span>
+        <span class="walimatulurus-label">~ Walimatulurus ~</span>
+      </div>
+      <p class="jemputan-text">
+        Kehadiran dan doa restu Tuan/Puan amatlah kami hargai.
+      </p>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: TARIKH, MASA DAN TEMPAT MAJLIS                     -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sTarikhMasa">
+      <div class="section-label">📅 Tarikh &amp; Masa</div>
+      <div class="event-grid">
+
+        <!-- TARIKH MAJLIS -->
+        <div class="event-box">
+          <span class="ev-icon">📅</span>
+          <div class="ev-label">Tarikh</div>
+          <div class="ev-value big" id="eTarikh">15 Nov 2025</div>
+          <div class="ev-value" style="font-size:13px; color:var(--color-primary)" id="eHari">Sabtu</div>
+        </div>
+
+        <!-- MASA MAJLIS -->
+        <div class="event-box">
+          <span class="ev-icon">🕐</span>
+          <div class="ev-label">Masa</div>
+          <div class="ev-value" id="eMasaMula">11:00 pagi</div>
+          <div class="ev-value" style="font-size:11px; color:var(--color-text-light)">hingga</div>
+          <div class="ev-value" id="eMasaTamat">5:00 petang</div>
+        </div>
+
+        <!-- TEMPAT MAJLIS -->
+        <div class="event-box full">
+          <span class="ev-icon">📍</span>
+          <div class="ev-label">Tempat</div>
+          <div class="ev-value" id="eTempat">Dewan Serbaguna Sri Kenanga</div>
+          <div style="font-size:12px; color:var(--color-text-light); margin-top:4px; font-family:var(--font-body)" id="eAlamat">
+            No. 12, Jalan Mawar, Taman Bunga, 06000 Jitra, Kedah
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: KIRAAN MASA (COUNTDOWN)                            -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sCountdown">
+      <div class="section-label">⏳ Kiraan Masa</div>
+      <div class="countdown" id="cdGrid">
+        <div class="cd-box"><span class="cd-num" id="cdHari">--</span><div class="cd-label">Hari</div></div>
+        <div class="cd-box"><span class="cd-num" id="cdJam">--</span><div class="cd-label">Jam</div></div>
+        <div class="cd-box"><span class="cd-num" id="cdMinit">--</span><div class="cd-label">Minit</div></div>
+        <div class="cd-box"><span class="cd-num" id="cdSaat">--</span><div class="cd-label">Saat</div></div>
+      </div>
+      <p id="cdMsg" style="text-align:center;font-family:var(--font-heading);color:var(--color-primary);font-size:14px;display:none;margin-top:12px;">
+        ✨ Majlis sedang berlangsung! Selamat datang!
+      </p>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: ATURCARA MAJLIS                                    -->
+    <!-- Edit array ATURCARA dalam JavaScript di bawah               -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sAturcara">
+      <div class="section-label">🕌 Aturcara Majlis</div>
+      <ul class="aturcara-list" id="listAturcara">
+        <!-- Dijana secara automatik dari array ATURCARA -->
+      </ul>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: LOKASI / PETA GOOGLE MAPS                          -->
+    <!-- Cara dapatkan embed URL:                                     -->
+    <!--   Google Maps > Cari lokasi > Share > Embed a map > salin src -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sLokasi">
+      <div class="section-label">📍 Lokasi Majlis</div>
+      <div class="map-wrap">
+        <!-- TUKAR src= dengan embed URL Google Maps anda -->
+        <iframe id="petaIframe"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966!2d100.4186!3d6.2699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2smy!4v1"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Lokasi Majlis">
+        </iframe>
+      </div>
+      <p class="map-addr" id="mapAddr">
+        Dewan Serbaguna Sri Kenanga<br/>
+        No. 12, Jalan Mawar, Taman Bunga, 06000 Jitra, Kedah
+      </p>
+      <div class="btn-row">
+        <!-- TUKAR href= dengan link Waze dan Google Maps anda -->
+        <a class="btn btn-primary" id="btnWaze"
+           href="https://www.waze.com/ul?ll=6.2699,100.4186&navigate=yes"
+           target="_blank" rel="noopener">🗺️ Waze</a>
+        <a class="btn btn-outline" id="btnGmaps"
+           href="https://goo.gl/maps/MASUKKAN_LINK"
+           target="_blank" rel="noopener">📍 Google Maps</a>
+      </div>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: TELEFON / HUBUNGI KELUARGA                         -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sTelefon">
+      <div class="section-label">📞 Hubungi Kami</div>
+      <div class="contact-grid">
+
+        <!-- PIHAK PEREMPUAN -->
+        <a class="contact-item" id="cntPerempuan"
+           href="https://wa.me/60123456789" target="_blank" rel="noopener">
+          <div class="contact-icon">👰</div>
+          <div>
+            <div class="contact-role">Pihak Perempuan</div>
+            <div class="contact-name" id="cntNamaP">Encik Abdullah</div>
+            <div class="contact-num"  id="cntNoP">012-345 6789</div>
+          </div>
+        </a>
+
+        <!-- PIHAK LELAKI -->
+        <a class="contact-item" id="cntLelaki"
+           href="https://wa.me/60198765432" target="_blank" rel="noopener">
+          <div class="contact-icon">🤵</div>
+          <div>
+            <div class="contact-role">Pihak Lelaki</div>
+            <div class="contact-name" id="cntNamaL">Encik Ibrahim</div>
+            <div class="contact-num"  id="cntNoL">019-876 5432</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- ============================================================ -->
+    <!-- BAHAGIAN: RSVP — PENGESAHAN KEHADIRAN                        -->
+    <!-- ============================================================ -->
+    <!--                                                              -->
+    <!-- CARA SETUP GOOGLE APPS SCRIPT UNTUK RSVP:                   -->
+    <!-- 1. Buka Google Sheets baharu                                 -->
+    <!-- 2. Pergi ke Extensions > Apps Script                         -->
+    <!-- 3. Padam semua kod sedia ada, tampal kod ini:                -->
+    <!--                                                              -->
+    <!--    function doPost(e) {                                       -->
+    <!--      var sheet = SpreadsheetApp.getActiveSheet();            -->
+    <!--      var data  = JSON.parse(e.postData.contents);            -->
+    <!--      sheet.appendRow([                                        -->
+    <!--        new Date(),                                           -->
+    <!--        data.nama, data.hadir, data.bilangan, data.pesanan    -->
+    <!--      ]);                                                      -->
+    <!--      return ContentService                                    -->
+    <!--        .createTextOutput(JSON.stringify({result:'success'})) -->
+    <!--        .setMimeType(ContentService.MimeType.JSON);            -->
+    <!--    }                                                          -->
+    <!--                                                              -->
+    <!-- 4. Klik Deploy > New deployment > Type: Web app             -->
+    <!-- 5. Execute as: Me, Who has access: Anyone                   -->
+    <!-- 6. Klik Deploy > Salin URL yang diberikan                   -->
+    <!-- 7. Tampal URL tersebut dalam KONFIGURASI.rsvpScriptUrl      -->
+    <!--    di bahagian JavaScript di bawah                           -->
+    <!--                                                              -->
+    <!-- ============================================================ -->
+    <div class="section-card" id="sRsvp">
+      <div class="section-label">✅ RSVP</div>
+      <p style="font-family:var(--font-heading);font-size:14px;color:var(--color-text-light);margin-bottom:14px;line-height:1.7;">
+        Mohon sahkan kehadiran sebelum
+        <strong id="rsvpDeadline" style="color:var(--color-primary)">10 November 2025</strong>
+      </p>
+
+      <form class="rsvp-form" id="rsvpForm" onsubmit="submitRSVP(event)">
+        <div class="form-group">
+          <label for="rNama">Nama Anda</label>
+          <input type="text" id="rNama" name="nama" class="form-ctrl"
+                 placeholder="Masukkan nama penuh" required />
+        </div>
+
+        <div class="form-group">
+          <label>Kehadiran</label>
+          <div class="hadir-row">
+            <div class="hadir-opt">
+              <input type="radio" name="hadir" id="hYa"    value="Hadir"       checked />
+              <label for="hYa">✅ Hadir</label>
+            </div>
+            <div class="hadir-opt">
+              <input type="radio" name="hadir" id="hTidak" value="Tidak Hadir" />
+              <label for="hTidak">❌ Tidak Hadir</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="rBil">Bilangan Tetamu</label>
+          <select id="rBil" name="bilangan" class="form-ctrl">
+            <option value="1">1 orang</option>
+            <option value="2">2 orang</option>
+            <option value="3">3 orang</option>
+            <option value="4">4 orang</option>
+            <option value="5">5 orang</option>
+            <option value="6+">6 orang ke atas</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="rPesan">Ucapan / Pesanan (Pilihan)</label>
+          <textarea id="rPesan" name="pesanan" class="form-ctrl" rows="3"
+                    placeholder="Ucapan tahniah atau pesanan..."></textarea>
+        </div>
+
+        <div id="rsvpMsg" class="rsvp-msg"></div>
+
+        <button type="submit" class="btn btn-primary" id="rsvpBtn">
+          💌 Hantar RSVP
+        </button>
+      </form>
+    </div>
+    <!-- ============================================================ -->
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="gold-divider" style="justify-content:center; margin-bottom:16px;">
+        <div class="line"></div>
+        <div class="diamond"></div>
+        <div class="line right"></div>
+      </div>
+      <strong id="footerNama">Syazwani &amp; Hassan</strong>
+      <p style="margin-top:10px; font-size:12px; color:rgba(201,168,76,0.55);">
+        "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan<br/>
+        untukmu isteri-isteri dari jenismu sendiri."<br/>
+        <em style="color:rgba(201,168,76,0.75);">— Surah Ar-Rum: 21</em>
+      </p>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /page-wrapper -->
+
+
+<script>
+/* ================================================================ */
+/*  KONFIGURASI UTAMA                                               */
+/*  Edit nilai-nilai di bawah untuk menukar maklumat kad            */
+/* ================================================================ */
+const KONFIGURASI = {
+
+  /* NAMA PASANGAN PENGANTIN */
+  namaPengantinP:   "Syazwani",          /* Nama pengantin perempuan   */
+  subNamaP:         "binti Abdullah",    /* Bin/Binti pengantin P      */
+  namaPengantinL:   "Hassan",            /* Nama pengantin lelaki      */
+  subNamaL:         "bin Ibrahim",       /* Bin/Binti pengantin L      */
+
+  /* TARIKH & MASA MAJLIS */
+  /* Format countdown: "YYYY-MM-DDTHH:mm:ss" */
+  tarikhCountdown:  "2025-11-15T11:00:00",
+  tarikhPapar:      "15 Nov 2025",       /* Seperti yang akan dipaparkan */
+  hariMajlis:       "Sabtu",
+  masaMula:         "11:00 pagi",
+  masaTamat:        "5:00 petang",
+
+  /* TEMPAT MAJLIS */
+  namaTempat:       "Dewan Serbaguna Sri Kenanga",
+  alamatTempat:     "No. 12, Jalan Mawar, Taman Bunga, 06000 Jitra, Kedah",
+
+  /* RSVP */
+  tarikhDeadlineRsvp: "10 November 2025",
+  /* ============================================================== */
+  /* URL GOOGLE APPS SCRIPT UNTUK RSVP                              */
+  /* Gantikan URL di bawah dengan URL dari Google Apps Script anda  */
+  /* Lihat arahan lengkap dalam HTML di atas (bahagian RSVP)        */
+  /* ============================================================== */
+  rsvpScriptUrl: "https://script.google.com/macros/s/MASUKKAN_URL_SCRIPT_ANDA_DI_SINI/exec",
+  /* ============================================================== */
+
+  /* PETA */
+  /* Gantikan dengan embed URL dari Google Maps */
+  googleMapsEmbed:  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966!2d100.4186!3d6.2699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2smy!4v1",
+  wazeUrl:          "https://www.waze.com/ul?ll=6.2699,100.4186&navigate=yes",
+  googleMapsUrl:    "https://goo.gl/maps/MASUKKAN_LINK_GMAPS_ANDA",
+
+  /* TELEFON / WHATSAPP */
+  namaKeluargaP:    "Encik Abdullah",
+  noTelP:           "012-345 6789",
+  waP:              "60123456789",       /* Format: 601XXXXXXXX (tanpa +) */
+
+  namaKeluargaL:    "Encik Ibrahim",
+  noTelL:           "019-876 5432",
+  waL:              "60198765432",       /* Format: 601XXXXXXXX (tanpa +) */
+
+};
+
+
+/* ================================================================ */
+/*  SENARAI LAGU LATAR BELAKANG                                     */
+/*  Format: { nama: "Nama Lagu", url: "https://..." }               */
+/*  Guna direct link ke fail .mp3 (hosting, Google Drive, dsb)      */
+/* ================================================================ */
+const PLAYLIST = [
+  {
+    nama: "Lagu 1 - Tajuk Lagu",
+    url:  "https://URL_KEPADA_FAIL_MP3_1.mp3"   /* GANTIKAN URL */
+  },
+  {
+    nama: "Lagu 2 - Tajuk Lagu",
+    url:  "https://URL_KEPADA_FAIL_MP3_2.mp3"   /* GANTIKAN URL */
+  },
+  {
+    nama: "Lagu 3 - Tajuk Lagu",
+    url:  "https://URL_KEPADA_FAIL_MP3_3.mp3"   /* GANTIKAN URL */
+  },
+];
+/* ================================================================ */
+
+
+/* ================================================================ */
+/*  ATURCARA MAJLIS                                                  */
+/*  Format: { masa, emoji, nama, keterangan }                       */
+/* ================================================================ */
+const ATURCARA = [
+  { masa: "11:00 pagi", emoji: "🎊", nama: "Ketibaan Tetamu",     keterangan: "Pendaftaran & Penyambutan"   },
+  { masa: "12:00 tgh",  emoji: "👰", nama: "Ketibaan Pengantin",  keterangan: "Bersanding di Pelamin"       },
+  { masa: "12:30 tgh",  emoji: "🍽️", nama: "Jamuan Makan",        keterangan: "Hidangan disediakan"         },
+  { masa: "2:00 ptg",   emoji: "📸", nama: "Sesi Bergambar",      keterangan: "Bersama pengantin & keluarga"},
+  { masa: "5:00 ptg",   emoji: "🙏", nama: "Majlis Tamat",        keterangan: "Terima kasih kerana hadir"   },
+];
+/* ================================================================ */
+
+
+/* ---- AUTO-POPULATE ---- */
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* Nama cover */
+  document.getElementById('cvNamaP').textContent  = KONFIGURASI.namaPengantinP;
+  document.getElementById('cvSubP').textContent   = KONFIGURASI.subNamaP;
+  document.getElementById('cvNamaL').textContent  = KONFIGURASI.namaPengantinL;
+  document.getElementById('cvSubL').textContent   = KONFIGURASI.subNamaL;
+
+  /* Nama jemputan */
+  document.getElementById('jNamaPasangan').innerHTML =
+    KONFIGURASI.namaPengantinP + ' &amp; ' + KONFIGURASI.namaPengantinL;
+
+  /* Tarikh & masa */
+  document.getElementById('eTarikh').textContent    = KONFIGURASI.tarikhPapar;
+  document.getElementById('eHari').textContent      = KONFIGURASI.hariMajlis;
+  document.getElementById('eMasaMula').textContent  = KONFIGURASI.masaMula;
+  document.getElementById('eMasaTamat').textContent = KONFIGURASI.masaTamat;
+  document.getElementById('eTempat').textContent    = KONFIGURASI.namaTempat;
+  document.getElementById('eAlamat').textContent    = KONFIGURASI.alamatTempat;
+
+  /* Peta */
+  document.getElementById('petaIframe').src = KONFIGURASI.googleMapsEmbed;
+  document.getElementById('btnWaze').href   = KONFIGURASI.wazeUrl;
+  document.getElementById('btnGmaps').href  = KONFIGURASI.googleMapsUrl;
+  document.getElementById('mapAddr').innerHTML =
+    KONFIGURASI.namaTempat + '<br/>' + KONFIGURASI.alamatTempat;
+
+  /* Telefon */
+  document.getElementById('cntNamaP').textContent = KONFIGURASI.namaKeluargaP;
+  document.getElementById('cntNoP').textContent   = KONFIGURASI.noTelP;
+  document.getElementById('cntPerempuan').href    = 'https://wa.me/' + KONFIGURASI.waP;
+  document.getElementById('cntNamaL').textContent = KONFIGURASI.namaKeluargaL;
+  document.getElementById('cntNoL').textContent   = KONFIGURASI.noTelL;
+  document.getElementById('cntLelaki').href       = 'https://wa.me/' + KONFIGURASI.waL;
+
+  /* RSVP */
+  document.getElementById('rsvpDeadline').textContent = KONFIGURASI.tarikhDeadlineRsvp;
+
+  /* Footer & title */
+  const namaPasangan = KONFIGURASI.namaPengantinP + ' & ' + KONFIGURASI.namaPengantinL;
+  document.getElementById('footerNama').textContent = namaPasangan;
+  document.title = 'Walimatulurus | ' + namaPasangan;
+
+  /* Render bahagian dinamik */
+  renderAturcara();
+  renderPlaylist();
+  mulaCountdown();
+  initScrollAnim();
+});
+
+
+/* ---- RENDER ATURCARA ---- */
+function renderAturcara() {
+  document.getElementById('listAturcara').innerHTML = ATURCARA.map(a => `
+    <li class="aturcara-item">
+      <span class="ac-masa">${a.masa}</span>
+      <div class="ac-dot"></div>
+      <div>
+        <div class="ac-nama">${a.emoji} <strong>${a.nama}</strong></div>
+        <div class="ac-keterangan">${a.keterangan}</div>
+      </div>
+    </li>
+  `).join('');
+}
+
+
+/* ---- MUZIK ---- */
+let currSong  = -1;
+let isPlaying = false;
+const audio   = document.getElementById('bgAudio');
+const mBtn    = document.getElementById('musicBtn');
+const mList   = document.getElementById('musicPlaylist');
+
+function renderPlaylist() {
+  document.getElementById('playlistItems').innerHTML = PLAYLIST.map((l, i) => `
+    <div class="playlist-item" id="pi${i}" onclick="mainLagu(${i})">♪ ${l.nama}</div>
+  `).join('');
+}
+
+function mainLagu(i) {
+  document.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active'));
+  currSong  = i;
+  audio.src = PLAYLIST[i].url;
+  audio.play().then(() => {
+    isPlaying = true;
+    mBtn.textContent = '⏸';
+    mBtn.classList.add('playing');
+    document.getElementById('pi' + i).classList.add('active');
+    mList.classList.remove('show');
+  }).catch(console.error);
+}
+
+function toggleMusic() {
+  if (!isPlaying) {
+    if (currSong === -1) { mList.classList.toggle('show'); }
+    else { audio.play(); isPlaying = true; mBtn.textContent = '⏸'; mBtn.classList.add('playing'); }
+  } else {
+    audio.pause(); isPlaying = false; mBtn.textContent = '♪'; mBtn.classList.remove('playing');
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('musicPlayer').contains(e.target))
+    mList.classList.remove('show');
+});
+
+/* Auto-main lagu pertama bila pengguna first click */
+document.addEventListener('click', function autoPlay() {
+  if (!isPlaying && currSong === -1 && PLAYLIST.length > 0) mainLagu(0);
+  document.removeEventListener('click', autoPlay);
+}, { once: true });
+
+
+/* ---- COUNTDOWN ---- */
+function mulaCountdown() {
+  function kemas() {
+    const diff = new Date(KONFIGURASI.tarikhCountdown) - new Date();
+    if (diff <= 0) {
+      document.getElementById('cdGrid').style.display = 'none';
+      document.getElementById('cdMsg').style.display  = 'block';
+      return;
+    }
+    const h = n => String(n).padStart(2, '0');
+    document.getElementById('cdHari').textContent  = h(Math.floor(diff / 86400000));
+    document.getElementById('cdJam').textContent   = h(Math.floor((diff % 86400000) / 3600000));
+    document.getElementById('cdMinit').textContent = h(Math.floor((diff % 3600000) / 60000));
+    document.getElementById('cdSaat').textContent  = h(Math.floor((diff % 60000) / 1000));
+  }
+  kemas();
+  setInterval(kemas, 1000);
+}
+
+
+/* ---- SCROLL ANIMATION ---- */
+function initScrollAnim() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.section-card').forEach(c => obs.observe(c));
+}
+
+
+/* ---- RSVP SUBMIT ---- */
+async function submitRSVP(e) {
+  e.preventDefault();
+  const btn = document.getElementById('rsvpBtn');
+  const msg = document.getElementById('rsvpMsg');
+
+  const payload = {
+    nama:     document.getElementById('rNama').value,
+    hadir:    document.querySelector('input[name="hadir"]:checked').value,
+    bilangan: document.getElementById('rBil').value,
+    pesanan:  document.getElementById('rPesan').value,
+  };
+
+  btn.disabled    = true;
+  btn.textContent = '⏳ Menghantar...';
+  msg.style.display = 'none';
+
+  try {
+    /* ============================================================ */
+    /* RSVP: Menghantar data ke Google Apps Script URL              */
+    /* URL diambil dari KONFIGURASI.rsvpScriptUrl                  */
+    /* ============================================================ */
+    await fetch(KONFIGURASI.rsvpScriptUrl, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+      mode:    'no-cors',
+    });
+    /* ============================================================ */
+    msg.textContent   = '✅ Terima kasih! RSVP anda telah diterima.';
+    msg.className     = 'rsvp-msg ok';
+    msg.style.display = 'block';
+    e.target.reset();
+  } catch {
+    msg.textContent   = '❌ Ralat! Sila cuba lagi atau hubungi kami.';
+    msg.className     = 'rsvp-msg err';
+    msg.style.display = 'block';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = '💌 Hantar RSVP';
+  }
+}
+</script>
+
+</body>
+</html>
+
