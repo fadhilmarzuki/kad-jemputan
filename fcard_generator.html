@@ -35,7 +35,7 @@
   </script>
 
   <style>
-    /* Custom Scrollbar */
+    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -141,7 +141,6 @@
       <!-- FORM CONTENT WRAPPER -->
       <div class="p-4 sm:p-6 space-y-6">
 
-        <!-- TAB 1: BUTIRAN YANG DIRAIKAN -->
         <div id="tab-pengantin" class="tab-pane space-y-5">
           <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/60">
             <div>
@@ -210,7 +209,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: TARIKH, MASA & TEMPAT -->
         <div id="tab-acara" class="tab-pane hidden space-y-5">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
@@ -270,7 +268,6 @@
           </div>
         </div>
 
-        <!-- TAB 3: ATURCARA MAJLIS -->
         <div id="tab-aturcara" class="tab-pane hidden space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-400">Susun jadual perjalanan acara majlis anda:</span>
@@ -281,7 +278,6 @@
           <div id="senaraiAturcaraInputs" class="space-y-2.5"></div>
         </div>
 
-        <!-- TAB 4: HUBUNGI, KOD MAJLIS & RSVP -->
         <div id="tab-kenalan" class="tab-pane hidden space-y-5">
           <div class="p-4 rounded-xl bg-gradient-to-r from-amber-500/15 via-brand-500/10 to-slate-900 border-2 border-amber-500/60 shadow-lg shadow-amber-500/10 space-y-3">
             <div class="flex items-center justify-between">
@@ -354,7 +350,6 @@
           </div>
         </div>
 
-        <!-- TAB 5: TEMA REKAAN, CORAK & LAGU -->
         <div id="tab-rekaan" class="tab-pane hidden space-y-5">
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-2">Pilihan Tema Warna:</label>
@@ -432,7 +427,6 @@
           </div>
         </div>
 
-        <!-- TAB 6: DASHBOARD SEMAK REKOD RSVP -->
         <div id="tab-dashboard" class="tab-pane hidden space-y-5">
           <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-4">
             <div class="flex items-center justify-between">
@@ -499,16 +493,21 @@
       </div>
     </div>
 
-    <!-- RIGHT PANEL: PHONE MOCKUP PREVIEW (LG: 5 COLUMNS) -->
     <div class="lg:col-span-5 flex flex-col items-center sticky top-20">
       <div class="flex items-center justify-between w-full max-w-[360px] mb-2 px-2 text-xs text-slate-400">
         <span class="font-medium flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           Pratonton Skrin Telefon
         </span>
-        <button onclick="bukaKadTabBaru()" class="text-brand-400 hover:underline text-[11px] flex items-center gap-1">
-          Buka Penuh ↗
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="kemaskiniPratonton()" title="Uji buka sampul semula" class="text-slate-400 hover:text-white text-[11px] flex items-center gap-1">
+            <span>🔄</span> Buka Semula Sampul
+          </button>
+          <span class="text-slate-600">|</span>
+          <button onclick="bukaKadTabBaru()" class="text-brand-400 hover:underline text-[11px] flex items-center gap-1">
+            Buka Penuh ↗
+          </button>
+        </div>
       </div>
 
       <!-- Phone Bezel Mockup -->
@@ -523,13 +522,12 @@
       </div>
 
       <p class="text-[11px] text-slate-500 text-center mt-3 max-w-xs leading-relaxed">
-        Kad kini bermula dengan <strong>paparan sampul &amp; butang Buka Jemputan</strong> untuk pengalaman tetamu yang lebih eksklusif!
+        Tekan butang <strong class="text-brand-400 font-semibold">"Buka Jemputan"</strong> di atas simulasi untuk melihat animasi buka sampul &amp; alunan muzik!
       </p>
     </div>
 
   </main>
 
-  <!-- MODAL: KOD GOOGLE APPS SCRIPT BERPUSAT -->
   <div id="modalScript" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -600,6 +598,7 @@ function doGet(e) {
     </div>
   </div>
 
+  <!-- Notification Toast -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl shadow-2xl bg-slate-800 text-white text-xs border border-slate-700 flex items-center gap-2">
     <span id="toastIcon">✅</span>
     <span id="toastMsg">Tindakan berjaya</span>
@@ -887,6 +886,8 @@ function doGet(e) {
 }`;
       const ta = document.createElement('textarea');
       ta.value = kod;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
@@ -894,7 +895,6 @@ function doGet(e) {
       tunjukToast("📋 Kod Google Apps Script telah disalin ke papan klip!");
     }
 
-    /* DASHBOARD RSVP */
     let cacheDataRSVP = [];
 
     async function muatSemakRSVP() {
@@ -1003,9 +1003,6 @@ function doGet(e) {
       tunjukToast(`Senarai-RSVP-${kod}.csv berjaya dimuat turun!`);
     }
 
-    /* ============================================================ */
-    /* PENJANA KOD HTML KAD STANDALONE DENGAN ENVELOPE OPENER       */
-    /* ============================================================ */
     function binaHTMLKad() {
       const isDua = document.getElementById('checkDuaPenama').checked;
       const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan Majlis';
@@ -1063,6 +1060,7 @@ function doGet(e) {
         </li>
       `).join('');
 
+      /* Construct standalone HTML without broken nested backticks */
       return `<!DOCTYPE html>
 <html lang="ms">
 <head>
@@ -1102,9 +1100,7 @@ function doGet(e) {
       height: 100vh;
     }
 
-    /* ============================================================ */
-    /* ENVELOPE OPENING OVERLAY (SKRIN BUKA SAMPUL)                 */
-    /* ============================================================ */
+    /* ENVELOPE OPENING OVERLAY */
     .envelope-overlay {
       position: fixed;
       inset: 0;
@@ -1116,7 +1112,7 @@ function doGet(e) {
       align-items: center;
       justify-content: center;
       padding: 24px;
-      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .envelope-overlay.opened {
@@ -1134,7 +1130,7 @@ function doGet(e) {
       padding: 38px 24px 32px;
       text-align: center;
       transform: scale(1);
-      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
     }
 
@@ -1169,7 +1165,7 @@ function doGet(e) {
 
     .env-names {
       font-family: 'Great Vibes', cursive;
-      font-size: clamp(40px, 12vw, 54px);
+      font-size: clamp(38px, 11vw, 52px);
       line-height: 1.15;
       color: #262626;
       margin-bottom: 8px;
@@ -1655,9 +1651,7 @@ function doGet(e) {
 </head>
 <body class="card-locked">
 
-  <!-- ============================================================ -->
-  <!-- SKRIN PEMBUKA SAMPUL KAD (ENVELOPE COVER SCREEN)             -->
-  <!-- ============================================================ -->
+  <!-- SKRIN PEMBUKA SAMPUL KAD (ENVELOPE COVER SCREEN) -->
   <div id="envelopeOverlay" class="envelope-overlay">
     <div class="envelope-card">
       <div class="env-icon-circle">
@@ -1895,28 +1889,27 @@ function doGet(e) {
   </div>
 
   <script>
-    const audio = document.getElementById('bgAudio');
-    const mBtn = document.getElementById('mBtn');
-    let playing = false;
+    var audio = document.getElementById('bgAudio');
+    var mBtn = document.getElementById('mBtn');
+    var playing = false;
 
     // FUNGSI BUKA KAD JEMPUTAN DARI SAMPUL
     function bukaKadJemputan() {
-      const overlay = document.getElementById('envelopeOverlay');
+      var overlay = document.getElementById('envelopeOverlay');
       if (overlay) {
         overlay.classList.add('opened');
       }
       document.body.classList.remove('card-locked');
 
-      // Mainkan audio secara langsung melalui interaksi pengguna
       if (audio) {
-        audio.play().then(() => {
+        audio.play().then(function() {
           playing = true;
           if (mBtn) {
             mBtn.textContent = '⏸';
             mBtn.classList.add('playing');
           }
-        }).catch(err => {
-          console.log('Autoplay ditahan pelayar:', err);
+        }).catch(function(err) {
+          console.log('Autoplay audio:', err);
         });
       }
     }
@@ -1924,11 +1917,13 @@ function doGet(e) {
     function toggleAudio() {
       if (!audio) return;
       if (!playing) {
-        audio.play().then(() => {
+        audio.play().then(function() {
           playing = true;
           mBtn.textContent = '⏸';
           mBtn.classList.add('playing');
-        }).catch(err => console.log('Autoplay blocked:', err));
+        }).catch(function(err) {
+          console.log('Audio error:', err);
+        });
       } else {
         audio.pause();
         playing = false;
@@ -1938,22 +1933,22 @@ function doGet(e) {
     }
 
     // Countdown Timer
-    const targetDate = new Date("${countdownIso}").getTime();
+    var targetDate = new Date("${countdownIso}").getTime();
     function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+      var now = new Date().getTime();
+      var diff = targetDate - now;
 
       if (diff <= 0) {
-        const endEl = document.getElementById('cdEnd');
+        var endEl = document.getElementById('cdEnd');
         if (endEl) endEl.style.display = 'block';
         return;
       }
 
-      const pad = n => String(n).padStart(2, '0');
-      const elH = document.getElementById('cdH');
-      const elJ = document.getElementById('cdJ');
-      const elM = document.getElementById('cdM');
-      const elS = document.getElementById('cdS');
+      var pad = function(n) { return String(n).padStart(2, '0'); };
+      var elH = document.getElementById('cdH');
+      var elJ = document.getElementById('cdJ');
+      var elM = document.getElementById('cdM');
+      var elS = document.getElementById('cdS');
 
       if (elH) elH.textContent = pad(Math.floor(diff / (1000 * 60 * 60 * 24)));
       if (elJ) elJ.textContent = pad(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
@@ -1964,44 +1959,8 @@ function doGet(e) {
     setInterval(updateCountdown, 1000);
 
     // Muat Turun Senarai Ucapan dari Google Sheet
-    const SCRIPT_URL = "${rsvpScriptUrl}";
-    const KOD_MAJLIS = "${kodMajlis}";
-
-    async function muatUcapanKad() {
-      const container = document.getElementById('senaraiUcapanKad');
-      if (!container) return;
-
-      if (!SCRIPT_URL) {
-        container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 10px 0;">Ucapan akan dipaparkan secara langsung di sini setelah Google Apps Script disambungkan.</div>';
-        return;
-      }
-
-      try {
-        const res = await fetch(SCRIPT_URL + '?kod=' + encodeURIComponent(KOD_MAJLIS));
-        const data = await res.json();
-        
-        const adaUcapan = data.filter(item => item.pesanan && item.pesanan.trim() !== "");
-
-        if (adaUcapan.length === 0) {
-          container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 14px 0;">Belum ada ucapan lagi. Jadilah yang terawal menitipkan ucapan! ✨</div>';
-          return;
-        }
-
-        container.innerHTML = adaUcapan.reverse().map(item => `
-          <div class="ucapan-bubble">
-            <div class="ucapan-header">
-              <span class="ucapan-nama">${escapeHtml(item.nama)}</span>
-              <span class="ucapan-badge">${escapeHtml(item.hadir || 'Tetamu')}</span>
-            </div>
-            <p class="ucapan-pesan">"${escapeHtml(item.pesanan)}"</p>
-            <div class="ucapan-tarikh">${item.timestamp ? new Date(item.timestamp).toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}</div>
-          </div>
-        `).join('');
-
-      } catch (err) {
-        container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 10px 0;">Sedia menerima ucapan tetamu.</div>';
-      }
-    }
+    var SCRIPT_URL = "${rsvpScriptUrl}";
+    var KOD_MAJLIS = "${kodMajlis}";
 
     function escapeHtml(text) {
       if (!text) return '';
@@ -2010,20 +1969,62 @@ function doGet(e) {
       });
     }
 
+    async function muatUcapanKad() {
+      var container = document.getElementById('senaraiUcapanKad');
+      if (!container) return;
+
+      if (!SCRIPT_URL) {
+        container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 10px 0;">Ucapan akan dipaparkan secara langsung di sini setelah Google Apps Script disambungkan.</div>';
+        return;
+      }
+
+      try {
+        var res = await fetch(SCRIPT_URL + '?kod=' + encodeURIComponent(KOD_MAJLIS));
+        var data = await res.json();
+        
+        var adaUcapan = data.filter(function(item) {
+          return item.pesanan && item.pesanan.trim() !== '';
+        });
+
+        if (adaUcapan.length === 0) {
+          container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 14px 0;">Belum ada ucapan lagi. Jadilah yang terawal menitipkan ucapan! ✨</div>';
+          return;
+        }
+
+        var html = '';
+        for (var i = adaUcapan.length - 1; i >= 0; i--) {
+          var item = adaUcapan[i];
+          var tarikhStr = item.timestamp ? new Date(item.timestamp).toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+          html += '<div class="ucapan-bubble">' +
+            '<div class="ucapan-header">' +
+              '<span class="ucapan-nama">' + escapeHtml(item.nama) + '</span>' +
+              '<span class="ucapan-badge">' + escapeHtml(item.hadir || 'Tetamu') + '</span>' +
+            '</div>' +
+            '<p class="ucapan-pesan">"' + escapeHtml(item.pesanan) + '"</p>' +
+            '<div class="ucapan-tarikh">' + tarikhStr + '</div>' +
+          '</div>';
+        }
+        container.innerHTML = html;
+
+      } catch (err) {
+        container.innerHTML = '<div style="text-align: center; color: var(--color-text-muted); font-size: 12px; padding: 10px 0;">Sedia menerima ucapan tetamu.</div>';
+      }
+    }
+
     muatUcapanKad();
 
     // Hantar RSVP
     async function hantarRSVP(e) {
       e.preventDefault();
-      const btn = document.getElementById('btnHantarRsvp');
-      const msg = document.getElementById('rsvpStatusMsg');
+      var btn = document.getElementById('btnHantarRsvp');
+      var msg = document.getElementById('rsvpStatusMsg');
 
-      const nama = document.getElementById('fNama').value.trim();
-      const hadir = document.querySelector('input[name="hadir"]:checked').value;
-      const bilangan = document.getElementById('fBil').value;
-      const pesanan = document.getElementById('fPesan').value.trim();
+      var nama = document.getElementById('fNama').value.trim();
+      var hadir = document.querySelector('input[name="hadir"]:checked').value;
+      var bilangan = document.getElementById('fBil').value;
+      var pesanan = document.getElementById('fPesan').value.trim();
 
-      const payload = {
+      var payload = {
         kodMajlis: KOD_MAJLIS,
         nama: nama,
         hadir: hadir,
@@ -2053,22 +2054,21 @@ function doGet(e) {
       btn.textContent = 'Telah Dihantar';
 
       if (pesanan) {
-        const container = document.getElementById('senaraiUcapanKad');
+        var container = document.getElementById('senaraiUcapanKad');
         if (container) {
-          if (container.innerText.includes('Belum ada ucapan')) {
+          if (container.innerText.indexOf('Belum ada ucapan') !== -1) {
             container.innerHTML = '';
           }
-          const divBaru = document.createElement('div');
+          var divBaru = document.createElement('div');
           divBaru.className = 'ucapan-bubble';
           divBaru.style.border = '1.5px solid var(--color-primary)';
-          divBaru.innerHTML = `
-            <div class="ucapan-header">
-              <span class="ucapan-nama">${escapeHtml(nama)}</span>
-              <span class="ucapan-badge" style="background:var(--color-primary); color:white;">${escapeHtml(hadir)}</span>
-            </div>
-            <p class="ucapan-pesan">"${escapeHtml(pesanan)}"</p>
-            <div class="ucapan-tarikh">Baru sahaja</div>
-          `;
+          divBaru.innerHTML = 
+            '<div class="ucapan-header">' +
+              '<span class="ucapan-nama">' + escapeHtml(nama) + '</span>' +
+              '<span class="ucapan-badge" style="background:var(--color-primary); color:white;">' + escapeHtml(hadir) + '</span>' +
+            '</div>' +
+            '<p class="ucapan-pesan">"' + escapeHtml(pesanan) + '"</p>' +
+            '<div class="ucapan-tarikh">Baru sahaja</div>';
           container.prepend(divBaru);
         }
       }
@@ -2080,45 +2080,68 @@ function doGet(e) {
 </html>`;
     }
 
-    /* KEMAS KINI PRATONTON & EKSPORT */
     function kemaskiniPratonton() {
-      const htmlKod = binaHTMLKad();
-      const frame = document.getElementById('previewFrame');
-      frame.srcdoc = htmlKod;
+      try {
+        const htmlKod = binaHTMLKad();
+        const frame = document.getElementById('previewFrame');
+        if (frame) {
+          frame.srcdoc = htmlKod;
+        }
+      } catch (err) {
+        console.error('Ralat kemas kini pratonton:', err);
+      }
     }
 
     function salinKodHTML() {
-      const html = binaHTMLKad();
-      const ta = document.createElement('textarea');
-      ta.value = html;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      tunjukToast("📋 Kod HTML penuh kad telah disalin ke papan klip!");
+      try {
+        const html = binaHTMLKad();
+        const ta = document.createElement('textarea');
+        ta.value = html;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        tunjukToast("📋 Kod HTML penuh kad telah disalin ke papan klip!");
+      } catch (err) {
+        tunjukToast("⚠️ Gagal menyalin kod: " + err.message, "warning");
+      }
     }
 
     function muatTurunHTML() {
-      const html = binaHTMLKad();
-      const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan';
-      const nama = document.getElementById('inNamaP').value.trim() || 'Majlis';
-      const namaFail = `kad-${tajuk.toLowerCase()}-${nama.toLowerCase().replace(/\s+/g, '-')}.html`;
+      try {
+        const html = binaHTMLKad();
+        const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan';
+        const nama = document.getElementById('inNamaP').value.trim() || 'Majlis';
+        const namaFail = `kad-${tajuk.toLowerCase()}-${nama.toLowerCase().replace(/\s+/g, '-')}.html`;
 
-      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = namaFail;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      tunjukToast(`💾 Fail ${namaFail} berjaya dimuat turun!`);
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = namaFail;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+        }, 300);
+        tunjukToast(`💾 Fail ${namaFail} berjaya dimuat turun!`);
+      } catch (err) {
+        console.error('Ralat muat turun:', err);
+        tunjukToast('⚠️ Ralat semasa muat turun: ' + err.message, 'warning');
+      }
     }
 
     function bukaKadTabBaru() {
-      const html = binaHTMLKad();
-      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
+      try {
+        const html = binaHTMLKad();
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } catch (err) {
+        tunjukToast("⚠️ Gagal membuka kad: " + err.message, "warning");
+      }
     }
 
     function tunjukToast(pesan, jenis = "ok") {
