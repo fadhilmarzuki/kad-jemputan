@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Penjana Kad Jemputan Digital Serbaguna</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fbf8ef',
+              100: '#f5edd6',
+              500: '#c59d3f',
+              600: '#ab812b',
+              700: '#8c651e',
+              900: '#48330b',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+            cursive: ['Great Vibes', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Phone Mockup Frame Bezel */
+    .mockup-phone {
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      border-radius: 42px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-500 selection:text-slate-950">
+
+  <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-300 flex items-center justify-center text-slate-950 font-bold text-lg shadow-lg shadow-brand-500/20">
+        💌
+      </div>
+      <div>
+        <h1 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+          Studio Kad Jemputan Digital
+          <span class="px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">
+            Versi Universal
+          </span>
+        </h1>
+        <p class="text-[11px] text-slate-400 hidden sm:block">Jana kad undangan majlis serbaguna &amp; simpan RSVP dalam 1 Google Sheet berpusat</p>
+      </div>
+    </div>
+
+    <!-- Jenis Majlis Dropdown & Action Buttons -->
+    <div class="flex items-center flex-wrap gap-2">
+      <div class="flex items-center bg-slate-800/80 rounded-lg p-1 border border-slate-700">
+        <span class="text-xs text-slate-400 px-2 font-medium hidden md:inline">Majlis:</span>
+        <select id="selJenisMajlis" onchange="tukarJenisMajlis(this.value)" class="text-xs bg-slate-900 text-brand-300 font-semibold rounded-md px-2.5 py-1.5 border border-slate-700 focus:outline-none focus:border-brand-500 cursor-pointer">
+          <option value="kahwin">💍 Majlis Perkahwinan (Walimatulurus)</option>
+          <option value="persaraan">🎓 Majlis Persaraan &amp; Jasamu Dikenang</option>
+          <option value="harijadi">🎂 Majlis Ulang Tahun Kelahiran</option>
+          <option value="aqiqah">👶 Majlis Aqiqah, Cukur Jambul &amp; Kesyukuran</option>
+          <option value="apresiasi">🏆 Majlis Apresiasi &amp; Makan Malam Tahunan</option>
+        </select>
+      </div>
+
+      <button onclick="bukaModalScript()" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-950/70 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-900/60 transition">
+        <span>⚙️</span> <span class="hidden sm:inline">Skrip Google Sheet</span><span class="sm:hidden">Skrip</span>
+      </button>
+
+      <button onclick="salinKodHTML()" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+        <span>📋</span> <span class="hidden sm:inline">Salin Kod</span><span class="sm:hidden">Salin</span>
+      </button>
+
+      <button onclick="muatTurunHTML()" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-brand-600 via-amber-500 to-brand-500 hover:from-brand-500 hover:to-amber-400 text-slate-950 shadow-md shadow-brand-500/20 transition transform active:scale-95">
+        <span>💾</span> <span>Muat Turun .html</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-[1700px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6 items-start">
+    
+    <!-- LEFT PANEL: FORM EDITOR TABS (LG: 7 COLUMNS) -->
+    <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      
+      <!-- Stepper / Category Navigation Tabs -->
+      <div class="flex items-center gap-1 border-b border-slate-800 px-3 py-2.5 overflow-x-auto bg-slate-950/70 no-scrollbar">
+        <button onclick="tukarTab('pengantin')" id="tabBtn-pengantin" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition bg-brand-500/20 text-brand-400 border border-brand-500/30">
+          🎉 Yang Diraikan
+        </button>
+        <button onclick="tukarTab('acara')" id="tabBtn-acara" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          📅 Tarikh &amp; Tempat
+        </button>
+        <button onclick="tukarTab('aturcara')" id="tabBtn-aturcara" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          🕌 Aturcara Majlis
+        </button>
+        <button onclick="tukarTab('kenalan')" id="tabBtn-kenalan" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          📞 Hubungi / RSVP
+        </button>
+        <button onclick="tukarTab('rekaan')" id="tabBtn-rekaan" class="tab-btn px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          🎨 Tema &amp; Lagu
+        </button>
+        <button onclick="tukarTab('dashboard')" id="tabBtn-dashboard" class="tab-btn px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/50 border border-emerald-500/30">
+          📊 Semak Rekod RSVP
+        </button>
+      </div>
+
+      <!-- FORM CONTENT WRAPPER -->
+      <div class="p-4 sm:p-6 space-y-6">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: BUTIRAN YANG DIRAIKAN               -->
+        <!-- ========================================== -->
+        <div id="tab-pengantin" class="tab-pane space-y-5">
+          <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/60 border border-slate-700/60">
+            <div>
+              <span class="text-xs font-semibold text-white block">Struktur Penama Majlis</span>
+              <span class="text-[11px] text-slate-400">Pilih sama ada majlis mempunyai 2 individu (pasangan) atau 1 individu utama</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="checkDuaPenama" onchange="toggleDuaPenama(this.checked)" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+              <span id="labelDuaPenama" class="ml-2 text-xs font-medium text-slate-300">2 Penama</span>
+            </label>
+          </div>
+
+          <!-- Tajuk Utama Kad -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Tajuk Majlis (Header)</label>
+              <input type="text" id="inTajukMajlis" value="Walimatulurus" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Ungkapan Atas (Cover Bismillah / Salam)</label>
+              <input type="text" id="inUngkapanAtas" value="بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+          </div>
+
+          <!-- Maklumat Penama 1 (Pengantin Perempuan / Individu Diraikan) -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 id="labelSeksyenP1" class="text-xs font-semibold text-brand-400 uppercase tracking-wider">👰 Individu Pertama / Pengantin Perempuan</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-slate-400 mb-1">Nama Panggilan / Nama Ringkas</label>
+                <input type="text" id="inNamaP" value="Syazwani" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label id="labelSubP" class="block text-xs text-slate-400 mb-1">Nama Bapa / Gelaran (cth: binti Abdullah)</label>
+                <input type="text" id="inSubP" value="binti Abdullah" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Maklumat Penama 2 (Pengantin Lelaki - Disembunyikan jika 1 Penama) -->
+          <div id="wrapperPenama2" class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-xs font-semibold text-brand-400 uppercase tracking-wider">🤵 Individu Kedua / Pengantin Lelaki</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-slate-400 mb-1">Nama Panggilan / Nama Ringkas</label>
+                <input type="text" id="inNamaL" value="Hassan" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-400 mb-1">Nama Bapa (cth: bin Ibrahim)</label>
+                <input type="text" id="inSubL" value="bin Ibrahim" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Teks Jemputan & Doa Penutup -->
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Teks Ucapan Jemputan</label>
+              <textarea id="inTeksJemputan" rows="3" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">Dengan penuh kesyukuran ke hadrat Ilahi, kami sekeluarga berbesar hati menjemput Dato' / Datin / Tuan / Puan / Encik / Cik sekeluarga hadir menyerikan majlis kami:</textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Doa / Pantun / Mutiara Kata Penutup (Footer)</label>
+              <textarea id="inTeksFooter" rows="2" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya." (Surah Ar-Rum: 21)</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: TARIKH, MASA & TEMPAT               -->
+        <!-- ========================================== -->
+        <div id="tab-acara" class="tab-pane hidden space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Tarikh Paparan</label>
+              <input type="text" id="inTarikhPapar" value="15 November 2026" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Hari</label>
+              <input type="text" id="inHari" value="Ahad" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Tarikh Hijri / Tambahan</label>
+              <input type="text" id="inTarikhHijri" value="5 Jamadilawal 1448H" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Masa Mula</label>
+              <input type="text" id="inMasaMula" value="11:00 pagi" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Masa Tamat</label>
+              <input type="text" id="inMasaTamat" value="4:00 petang" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-amber-400 mb-1">Sasaran Countdown (ISO Format)</label>
+              <input type="datetime-local" id="inCountdownIso" value="2026-11-15T11:00" class="w-full text-xs rounded-lg bg-slate-900 border border-amber-500/40 px-3 py-2 text-amber-300 focus:outline-none focus:border-amber-400">
+            </div>
+          </div>
+
+          <!-- Maklumat Tempat & Peta -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-xs font-semibold text-brand-400 uppercase tracking-wider">📍 Lokasi &amp; Pandu Arah</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Nama Tempat / Dewan / Kediaman</label>
+              <input type="text" id="inNamaTempat" value="Dewan Perdana Felda" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Alamat Lengkap</label>
+              <textarea id="inAlamat" rows="2" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">Jalan Maktab, Kampung Datuk Keramat, 54000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur</textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Waze</label>
+                <input type="url" id="inWazeUrl" value="https://waze.com/ul/hw283f" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Google Maps</label>
+                <input type="url" id="inGmapsUrl" value="https://maps.google.com" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Google Maps Embed URL (Iframe Src)</label>
+              <input type="url" id="inGmapsEmbed" value="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.743118933221!2d101.7163351!3d3.1622359!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc37cfd8b9bbdb%3A0x6b8bcbc67dfb5aa7!2sDewan%20Perdana%20Felda!5e0!3m2!1sen!2smy!4v1700000000000!5m2!1sen!2smy" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Boleh didapati melalui Google Maps: Kongsi &gt; Sematkan Peta &gt; Salin link src sahaja.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: ATURCARA MAJLIS                     -->
+        <!-- ========================================== -->
+        <div id="tab-aturcara" class="tab-pane hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-400">Susun jadual perjalanan acara majlis anda:</span>
+            <button type="button" onclick="tambahBarisAturcara()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-500/20 text-brand-400 border border-brand-500/30 hover:bg-brand-500/30 transition flex items-center gap-1">
+              <span>➕</span> Tambah Sesi
+            </button>
+          </div>
+
+          <div id="senaraiAturcaraInputs" class="space-y-2.5">
+            <!-- Dynamic Schedule Rows Injected by JS -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: HUBUNGI, KOD MAJLIS & RSVP          -->
+        <!-- ========================================== -->
+        <div id="tab-kenalan" class="tab-pane hidden space-y-5">
+          
+          <!-- RUANG UTAMA: KOD MAJLIS (IDENTIFIER) -->
+          <div class="p-4 rounded-xl bg-gradient-to-r from-amber-500/15 via-brand-500/10 to-slate-900 border-2 border-amber-500/60 shadow-lg shadow-amber-500/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                <span>🏷️</span> KOD MAJLIS (EVENT IDENTIFIER)
+              </span>
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-400 text-slate-950">
+                Penting Untuk 1 Google Sheet
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <input type="text" id="inKodMajlis" value="KP123" placeholder="cth: KP123 atau SARA-2026" class="w-full text-sm font-mono font-bold uppercase rounded-lg bg-slate-950 border border-amber-500 px-3.5 py-2.5 text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400">
+              <button type="button" onclick="janaKodRawak()" class="px-3.5 py-2.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 whitespace-nowrap transition">
+                🎲 Jana Rawak
+              </button>
+            </div>
+            
+            <p class="text-[11px] text-slate-300 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-slate-800">
+              💡 <strong>Di sinilah anda tentukan kod unik majlis ini.</strong> Kod ini akan dibenamkan secara automatik ke dalam borang RSVP kad. Apabila tetamu menghantar kehadiran atau ucapan, Google Sheet anda akan melabelkan baris data dengan kod ini supaya tidak bercampur dengan majlis lain!
+            </p>
+          </div>
+
+          <!-- Maklumat Kenalan Keluarga / Penganjur -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-800 space-y-2.5">
+              <span class="text-xs font-semibold text-brand-400 block">📞 Kenalan 1 (Wakil A / Pihak Perempuan)</span>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nama Wakil</label>
+                <input type="text" id="inPihakPNama" value="Encik Abdullah" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nombor Telefon (Papar)</label>
+                <input type="text" id="inPihakPPhone" value="012-345 6789" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nombor WhatsApp (Format: 601XXXXXXXX)</label>
+                <input type="text" id="inPihakPWa" value="60123456789" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-800 space-y-2.5">
+              <span class="text-xs font-semibold text-brand-400 block">📞 Kenalan 2 (Wakil B / Pihak Lelaki)</span>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nama Wakil</label>
+                <input type="text" id="inPihakLNama" value="Puan Aminah" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nombor Telefon (Papar)</label>
+                <input type="text" id="inPihakLPhone" value="019-876 5432" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] text-slate-400 mb-0.5">Nombor WhatsApp (Format: 601XXXXXXXX)</label>
+                <input type="text" id="inPihakLWa" value="60198765432" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-1.5 text-white">
+              </div>
+            </div>
+          </div>
+
+          <!-- Tetapan RSVP & Google Apps Script URL -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">💌 Tetapan Pengesahan RSVP &amp; Google Apps Script</h3>
+            
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Tarikh Akhir Pengesahan Hadir (RSVP Deadline)</label>
+              <input type="text" id="inRsvpDeadline" value="5 November 2026" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-emerald-300 mb-1">Google Apps Script Web App URL (Exec Link)</label>
+              <input type="url" id="inRsvpScriptUrl" placeholder="https://script.google.com/macros/s/AKfycb.../exec" value="" class="w-full text-xs rounded-lg bg-slate-900 border border-emerald-500/40 px-3 py-2 text-emerald-300 font-mono focus:outline-none focus:border-emerald-400">
+              <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
+                * Klik butang hijau <strong class="text-emerald-400">"⚙️ Skrip Google Sheet"</strong> di bahagian atas untuk mengambil kod skrip sedia guna dan panduan penyediaan.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: TEMA REKAAN, CORAK & LAGU           -->
+        <!-- ========================================== -->
+        <div id="tab-rekaan" class="tab-pane hidden space-y-5">
+          <!-- Pilihan Palet Warna -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Pilihan Tema Warna:</label>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+              <button type="button" onclick="pilihTemaPreset('#b8860b', '#d4a017', '#8b6508', '#faf7f0', '#0f0a02')" class="p-2.5 rounded-xl border border-amber-500/40 bg-amber-950/30 text-left hover:scale-[1.02] transition">
+                <div class="flex gap-1 mb-1.5">
+                  <div class="w-4 h-4 rounded-full bg-[#b8860b]"></div>
+                  <div class="w-4 h-4 rounded-full bg-[#faf7f0]"></div>
+                </div>
+                <div class="text-[11px] font-semibold text-amber-300">Emas Diraja</div>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('#be185d', '#f472b6', '#9d174d', '#fff1f2', '#19060e')" class="p-2.5 rounded-xl border border-pink-500/40 bg-pink-950/30 text-left hover:scale-[1.02] transition">
+                <div class="flex gap-1 mb-1.5">
+                  <div class="w-4 h-4 rounded-full bg-[#be185d]"></div>
+                  <div class="w-4 h-4 rounded-full bg-[#fff1f2]"></div>
+                </div>
+                <div class="text-[11px] font-semibold text-pink-300">Ros Manis</div>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('#059669', '#34d399', '#047857', '#ecfdf5', '#021810')" class="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-950/30 text-left hover:scale-[1.02] transition">
+                <div class="flex gap-1 mb-1.5">
+                  <div class="w-4 h-4 rounded-full bg-[#059669]"></div>
+                  <div class="w-4 h-4 rounded-full bg-[#ecfdf5]"></div>
+                </div>
+                <div class="text-[11px] font-semibold text-emerald-300">Zamrud Hijau</div>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('#2563eb', '#60a5fa', '#1d4ed8', '#eff6ff', '#030c1e')" class="p-2.5 rounded-xl border border-blue-500/40 bg-blue-950/30 text-left hover:scale-[1.02] transition">
+                <div class="flex gap-1 mb-1.5">
+                  <div class="w-4 h-4 rounded-full bg-[#2563eb]"></div>
+                  <div class="w-4 h-4 rounded-full bg-[#eff6ff]"></div>
+                </div>
+                <div class="text-[11px] font-semibold text-blue-300">Nilam Biru</div>
+              </button>
+
+              <button type="button" onclick="pilihTemaPreset('#7c3aed', '#a78bfa', '#6d28d9', '#f5f3ff', '#110521')" class="p-2.5 rounded-xl border border-purple-500/40 bg-purple-950/30 text-left hover:scale-[1.02] transition">
+                <div class="flex gap-1 mb-1.5">
+                  <div class="w-4 h-4 rounded-full bg-[#7c3aed]"></div>
+                  <div class="w-4 h-4 rounded-full bg-[#f5f3ff]"></div>
+                </div>
+                <div class="text-[11px] font-semibold text-purple-300">Ungu Anggun</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Corak Background & Warna Manual -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Corak Hiasan Latar</label>
+              <select id="selCorakLatar" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <option value="islamic">Geometri Klasik (Arabesque)</option>
+                <option value="floral">Sentuhan Floral Lembut</option>
+                <option value="minimal">Moden Minimalis (Gradien Sahaja)</option>
+                <option value="dots">Bintang Gemerlapan (Glitter)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Warna Utama (Kustom Hex)</label>
+              <div class="flex items-center gap-2">
+                <input type="color" id="inWarnaUtamaHex" value="#b8860b" class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-700 cursor-pointer">
+                <input type="text" id="inWarnaUtamaText" value="#b8860b" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white font-mono uppercase">
+              </div>
+            </div>
+          </div>
+
+          <!-- Pilihan Lagu Latar Belakang -->
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-3">
+            <h3 class="text-xs font-semibold text-brand-400 uppercase tracking-wider">🎵 Lagu Latar Belakang (.MP3)</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Pilih Lagu Built-in Mengikut Majlis</label>
+              <select id="selPilihanLagu" onchange="tukarPilihanMuzik(this.value)" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white">
+                <optgroup label="💍 Perkahwinan & Romantis">
+                  <option value="wedding1">Melodi Cinta Klasik (Romantic Acoustic)</option>
+                  <option value="wedding2">Sweet Love Piano Instrumental</option>
+                </optgroup>
+                <optgroup label="🎓 Persaraan & Majlis Perpisahan">
+                  <option value="persaraan1">Gamelan &amp; Serunai Melayu Lembut</option>
+                  <option value="persaraan2">Petikan Akustik Kenangan Manis</option>
+                </optgroup>
+                <optgroup label="🎂 Hari Jadi / Ulang Tahun">
+                  <option value="harijadi1">Happy Birthday Ukulele Ceria</option>
+                  <option value="harijadi2">Sanah Helwah Instrumental</option>
+                </optgroup>
+                <optgroup label="👶 Aqiqah & Kesyukuran">
+                  <option value="aqiqah1">Alunan Tenang Selawat &amp; Dondang Sayang</option>
+                  <option value="aqiqah2">Kedamaian Harpa &amp; Flute</option>
+                </optgroup>
+                <optgroup label="🏆 Apresiasi & Korporat">
+                  <option value="apresiasi1">Grand Cinematic Achievement</option>
+                </optgroup>
+                <option value="custom">🔗 Masukkan Pautan MP3 Sendiri (Custom URL)</option>
+              </select>
+            </div>
+
+            <div id="wrapperCustomMusic" class="hidden">
+              <label class="block text-xs font-medium text-slate-400 mb-1">Pautan Fail MP3 Terus (.mp3 URL)</label>
+              <input type="url" id="inCustomMusicUrl" placeholder="https://domain-anda.com/lagu-majlis.mp3" class="w-full text-xs rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-white focus:outline-none focus:border-brand-500">
+              <span class="text-[11px] text-slate-500">Pastikan pautan boleh diakses terus tanpa sekat sekuriti pelayar (direct audio file).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: DASHBOARD SEMAK REKOD RSVP & UCAPAN -->
+        <!-- ========================================== -->
+        <div id="tab-dashboard" class="tab-pane hidden space-y-5">
+          <div class="p-4 rounded-xl bg-slate-800/40 border border-slate-800 space-y-4">
+            
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+                  <span>📊</span> Semakan Tetamu &amp; Ucapan Mengikut Kod
+                </h3>
+                <p class="text-[11px] text-slate-400">Data ditarik secara terus dari 1 Google Sheet berpusat anda</p>
+              </div>
+              <button onclick="muatSemakRSVP()" type="button" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-1.5 transition">
+                <span>🔄</span> Segar Semula
+              </button>
+            </div>
+
+            <!-- RUANG CARIAN KOD MAJLIS DI DASHBOARD -->
+            <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+              <label class="block text-xs font-semibold text-slate-300">Tapis Rekod Majlis (Kod Majlis):</label>
+              <div class="flex items-center gap-2">
+                <input type="text" id="dashKodInput" value="KP123" placeholder="cth: KP123" class="text-xs font-mono font-bold uppercase rounded-lg bg-slate-900 border border-emerald-500/50 px-3.5 py-2 text-emerald-300 w-full focus:outline-none focus:border-emerald-400">
+                <button type="button" onclick="muatSemakRSVP()" class="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white whitespace-nowrap transition">
+                  Tapis Data
+                </button>
+              </div>
+            </div>
+
+            <!-- Ringkasan Statistik -->
+            <div class="grid grid-cols-3 gap-2.5 text-center">
+              <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Hadir</div>
+                <div id="statHadir" class="text-xl font-bold text-emerald-400">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Tidak Hadir</div>
+                <div id="statTidakHadir" class="text-xl font-bold text-red-400">0</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Anggaran Pax</div>
+                <div id="statPax" class="text-xl font-bold text-amber-400">0</div>
+              </div>
+            </div>
+
+            <!-- Butang Eksport CSV -->
+            <div class="flex justify-end">
+              <button onclick="eksportCSV()" type="button" class="text-xs px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition">
+                <span>📥</span> Muat Turun Senarai (.CSV / Excel)
+              </button>
+            </div>
+
+            <!-- Senarai Rekod & Ucapan Tetamu -->
+            <div class="space-y-2">
+              <div class="text-xs font-semibold text-slate-300">Senarai Maklum Balas &amp; Ucapan Tetamu:</div>
+              <div id="senaraiRekodRSVP" class="max-h-72 overflow-y-auto space-y-2 pr-1 text-xs text-slate-400">
+                <div class="text-center py-6 text-slate-500">
+                  Sila masukkan URL Google Apps Script dan tekan butang <strong>"Tapis Data"</strong>.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Butang Kemaskini Pratonton Manual -->
+        <div class="pt-2">
+          <button type="button" onclick="kemaskiniPratonton()" class="w-full py-2.5 text-xs font-bold rounded-xl bg-slate-800 hover:bg-slate-700 text-brand-400 border border-slate-700 transition flex items-center justify-center gap-1.5">
+            <span>✨</span> Kemas Kini Pratonton Langsung
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: PHONE MOCKUP PREVIEW (LG: 5 COLUMNS) -->
+    <div class="lg:col-span-5 flex flex-col items-center sticky top-20">
+      <div class="flex items-center justify-between w-full max-w-[360px] mb-2 px-2 text-xs text-slate-400">
+        <span class="font-medium flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Pratonton Skrin Telefon
+        </span>
+        <button onclick="bukaKadTabBaru()" class="text-brand-400 hover:underline text-[11px] flex items-center gap-1">
+          Buka Penuh ↗
+        </button>
+      </div>
+
+      <!-- Phone Bezel Mockup -->
+      <div class="mockup-phone bg-slate-900 w-full max-w-[360px] h-[670px] overflow-hidden relative flex flex-col">
+        <!-- Phone Camera Notch -->
+        <div class="w-32 h-4 bg-slate-800 rounded-b-xl mx-auto flex items-center justify-center gap-2 z-30">
+          <div class="w-2 h-2 rounded-full bg-slate-950"></div>
+          <div class="w-8 h-1 rounded-full bg-slate-900"></div>
+        </div>
+
+        <!-- Live Preview IFrame -->
+        <iframe id="previewFrame" title="Pratonton Kad Jemputan" class="w-full h-full border-none bg-white"></iframe>
+      </div>
+
+      <p class="text-[11px] text-slate-500 text-center mt-3 max-w-xs leading-relaxed">
+        Sebarang suntingan pada borang di sebelah kiri dipaparkan secara langsung. Sedia untuk dimuat turun sebagai fail tunggal <span class="text-brand-400 font-mono">.html</span>!
+      </p>
+    </div>
+
+  </main>
+
+  <!-- MODAL: KOD GOOGLE APPS SCRIPT BERPUSAT -->
+  <div id="modalScript" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-5 sm:p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span>⚙️</span> Kod Google Apps Script (1 Sheet Untuk Semua Majlis)
+        </h3>
+        <button onclick="tutupModalScript()" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Buka Google Sheets baru &gt; pergi ke <strong>Extensions &gt; Apps Script</strong>. Padam semua kod sedia ada, gantikan dengan kod di bawah, kemudian klik <strong>Deploy &gt; New deployment &gt; Web app (Execute as: Me, Who has access: Anyone)</strong>. Salin URL yang diberikan ke dalam tab <strong>Hubungi / RSVP</strong>.
+      </p>
+
+      <div class="relative">
+        <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-[11px] font-mono text-emerald-400 overflow-x-auto max-h-60 selection:bg-emerald-500 selection:text-black"><code>function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  
+  // Format Lajur: Timestamp | Kod Majlis | Nama | Status Kehadiran | Bilangan Pax | Ucapan & Doa
+  sheet.appendRow([
+    new Date(),
+    data.kodMajlis || "DEFAULT",
+    data.nama || "",
+    data.hadir || "",
+    data.bilangan || "1",
+    data.pesanan || ""
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sheet.getDataRange().getValues();
+  var kod = e.parameter.kod || "";
+  var out = [];
+  
+  // Baris pertama (index 0) adalah tajuk lajur
+  for (var i = 1; i < rows.length; i++) {
+    if (!kod || String(rows[i][1]).toUpperCase() === kod.toUpperCase()) {
+      out.push({
+        timestamp: rows[i][0],
+        kodMajlis: rows[i][1],
+        nama: rows[i][2],
+        hadir: rows[i][3],
+        bilangan: rows[i][4],
+        pesanan: rows[i][5]
+      });
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}</code></pre>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <span class="text-[11px] text-slate-400">Lajur dijana secara automatik apabila rekod pertama masuk.</span>
+        <button onclick="salinKodAppsScript()" type="button" class="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition">
+          📋 Salin Kod Apps Script
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl shadow-2xl bg-slate-800 text-white text-xs border border-slate-700 flex items-center gap-2">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Tindakan berjaya</span>
+  </div>
+
+  <script>
+    /* ============================================================ */
+    /* DATA ATURCARA MAJLIS & AUDIO PRESET                          */
+    /* ============================================================ */
+    let dataAturcara = [
+      { masa: "11:00 pagi", emoji: "🎊", tajuk: "Ketibaan Para Tetamu", nota: "Sesi Aluan & Pendaftaran" },
+      { masa: "12:15 tgh",  emoji: "👰", tajuk: "Perarakan Masuk Pasangan Mempelai", nota: "Upacara Bersanding & Makan Beradab" },
+      { masa: "1:00 ptg",   emoji: "🍽️", tajuk: "Jamuan Selera Beraneka", nota: "Alunan Muzik Santai & Ramah Mesra" },
+      { masa: "2:00 ptg",   emoji: "📸", tajuk: "Sesi Bergambar & Bersalaman", nota: "Bersama Ahli Keluarga & Rakan Taulan" },
+      { masa: "4:00 ptg",   emoji: "🙏", tajuk: "Majlis Bersurai", nota: "Ucapan Terima Kasih Daripada Tuan Rumah" }
+    ];
+
+    const AUDIO_PRESETS = {
+      wedding1: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3?filename=romantic-wedding-122477.mp3",
+      wedding2: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=sweet-love-110029.mp3",
+      persaraan1: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitar-loop-f-91bpm-112187.mp3",
+      persaraan2: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c7443c.mp3?filename=memories-acoustic-112191.mp3",
+      harijadi1: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=happy-birthday-ukulele-112190.mp3",
+      harijadi2: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_249df9bb12.mp3?filename=happy-birthday-instrumental-125438.mp3",
+      aqiqah1: "https://cdn.pixabay.com/download/audio/2022/04/27/audio_65b4c1fb3a.mp3?filename=peaceful-garden-112188.mp3",
+      aqiqah2: "https://cdn.pixabay.com/download/audio/2022/03/09/audio_c36bfb1016.mp3?filename=meditation-harp-112189.mp3",
+      apresiasi1: "https://cdn.pixabay.com/download/audio/2021/09/06/audio_40b2efd483.mp3?filename=inspiring-cinematic-112192.mp3"
+    };
+
+    /* ============================================================ */
+    /* PENGURUSAN TAB EDITOR                                        */
+    /* ============================================================ */
+    function tukarTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-500/20', 'text-brand-400', 'border-brand-500/30', 'bg-emerald-950/50', 'text-emerald-300');
+        btn.classList.add('text-slate-400');
+      });
+
+      const pane = document.getElementById('tab-' + tabId);
+      const btn = document.getElementById('tabBtn-' + tabId);
+      if (pane) pane.classList.remove('hidden');
+
+      if (btn) {
+        btn.classList.remove('text-slate-400');
+        if (tabId === 'dashboard') {
+          btn.classList.add('bg-emerald-950/50', 'text-emerald-300');
+        } else {
+          btn.classList.add('bg-brand-500/20', 'text-brand-400', 'border-brand-500/30');
+        }
+      }
+    }
+
+    /* ============================================================ */
+    /* TOGGLE 1 PENAMA vs 2 PENAMA                                  */
+    /* ============================================================ */
+    function toggleDuaPenama(isDua) {
+      const wrap2 = document.getElementById('wrapperPenama2');
+      const labelCheck = document.getElementById('labelDuaPenama');
+      const labelP1 = document.getElementById('labelSeksyenP1');
+
+      if (isDua) {
+        wrap2.classList.remove('hidden');
+        labelCheck.textContent = '2 Penama (Pasangan)';
+        labelP1.textContent = '👰 Individu Pertama / Pengantin Perempuan';
+      } else {
+        wrap2.classList.add('hidden');
+        labelCheck.textContent = '1 Penama Utama';
+        labelP1.textContent = '🌟 Individu Yang Diraikan';
+      }
+      kemaskiniPratonton();
+    }
+
+    /* ============================================================ */
+    /* PRESET JENIS MAJLIS                                          */
+    /* ============================================================ */
+    function tukarJenisMajlis(jenis) {
+      const isDua = document.getElementById('checkDuaPenama');
+      const tajuk = document.getElementById('inTajukMajlis');
+      const ungkapan = document.getElementById('inUngkapanAtas');
+      const namaP = document.getElementById('inNamaP');
+      const subP = document.getElementById('inSubP');
+      const namaL = document.getElementById('inNamaL');
+      const subL = document.getElementById('inSubL');
+      const teksJemputan = document.getElementById('inTeksJemputan');
+      const teksFooter = document.getElementById('inTeksFooter');
+      const selMuzik = document.getElementById('selPilihanLagu');
+
+      if (jenis === 'kahwin') {
+        isDua.checked = true;
+        toggleDuaPenama(true);
+        tajuk.value = "Walimatulurus";
+        ungkapan.value = "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ";
+        namaP.value = "Syazwani";
+        subP.value = "binti Abdullah";
+        namaL.value = "Hassan";
+        subL.value = "bin Ibrahim";
+        teksJemputan.value = "Dengan penuh kesyukuran ke hadrat Ilahi, kami sekeluarga berbesar hati menjemput Dato' / Datin / Tuan / Puan / Encik / Cik sekeluarga hadir menyerikan majlis perkahwinan puteri dan putera kami:";
+        teksFooter.value = '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan dari jenismu sendiri, supaya kamu merasa tenteram kepadanya." (Surah Ar-Rum: 21)';
+        selMuzik.value = "wedding1";
+        dataAturcara = [
+          { masa: "11:00 pagi", emoji: "🎊", tajuk: "Ketibaan Para Tetamu", nota: "Sesi Aluan & Pendaftaran" },
+          { masa: "12:15 tgh",  emoji: "👰", tajuk: "Perarakan Masuk Pasangan Mempelai", nota: "Upacara Bersanding & Makan Beradab" },
+          { masa: "1:00 ptg",   emoji: "🍽️", tajuk: "Jamuan Selera Beraneka", nota: "Alunan Muzik Santai & Ramah Mesra" },
+          { masa: "2:00 ptg",   emoji: "📸", tajuk: "Sesi Bergambar & Bersalaman", nota: "Bersama Ahli Keluarga & Rakan Taulan" },
+          { masa: "4:00 ptg",   emoji: "🙏", tajuk: "Majlis Bersurai", nota: "Ucapan Terima Kasih Daripada Tuan Rumah" }
+        ];
+        pilihTemaPreset('#b8860b', '#d4a017', '#8b6508', '#faf7f0', '#0f0a02');
+      } else if (jenis === 'persaraan') {
+        isDua.checked = false;
+        toggleDuaPenama(false);
+        tajuk.value = "Jasamu Dikenang";
+        ungkapan.value = "SELAMAT BERSARA";
+        namaP.value = "Cikgu Noraini";
+        subP.value = "Mantan Pengetua Cemerlang";
+        teksJemputan.value = "Sekalung budi setulus ingatan, kami warga sekolah berbesar hati menjemput Tuan/Puan ke majlis persaraan dan meraikan bakti insan yang disayangi:";
+        teksFooter.value = "Tuaian padi di hujung desa, budi disemai kenangan abadi. Terima kasih atas segala jasa dan pengorbanan.";
+        selMuzik.value = "persaraan1";
+        dataAturcara = [
+          { masa: "10:30 pagi", emoji: "🚗", tajuk: "Ketibaan Tetamu & Yang Diraikan", nota: "Sambutan Perbarisan Hormat" },
+          { masa: "11:00 pagi", emoji: "🎤", tajuk: "Ucapan Aluan & Tayangan Montaj", nota: "Sorotan Jasa & Bakti" },
+          { masa: "12:00 tgh",  emoji: "🎁", tajuk: "Penyampaian Cenderahati", nota: "Kenang-kenangan Bersama Warga Kerja" },
+          { masa: "12:45 tgh",  emoji: "🍽️", tajuk: "Jamuan Makan & Lambaian Kasih", nota: "Sesi Bersalaman & Bergambar" }
+        ];
+        pilihTemaPreset('#059669', '#34d399', '#047857', '#ecfdf5', '#021810');
+      } else if (jenis === 'harijadi') {
+        isDua.checked = false;
+        toggleDuaPenama(false);
+        tajuk.value = "Sanah Helwah";
+        ungkapan.value = "HAPPY BIRTHDAY";
+        namaP.value = "Aisyah Humaira";
+        subP.value = "Ulang Tahun Ke-7";
+        teksJemputan.value = "Mari bersama-sama meraikan detik manis hari kelahiran anakanda tercinta kami dengan penuh keceriaan dan tawa:";
+        teksFooter.value = "Semoga dipanjangkan umur, dimurahkan rezeki, dan sentiasa dalam rahmat serta lindungan Ilahi.";
+        selMuzik.value = "harijadi1";
+        dataAturcara = [
+          { masa: "2:00 ptg", emoji: "🎈", tajuk: "Ketibaan Tetamu & Rakan", nota: "Pemberian Hadiah & Welcome Drink" },
+          { masa: "3:00 ptg", emoji: "🎮", tajuk: "Permainan Interaktif & Badut", nota: "Aktiviti Ceria Kanak-kanak" },
+          { masa: "4:00 ptg", emoji: "🎂", tajuk: "Upacara Memotong Kek & Nyanyian", nota: "Sesi Meniup Lilin & Bergambar" },
+          { masa: "4:30 ptg", emoji: "🍿", tajuk: "Jamuan Minum Petang", nota: "Goodies & Ucapan Terima Kasih" }
+        ];
+        pilihTemaPreset('#be185d', '#f472b6', '#9d174d', '#fff1f2', '#19060e');
+      } else if (jenis === 'aqiqah') {
+        isDua.checked = false;
+        toggleDuaPenama(false);
+        tajuk.value = "Majlis Aqiqah & Kesyukuran";
+        ungkapan.value = "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ";
+        namaP.value = "Muhammad Al-Fateh";
+        subP.value = "Putera Tercinta Ahmad & Hidayah";
+        teksJemputan.value = "Dengan rasa syukur ke hadrat Allah SWT, kami menjemput Dato'/Datin/Tuan/Puan ke majlis kesyukuran, aqiqah dan tahnik putera kami:";
+        teksFooter.value = "Ya Allah, jadikanlah anak ini anak yang soleh, berbakti kepada kedua ibu bapa serta berguna bagi agama dan bangsa.";
+        selMuzik.value = "aqiqah1";
+        dataAturcara = [
+          { masa: "10:30 pagi", emoji: "🕌", tajuk: "Ketibaan Para Tetamu", nota: "Alunan Zikir & Selawat" },
+          { masa: "11:15 pagi", emoji: "✂️", tajuk: "Upacara Berzanji, Cukur Jambul & Tahnik", nota: "Dipimpin oleh Kumpulan Marhaban" },
+          { masa: "12:00 tgh",  emoji: "🤲", tajuk: "Doa Selamat & Kesyukuran", nota: "Memohon Keberkatan Ilahi" },
+          { masa: "12:30 tgh",  emoji: "🍛", tajuk: "Jamuan Kenduri Aqiqah", nota: "Hidangan Gulai Kawah & Minuman" }
+        ];
+        pilihTemaPreset('#2563eb', '#60a5fa', '#1d4ed8', '#eff6ff', '#030c1e');
+      } else if (jenis === 'apresiasi') {
+        isDua.checked = false;
+        toggleDuaPenama(false);
+        tajuk.value = "Malam Gemilang Apresiasi";
+        ungkapan.value = "ANNUAL GALA NIGHT";
+        namaP.value = "Kelab Sukan & Rekreasi";
+        subP.value = "Sesi 2026/2027";
+        teksJemputan.value = "Jawatankuasa penganjur dengan sukacitanya mempersilakan anda hadir ke Malam Gemilang Apresiasi Tahunan:";
+        teksFooter.value = '"Kebersamaan adalah permulaan; menjaga kebersamaan adalah kemajuan; bekerja bersama adalah kejayaan."';
+        selMuzik.value = "apresiasi1";
+        dataAturcara = [
+          { masa: "7:30 mlm", emoji: "✨", tajuk: "Pendaftaran & Welcome Cocktail", nota: "Sesi Fotografi Red Carpet" },
+          { masa: "8:15 mlm", emoji: "🎤", tajuk: "Ucapan Perasmian Pengerusi", nota: "Sorotan Pencapaian Tahunan" },
+          { masa: "8:45 mlm", emoji: "🍽️", tajuk: "Makan Malam Buffet & Persembahan", nota: "Hiburan Live Band" },
+          { masa: "9:45 mlm", emoji: "🏆", tajuk: "Penyampaian Anugerah Cemerlang & Cabutan Bertuah", nota: "Kemuncak Majlis" }
+        ];
+        pilihTemaPreset('#7c3aed', '#a78bfa', '#6d28d9', '#f5f3ff', '#110521');
+      }
+
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+      tunjukToast(`Format ditukar kepada: ${tajuk.value}`);
+    }
+
+    /* ============================================================ */
+    /* PENGURUSAN ATURCARA MAJLIS                                   */
+    /* ============================================================ */
+    function renderAturcaraInputs() {
+      const container = document.getElementById('senaraiAturcaraInputs');
+      container.innerHTML = dataAturcara.map((item, idx) => `
+        <div class="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+          <input type="text" value="${item.emoji}" onchange="kemaskiniAturcaraItem(${idx}, 'emoji', this.value)" class="w-10 text-center text-xs rounded bg-slate-950 border border-slate-700 p-1.5 text-white" placeholder="Emoji">
+          <input type="text" value="${item.masa}" onchange="kemaskiniAturcaraItem(${idx}, 'masa', this.value)" class="w-24 text-xs rounded bg-slate-950 border border-slate-700 p-1.5 text-brand-300 font-semibold" placeholder="Masa">
+          <input type="text" value="${item.tajuk}" onchange="kemaskiniAturcaraItem(${idx}, 'tajuk', this.value)" class="flex-1 text-xs rounded bg-slate-950 border border-slate-700 p-1.5 text-white" placeholder="Tajuk Sesi">
+          <input type="text" value="${item.nota}" onchange="kemaskiniAturcaraItem(${idx}, 'nota', this.value)" class="hidden sm:block flex-1 text-xs rounded bg-slate-950 border border-slate-700 p-1.5 text-slate-400" placeholder="Keterangan Ringkas">
+          <button type="button" onclick="padamBarisAturcara(${idx})" class="p-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded transition">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function tambahBarisAturcara() {
+      dataAturcara.push({ masa: "1:00 ptg", emoji: "✨", tajuk: "Sesi Baharu", nota: "Penerangan ringkas" });
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+    }
+
+    function padamBarisAturcara(idx) {
+      if (dataAturcara.length <= 1) {
+        tunjukToast("Majlis memerlukan sekurang-kurangnya 1 aturcara.", "warning");
+        return;
+      }
+      dataAturcara.splice(idx, 1);
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+    }
+
+    function kemaskiniAturcaraItem(idx, key, val) {
+      if (dataAturcara[idx]) {
+        dataAturcara[idx][key] = val;
+        kemaskiniPratonton();
+      }
+    }
+
+    /* ============================================================ */
+    /* PENGURUSAN TEMA WARNA & MUZIK                                */
+    /* ============================================================ */
+    function pilihTemaPreset(primary, light, dark, bgLight, bgDark) {
+      document.getElementById('inWarnaUtamaHex').value = primary;
+      document.getElementById('inWarnaUtamaText').value = primary;
+      kemaskiniPratonton();
+    }
+
+    function tukarPilihanMuzik(val) {
+      const wrapCustom = document.getElementById('wrapperCustomMusic');
+      if (val === 'custom') {
+        wrapCustom.classList.remove('hidden');
+      } else {
+        wrapCustom.classList.add('hidden');
+      }
+      kemaskiniPratonton();
+    }
+
+    /* ============================================================ */
+    /* FUNGSI KOD MAJLIS (IDENTIFIER) & APPS SCRIPT                 */
+    /* ============================================================ */
+    function janaKodRawak() {
+      const nombor = Math.floor(100 + Math.random() * 900);
+      const kodBaru = `KP${nombor}`;
+      document.getElementById('inKodMajlis').value = kodBaru;
+      
+      const dashIn = document.getElementById('dashKodInput');
+      if (dashIn) dashIn.value = kodBaru;
+
+      kemaskiniPratonton();
+      tunjukToast(`Kod majlis dijana: ${kodBaru}`);
+    }
+
+    function bukaModalScript() {
+      document.getElementById('modalScript').classList.remove('hidden');
+    }
+
+    function tutupModalScript() {
+      document.getElementById('modalScript').classList.add('hidden');
+    }
+
+    function salinKodAppsScript() {
+      const kod = `function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(),
+    data.kodMajlis || "DEFAULT",
+    data.nama || "",
+    data.hadir || "",
+    data.bilangan || "1",
+    data.pesanan || ""
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rows = sheet.getDataRange().getValues();
+  var kod = e.parameter.kod || "";
+  var out = [];
+  for (var i = 1; i < rows.length; i++) {
+    if (!kod || String(rows[i][1]).toUpperCase() === kod.toUpperCase()) {
+      out.push({
+        timestamp: rows[i][0],
+        kodMajlis: rows[i][1],
+        nama: rows[i][2],
+        hadir: rows[i][3],
+        bilangan: rows[i][4],
+        pesanan: rows[i][5]
+      });
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+      const ta = document.createElement('textarea');
+      ta.value = kod;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      tunjukToast("📋 Kod Google Apps Script telah disalin ke papan klip!");
+    }
+
+    /* ============================================================ */
+    /* DASHBOARD RSVP: PENAPISAN MENGIKUT KOD MAJLIS               */
+    /* ============================================================ */
+    let cacheDataRSVP = [];
+
+    async function muatSemakRSVP() {
+      const kod = (document.getElementById('dashKodInput').value || '').trim().toUpperCase();
+      const scriptUrl = document.getElementById('inRsvpScriptUrl').value.trim();
+      const listEl = document.getElementById('senaraiRekodRSVP');
+
+      if (!kod) {
+        tunjukToast("⚠️ Sila masukkan Kod Majlis untuk menapis!", "warning");
+        return;
+      }
+
+      if (!scriptUrl) {
+        listEl.innerHTML = `<div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 leading-relaxed">
+          ⚠️ Sila masukkan URL Google Apps Script di Tab <strong>"Hubungi / RSVP"</strong> dahulu untuk menarik rekod dari Google Sheet.
+        </div>`;
+        return;
+      }
+
+      listEl.innerHTML = `<div class="text-center py-6 text-slate-400">⏳ Sedang menarik rekod bagi kod <strong>${kod}</strong>...</div>`;
+
+      try {
+        const res = await fetch(`${scriptUrl}?kod=${encodeURIComponent(kod)}`);
+        const data = await res.json();
+        cacheDataRSVP = data;
+        renderDataDashboard(data, kod);
+        tunjukToast(`Berjaya memuatkan ${data.length} rekod.`);
+      } catch (err) {
+        listEl.innerHTML = `<div class="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300">
+          ❌ Gagal menghubungi Google Apps Script. Pastikan Web App disetkan kepada "Anyone" semasa Deploy dan link diakhiri dengan /exec.
+        </div>`;
+      }
+    }
+
+    function renderDataDashboard(data, kod) {
+      const statHadir = document.getElementById('statHadir');
+      const statTidak = document.getElementById('statTidakHadir');
+      const statPax = document.getElementById('statPax');
+      const listEl = document.getElementById('senaraiRekodRSVP');
+
+      let hadirCount = 0;
+      let tidakCount = 0;
+      let totalPax = 0;
+
+      data.forEach(item => {
+        if (item.hadir === 'Hadir') {
+          hadirCount++;
+          const p = parseInt(item.bilangan, 10);
+          totalPax += isNaN(p) ? 1 : p;
+        } else {
+          tidakCount++;
+        }
+      });
+
+      statHadir.textContent = hadirCount;
+      statTidak.textContent = tidakCount;
+      statPax.textContent = totalPax;
+
+      if (data.length === 0) {
+        listEl.innerHTML = `<div class="text-center py-6 text-slate-500">Tiada rekod RSVP ditemui bagi kod <strong>${kod}</strong> lagi.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = data.map(item => `
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-200 text-xs">${item.nama}</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${item.hadir === 'Hadir' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}">
+              ${item.hadir} (${item.bilangan} pax)
+            </span>
+          </div>
+          ${item.pesanan ? `<p class="text-slate-300 italic text-[11px] leading-relaxed">"${item.pesanan}"</p>` : ''}
+          <div class="text-[10px] text-slate-500">${item.timestamp ? new Date(item.timestamp).toLocaleString('ms-MY') : ''}</div>
+        </div>
+      `).join('');
+    }
+
+    function eksportCSV() {
+      if (!cacheDataRSVP || cacheDataRSVP.length === 0) {
+        tunjukToast("⚠️ Tiada rekod untuk dimuat turun. Sila tapis data dahulu.", "warning");
+        return;
+      }
+
+      const kod = (document.getElementById('dashKodInput').value || 'MAJLIS').toUpperCase();
+      let csv = "Tarikh,Kod Majlis,Nama Tetamu,Status,Bilangan Pax,Ucapan & Doa\n";
+
+      cacheDataRSVP.forEach(r => {
+        const row = [
+          `"${r.timestamp || ''}"`,
+          `"${r.kodMajlis || ''}"`,
+          `"${(r.nama || '').replace(/"/g, '""')}"`,
+          `"${r.hadir || ''}"`,
+          `"${r.bilangan || '1'}"`,
+          `"${(r.pesanan || '').replace(/"/g, '""')}"`
+        ];
+        csv += row.join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `Senarai-RSVP-${kod}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      tunjukToast(`Senarai-RSVP-${kod}.csv berjaya dimuat turun!`);
+    }
+
+    /* ============================================================ */
+    /* PENJANA KOD HTML KAD STANDALONE (KAD JEMPUTAN RASMI)         */
+    /* ============================================================ */
+    function binaHTMLKad() {
+      const isDua = document.getElementById('checkDuaPenama').checked;
+      const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan Majlis';
+      const ungkapanAtas = document.getElementById('inUngkapanAtas').value.trim();
+      const namaP = document.getElementById('inNamaP').value.trim() || 'Nama';
+      const subP = document.getElementById('inSubP').value.trim();
+      const namaL = document.getElementById('inNamaL').value.trim() || 'Pasangan';
+      const subL = document.getElementById('inSubL').value.trim();
+      const teksJemputan = document.getElementById('inTeksJemputan').value.trim();
+      const teksFooter = document.getElementById('inTeksFooter').value.trim();
+
+      const tarikhPapar = document.getElementById('inTarikhPapar').value.trim() || '15 November 2026';
+      const hari = document.getElementById('inHari').value.trim() || 'Ahad';
+      const tarikhHijri = document.getElementById('inTarikhHijri').value.trim();
+      const masaMula = document.getElementById('inMasaMula').value.trim() || '11:00 pagi';
+      const masaTamat = document.getElementById('inMasaTamat').value.trim() || '4:00 petang';
+      const countdownIso = document.getElementById('inCountdownIso').value || '2026-11-15T11:00';
+
+      const namaTempat = document.getElementById('inNamaTempat').value.trim() || 'Dewan Perdana';
+      const alamat = document.getElementById('inAlamat').value.trim();
+      const wazeUrl = document.getElementById('inWazeUrl').value.trim();
+      const gmapsUrl = document.getElementById('inGmapsUrl').value.trim();
+      const gmapsEmbed = document.getElementById('inGmapsEmbed').value.trim();
+
+      const kodMajlis = (document.getElementById('inKodMajlis').value || 'KP123').trim().toUpperCase();
+      const rsvpDeadline = document.getElementById('inRsvpDeadline').value.trim() || '5 November 2026';
+      const rsvpScriptUrl = document.getElementById('inRsvpScriptUrl').value.trim();
+
+      const pihakPNama = document.getElementById('inPihakPNama').value.trim();
+      const pihakPPhone = document.getElementById('inPihakPPhone').value.trim();
+      const pihakPWa = document.getElementById('inPihakPWa').value.trim();
+      const pihakLNama = document.getElementById('inPihakLNama').value.trim();
+      const pihakLPhone = document.getElementById('inPihakLPhone').value.trim();
+      const pihakLWa = document.getElementById('inPihakLWa').value.trim();
+
+      const warnaUtama = document.getElementById('inWarnaUtamaHex').value || '#b8860b';
+      const corakLatar = document.getElementById('selCorakLatar').value;
+      const pilihanMuzik = document.getElementById('selPilihanLagu').value;
+      let laguUrl = AUDIO_PRESETS[pilihanMuzik] || AUDIO_PRESETS.wedding1;
+      if (pilihanMuzik === 'custom') {
+        laguUrl = document.getElementById('inCustomMusicUrl').value.trim() || AUDIO_PRESETS.wedding1;
+      }
+
+      // Title & Heading Display
+      const displayNamaHeader = isDua ? `${namaP} &amp; ${namaL}` : namaP;
+
+      // Schedule Items HTML
+      const scheduleHtml = dataAturcara.map(ac => `
+        <li class="aturcara-item">
+          <span class="ac-masa">${ac.masa}</span>
+          <div class="ac-dot"></div>
+          <div>
+            <div class="ac-nama">${ac.emoji} <strong>${ac.tajuk}</strong></div>
+            ${ac.nota ? `<div class="ac-nota">${ac.nota}</div>` : ''}
+          </div>
+        </li>
+      `).join('');
+
+      return `<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${tajuk} | ${displayNamaHeader}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --color-primary: ${warnaUtama};
+      --color-primary-light: #fef3c7;
+      --color-bg-dark: #0b0702;
+      --color-card: rgba(255, 252, 245, 0.94);
+      --color-text: #2c1e05;
+      --color-text-muted: #6b5533;
+      --radius-card: 22px;
+      --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.3);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--color-bg-dark);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .page-wrapper {
+      position: relative;
+      min-height: 100vh;
+      background: 
+        radial-gradient(ellipse at top, rgba(184,134,11,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(139,101,8,0.15) 0%, transparent 60%),
+        linear-gradient(135deg, #070502 0%, #150e04 50%, #070502 100%);
+    }
+
+    /* Background Pattern */
+    .page-wrapper::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      ${corakLatar === 'islamic' ? `
+        background-image: 
+          repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(184,134,11,0.04) 35px, rgba(184,134,11,0.04) 36px),
+          repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(184,134,11,0.04) 35px, rgba(184,134,11,0.04) 36px);
+      ` : corakLatar === 'floral' ? `
+        background-image: radial-gradient(circle at center, rgba(184,134,11,0.08) 1.5px, transparent 1.5px);
+        background-size: 28px 28px;
+      ` : corakLatar === 'dots' ? `
+        background-image: radial-gradient(circle at center, rgba(255,255,255,0.07) 1px, transparent 1px);
+        background-size: 18px 18px;
+      ` : ''}
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding-bottom: 70px;
+    }
+
+    /* Music Floating Button */
+    .music-player {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 99;
+    }
+    .music-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--color-primary);
+      background: rgba(10, 7, 2, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--color-primary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(184,134,11,0.4);
+      transition: all 0.3s ease;
+    }
+    .music-btn.playing {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(184,134,11,0.6); }
+      70% { box-shadow: 0 0 0 12px rgba(184,134,11,0); }
+      100% { box-shadow: 0 0 0 0 rgba(184,134,11,0); }
+    }
+
+    /* Cover Section */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+    }
+    .bismillah {
+      font-size: 20px;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .tajuk-majlis {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #dfc282;
+      margin-bottom: 12px;
+    }
+    .nama-utama {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(48px, 14vw, 70px);
+      color: #fffef9;
+      text-shadow: 0 2px 20px rgba(184,134,11,0.5);
+      line-height: 1.15;
+      display: block;
+    }
+    .nama-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      color: #c9a84c;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 4px 0 8px;
+    }
+    .ampersand {
+      font-family: 'Great Vibes', cursive;
+      font-size: 38px;
+      color: var(--color-primary);
+      margin: 2px 0;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0;
+      width: 100%;
+      max-width: 260px;
+    }
+    .divider .line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(to right, transparent, var(--color-primary));
+    }
+    .divider .line.right {
+      background: linear-gradient(to left, transparent, var(--color-primary));
+    }
+    .divider .diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--color-primary);
+      transform: rotate(45deg);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #c9a84c;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .scroll-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      animation: bounce 1.6s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* Cards */
+    .card {
+      margin: 16px 14px;
+      background: var(--color-card);
+      border-radius: var(--radius-card);
+      padding: 28px 22px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(184,134,11,0.2);
+    }
+    .card-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184,134,11,0.25);
+    }
+
+    /* Event Details Grid */
+    .event-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .event-box {
+      background: rgba(184,134,11,0.06);
+      border: 1px solid rgba(184,134,11,0.18);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .event-box.full { grid-column: 1 / -1; }
+    .event-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+    .event-val.big { font-size: 22px; }
+
+    /* Countdown */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .cd-box {
+      text-align: center;
+      background: rgba(184,134,11,0.08);
+      border: 1px solid rgba(184,134,11,0.2);
+      border-radius: 12px;
+      padding: 12px 4px;
+    }
+    .cd-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: block;
+      line-height: 1;
+    }
+    .cd-lbl {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    /* Aturcara */
+    .aturcara-list { list-style: none; }
+    .aturcara-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(184,134,11,0.25);
+      align-items: flex-start;
+    }
+    .aturcara-item:last-child { border-bottom: none; }
+    .ac-masa {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-primary);
+      min-width: 68px;
+      padding-top: 2px;
+    }
+    .ac-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+    .ac-nama { font-size: 13px; color: var(--color-text); line-height: 1.4; }
+    .ac-nota { font-size: 11px; color: var(--color-text-muted); }
+
+    /* Buttons */
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), #8b6508);
+      color: white;
+      box-shadow: 0 4px 15px rgba(184,134,11,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--color-primary);
+      border: 1.5px solid var(--color-primary);
+    }
+
+    /* Contact Links */
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(184,134,11,0.05);
+      border: 1px solid rgba(184,134,11,0.15);
+      text-decoration: none;
+      color: var(--color-text);
+      margin-bottom: 8px;
+      transition: transform 0.2s;
+    }
+    .contact-item:hover { transform: translateX(3px); }
+    .contact-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    /* Form RSVP */
+    .form-group { margin-bottom: 12px; }
+    .form-group label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .form-ctrl {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(184,134,11,0.25);
+      background: rgba(255,255,255,0.7);
+      font-size: 13px;
+      color: var(--color-text);
+      outline: none;
+    }
+    .form-ctrl:focus { border-color: var(--color-primary); }
+
+    .hadir-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hadir-opt { position: relative; }
+    .hadir-opt input { position: absolute; opacity: 0; }
+    .hadir-opt label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(184,134,11,0.25);
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--color-text);
+    }
+    .hadir-opt input:checked + label {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+
+    .rsvp-msg {
+      text-align: center;
+      font-size: 13px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+      margin-top: 10px;
+    }
+    .rsvp-msg.ok { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .rsvp-msg.err { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+    .footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #c9a84c;
+      font-size: 12px;
+      line-height: 1.8;
+      font-family: 'Cormorant Garamond', serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="music-player">
+    <button class="music-btn" id="mBtn" onclick="toggleAudio()" title="Muzik">🎵</button>
+  </div>
+  <audio id="bgAudio" loop preload="none" src="${laguUrl}"></audio>
+
+  <div class="page-wrapper">
+    <div class="container">
+
+      <!-- COVER -->
+      <section class="cover" id="cover">
+        ${ungkapanAtas ? `<p class="bismillah">${ungkapanAtas}</p>` : ''}
+        <p class="tajuk-majlis">~ ${tajuk} ~</p>
+
+        <div class="divider">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+
+        <div style="margin: 12px 0;">
+          ${isDua ? `
+            <span class="nama-utama">${namaP}</span>
+            ${subP ? `<span class="nama-sub">${subP}</span>` : ''}
+            <span class="ampersand">&amp;</span>
+            <span class="nama-utama">${namaL}</span>
+            ${subL ? `<span class="nama-sub">${subL}</span>` : ''}
+          ` : `
+            <span class="nama-utama">${namaP}</span>
+            ${subP ? `<span class="nama-sub">${subP}</span>` : ''}
+          `}
+        </div>
+
+        <div class="divider">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+
+        <div class="scroll-hint" onclick="document.getElementById('sJemputan').scrollIntoView({behavior:'smooth'})">
+          <span>Tatal ke bawah</span>
+          <div class="scroll-dot"></div>
+        </div>
+      </section>
+
+      <!-- JEMPUTAN -->
+      <div class="card" id="sJemputan">
+        <div class="card-label">📜 Undangan Majlis</div>
+        <p style="text-align:center; font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.8; color:var(--color-text-muted);">
+          ${teksJemputan}
+        </p>
+        <div style="text-align:center; margin: 16px 0;">
+          <span style="font-family:'Great Vibes',cursive; font-size:36px; color:var(--color-text);">${displayNamaHeader}</span>
+        </div>
+      </div>
+
+      <!-- TARIKH & MASA -->
+      <div class="card" id="sTarikh">
+        <div class="card-label">📅 Tarikh &amp; Masa</div>
+        <div class="event-grid">
+          <div class="event-box">
+            <span style="font-size:20px; display:block; margin-bottom:4px;">📅</span>
+            <div style="font-size:9px; text-transform:uppercase; color:var(--color-primary); letter-spacing:1px;">Tarikh</div>
+            <div class="event-val big">${tarikhPapar}</div>
+            <div class="event-val" style="font-size:13px; color:var(--color-primary);">${hari}</div>
+            ${tarikhHijri ? `<div style="font-size:10px; color:var(--color-text-muted); margin-top:2px;">${tarikhHijri}</div>` : ''}
+          </div>
+
+          <div class="event-box">
+            <span style="font-size:20px; display:block; margin-bottom:4px;">🕐</span>
+            <div style="font-size:9px; text-transform:uppercase; color:var(--color-primary); letter-spacing:1px;">Masa</div>
+            <div class="event-val">${masaMula}</div>
+            <div style="font-size:11px; color:var(--color-text-muted);">hingga</div>
+            <div class="event-val">${masaTamat}</div>
+          </div>
+
+          <div class="event-box full">
+            <span style="font-size:20px; display:block; margin-bottom:4px;">📍</span>
+            <div style="font-size:9px; text-transform:uppercase; color:var(--color-primary); letter-spacing:1px;">Tempat Majlis</div>
+            <div class="event-val">${namaTempat}</div>
+            ${alamat ? `<div style="font-size:12px; color:var(--color-text-muted); margin-top:4px;">${alamat}</div>` : ''}
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNTDOWN -->
+      <div class="card" id="sCountdown">
+        <div class="card-label">⏳ Kiraan Masa</div>
+        <div class="countdown-grid">
+          <div class="cd-box"><span class="cd-num" id="cdH">00</span><span class="cd-lbl">Hari</span></div>
+          <div class="cd-box"><span class="cd-num" id="cdJ">00</span><span class="cd-lbl">Jam</span></div>
+          <div class="cd-box"><span class="cd-num" id="cdM">00</span><span class="cd-lbl">Minit</span></div>
+          <div class="cd-box"><span class="cd-num" id="cdS">00</span><span class="cd-lbl">Saat</span></div>
+        </div>
+        <p id="cdEnd" style="text-align:center; display:none; color:var(--color-primary); font-size:14px; margin-top:10px;">
+          ✨ Majlis sedang berlangsung! Selamat datang!
+        </p>
+      </div>
+
+      <!-- ATURCARA -->
+      <div class="card" id="sAturcara">
+        <div class="card-label">🕌 Aturcara Majlis</div>
+        <ul class="aturcara-list">
+          ${scheduleHtml}
+        </ul>
+      </div>
+
+      <!-- LOKASI & PETA -->
+      <div class="card" id="sLokasi">
+        <div class="card-label">📍 Lokasi &amp; Peta</div>
+        ${gmapsEmbed ? `
+          <div style="border-radius:14px; overflow:hidden; border:1px solid rgba(184,134,11,0.25); height:220px; margin-bottom:12px;">
+            <iframe src="${gmapsEmbed}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        ` : ''}
+        <p style="text-align:center; font-size:12px; color:var(--color-text-muted); margin-bottom:8px;">${namaTempat} - ${alamat}</p>
+        <div class="btn-row">
+          ${wazeUrl ? `<a href="${wazeUrl}" target="_blank" rel="noopener" class="btn btn-primary">🗺️ Waze</a>` : ''}
+          ${gmapsUrl ? `<a href="${gmapsUrl}" target="_blank" rel="noopener" class="btn btn-outline">📍 Google Maps</a>` : ''}
+        </div>
+      </div>
+
+      <!-- HUBUNGI KAMI -->
+      <div class="card" id="sHubungi">
+        <div class="card-label">📞 Hubungi Kami</div>
+        ${pihakPNama ? `
+          <a href="https://wa.me/${pihakPWa}" target="_blank" rel="noopener" class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div style="font-size:10px; text-transform:uppercase; color:var(--color-primary);">${pihakPNama}</div>
+              <div style="font-size:14px; font-weight:600;">${pihakPPhone}</div>
+            </div>
+          </a>
+        ` : ''}
+        ${pihakLNama ? `
+          <a href="https://wa.me/${pihakLWa}" target="_blank" rel="noopener" class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div style="font-size:10px; text-transform:uppercase; color:var(--color-primary);">${pihakLNama}</div>
+              <div style="font-size:14px; font-weight:600;">${pihakLPhone}</div>
+            </div>
+          </a>
+        ` : ''}
+      </div>
+
+      <!-- RSVP FORM -->
+      <div class="card" id="sRsvp">
+        <div class="card-label">💌 Pengesahan Kehadiran (RSVP)</div>
+        <p style="font-size:12px; color:var(--color-text-muted); margin-bottom:12px;">
+          Sila sahkan kehadiran sebelum <strong>${rsvpDeadline}</strong> bagi melancarkan urusan penganjur:
+        </p>
+
+        <form id="formKadRsvp" onsubmit="hantarRSVP(event)">
+          <div class="form-group">
+            <label for="fNama">Nama Anda</label>
+            <input type="text" id="fNama" name="nama" class="form-ctrl" placeholder="Masukkan nama penuh" required>
+          </div>
+
+          <div class="form-group">
+            <label>Status Kehadiran</label>
+            <div class="hadir-row">
+              <div class="hadir-opt">
+                <input type="radio" name="hadir" id="fHadir" value="Hadir" checked>
+                <label for="fHadir">✅ Hadir</label>
+              </div>
+              <div class="hadir-opt">
+                <input type="radio" name="hadir" id="fTidak" value="Tidak Hadir">
+                <label for="fTidak">❌ Tidak Hadir</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fBil">Bilangan Pax</label>
+            <select id="fBil" name="bilangan" class="form-ctrl">
+              <option value="1">1 Orang</option>
+              <option value="2">2 Orang</option>
+              <option value="3">3 Orang</option>
+              <option value="4">4 Orang</option>
+              <option value="5">5 Orang</option>
+              <option value="6+">6 Orang Ke Atas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fPesan">Ucapan &amp; Doa</label>
+            <textarea id="fPesan" name="pesanan" class="form-ctrl" rows="3" placeholder="Titipkan ucapan buat yang diraikan..."></textarea>
+          </div>
+
+          <button type="submit" id="btnHantarRsvp" class="btn btn-primary" style="width:100%;">
+            💌 Hantar Maklum Balas
+          </button>
+
+          <div id="rsvpStatusMsg" class="rsvp-msg"></div>
+        </form>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <div class="divider" style="margin: 0 auto 16px;">
+          <div class="line"></div>
+          <div class="diamond"></div>
+          <div class="line right"></div>
+        </div>
+        <strong style="font-size:16px; color:var(--color-primary);">${displayNamaHeader}</strong>
+        ${teksFooter ? `<p style="margin-top:10px; font-style:italic;">${teksFooter}</p>` : ''}
+        <p style="margin-top:12px; font-size:10px; opacity:0.6;">Dihasilkan dengan Studio Kad Digital</p>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // Audio Player Toggle
+    const audio = document.getElementById('bgAudio');
+    const mBtn = document.getElementById('mBtn');
+    let playing = false;
+
+    function toggleAudio() {
+      if (!playing) {
+        audio.play().then(() => {
+          playing = true;
+          mBtn.textContent = '⏸';
+          mBtn.classList.add('playing');
+        }).catch(err => console.log('Autoplay blocked', err));
+      } else {
+        audio.pause();
+        playing = false;
+        mBtn.textContent = '🎵';
+        mBtn.classList.remove('playing');
+      }
+    }
+
+    // Auto Play on first click
+    document.addEventListener('click', function autoMuzik() {
+      if (!playing && audio.src) {
+        audio.play().then(() => {
+          playing = true;
+          mBtn.textContent = '⏸';
+          mBtn.classList.add('playing');
+        }).catch(() => {});
+      }
+      document.removeEventListener('click', autoMuzik);
+    }, { once: true });
+
+    // Countdown Timer
+    const targetDate = new Date("${countdownIso}").getTime();
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('cdEnd').style.display = 'block';
+        return;
+      }
+
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cdH').textContent = pad(Math.floor(diff / (1000 * 60 * 60 * 24)));
+      document.getElementById('cdJ').textContent = pad(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+      document.getElementById('cdM').textContent = pad(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+      document.getElementById('cdS').textContent = pad(Math.floor((diff % (1000 * 60)) / 1000));
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // RSVP Google Sheet Submission
+    async function hantarRSVP(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnHantarRsvp');
+      const msg = document.getElementById('rsvpStatusMsg');
+      const scriptUrl = "${rsvpScriptUrl}";
+      const kodMajlis = "${kodMajlis}";
+
+      const payload = {
+        kodMajlis: kodMajlis,
+        nama: document.getElementById('fNama').value,
+        hadir: document.querySelector('input[name="hadir"]:checked').value,
+        bilangan: document.getElementById('fBil').value,
+        pesanan: document.getElementById('fPesan').value,
+        masaHantar: new Date().toISOString()
+      };
+
+      btn.disabled = true;
+      btn.textContent = 'Menghantar...';
+
+      if (scriptUrl) {
+        try {
+          await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.warn('Nota RSVP:', err);
+        }
+      }
+
+      msg.textContent = '✅ Terima kasih! Pengesahan kehadiran & ucapan anda telah berjaya dihantar.';
+      msg.className = 'rsvp-msg ok';
+      msg.style.display = 'block';
+      btn.textContent = 'Telah Dihantar';
+      e.target.reset();
+    }
+  <\/script>
+</body>
+</html>`;
+    }
+
+    /* ============================================================ */
+    /* KEMAS KINI PRATONTON & EKSPORT                               */
+    /* ============================================================ */
+    function kemaskiniPratonton() {
+      const htmlKod = binaHTMLKad();
+      const frame = document.getElementById('previewFrame');
+      frame.srcdoc = htmlKod;
+    }
+
+    function salinKodHTML() {
+      const html = binaHTMLKad();
+      const ta = document.createElement('textarea');
+      ta.value = html;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      tunjukToast("📋 Kod HTML penuh kad telah disalin ke papan klip!");
+    }
+
+    function muatTurunHTML() {
+      const html = binaHTMLKad();
+      const tajuk = document.getElementById('inTajukMajlis').value.trim() || 'Jemputan';
+      const nama = document.getElementById('inNamaP').value.trim() || 'Majlis';
+      const namaFail = `kad-${tajuk.toLowerCase()}-${nama.toLowerCase().replace(/\s+/g, '-')}.html`;
+
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = namaFail;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      tunjukToast(`💾 Fail ${namaFail} berjaya dimuat turun!`);
+    }
+
+    function bukaKadTabBaru() {
+      const html = binaHTMLKad();
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }
+
+    function tunjukToast(pesan, jenis = "ok") {
+      const t = document.getElementById('toast');
+      const msg = document.getElementById('toastMsg');
+      const icon = document.getElementById('toastIcon');
+
+      msg.textContent = pesan;
+      icon.textContent = jenis === "warning" ? "⚠️" : "✅";
+
+      t.classList.remove('translate-y-20', 'opacity-0');
+      t.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        t.classList.remove('translate-y-0', 'opacity-100');
+        t.classList.add('translate-y-20', 'opacity-0');
+      }, 3200);
+    }
+
+    /* ============================================================ */
+    /* INITIALIZATION UPON PAGE LOAD                                */
+    /* ============================================================ */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAturcaraInputs();
+      kemaskiniPratonton();
+
+      // Pasang listener auto-kemas kini untuk semua input borang
+      const inputs = document.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        if (input.id !== 'dashKodInput') {
+          input.addEventListener('input', () => {
+            kemaskiniPratonton();
+          });
+        }
+      });
+
+      // Synchronize inKodMajlis to dashKodInput
+      const inKod = document.getElementById('inKodMajlis');
+      if (inKod) {
+        inKod.addEventListener('input', (e) => {
+          const dash = document.getElementById('dashKodInput');
+          if (dash) dash.value = e.target.value.toUpperCase();
+        });
+      }
+
+      // Hex Color Input Synchronizer
+      const hexPick = document.getElementById('inWarnaUtamaHex');
+      const hexText = document.getElementById('inWarnaUtamaText');
+      if (hexPick && hexText) {
+        hexPick.addEventListener('input', (e) => {
+          hexText.value = e.target.value.toUpperCase();
+          kemaskiniPratonton();
+        });
+        hexText.addEventListener('input', (e) => {
+          hexPick.value = e.target.value;
+          kemaskiniPratonton();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
