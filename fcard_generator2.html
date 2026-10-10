@@ -1079,6 +1079,9 @@ function out(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }`;
 
+/* URL Google Apps Script lalai (boleh ditukar dalam borang) */
+const DEFAULT_SCRIPT = 'https://script.google.com/macros/s/AKfycbzONoreTikPFOOvbp3IQXlwqDBOOy9rrz9EZcRjrAcdRX0NiFPobuiyw_tpvEAKuCYDbw/exec';
+
 /* ================================================================
    UTILS
 ================================================================ */
@@ -1216,7 +1219,7 @@ function renderStep2() {
     if (el && typeof val === 'string') el.value = val;
   });
   const su = g('f_scriptUrl');
-  if (su && !su.value) su.value = lsGet('mkj_script');
+  if (su && !su.value) su.value = lsGet('mkj_script') || DEFAULT_SCRIPT;
 
   const td = g('f_tarikh');
   if (td) td.addEventListener('change', () => {
@@ -1274,6 +1277,7 @@ function collectForm() {
     S.data.kodAcara = S.data.kodAcara.toUpperCase().replace(/[^A-Z0-9_-]/g, '');
     const k = g('f_kodAcara'); if (k) k.value = S.data.kodAcara;
   }
+  if (!S.data.scriptUrl && g('f_scriptUrl')) { S.data.scriptUrl = lsGet('mkj_script') || DEFAULT_SCRIPT; g('f_scriptUrl').value = S.data.scriptUrl; }
   if (S.data.scriptUrl) lsSet('mkj_script', S.data.scriptUrl);
 }
 
@@ -1950,7 +1954,7 @@ function expCSV() {
    INIT
 ================================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  g('dScriptUrl').value = lsGet('mkj_script');
+  g('dScriptUrl').value = lsGet('mkj_script') || DEFAULT_SCRIPT;
   goSection('hero');
 });
 </script>
