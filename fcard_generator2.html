@@ -1080,7 +1080,7 @@ function out(obj) {
 }`;
 
 /* URL Google Apps Script lalai (boleh ditukar dalam borang) */
-const DEFAULT_SCRIPT = 'https://script.google.com/macros/s/AKfycbyjT8TaUq-z11Nv-ZLbab6cOlZYKg2KCR9wsV0XUmTEsesYRRjzztBw-q-4rZJkTmGdig/exec';
+const DEFAULT_SCRIPT = 'https://script.google.com/macros/s/AKfycbzL2z1w4STRcv5DDJqwk_EgKiAJcLS7stUvPiNTN6SlYv080Xt50u69lsjLN-lDriI/exec';
 
 /* ================================================================
    UTILS
@@ -1627,7 +1627,18 @@ function cardRuntime(C) {
 
 function buildCard() {
   const ev = EV[S.evType], th = getTheme(), ac = getAcItems();
-  const F = id => esc(f(id));
+  // Nama orang: jika ditaip huruf besar semua, tukar kepada huruf title (bin/binti kekal kecil)
+  const NAMEF = new Set(['namaPP','namaPL','subNP','subNL','namaInd','namaBayi','namaAyah','namaIbu']);
+  const tc = t => (t && t === t.toUpperCase() && t !== t.toLowerCase())
+    ? t.toLowerCase().replace(/(^|[\s'(\-])([a-zà-ÿ])/g, (m, a, b) => a + b.toUpperCase()).replace(/\b(Bin|Binti|Bte|Bt)\b/g, m => m.toLowerCase())
+    : t;
+  const D = id => NAMEF.has(id) ? tc(f(id)) : f(id);
+  const F = id => esc(D(id));
+  // Saiz tulisan mengikut panjang nama supaya sentiasa mudah dibaca
+  const nf = t => 'font-size:' + (t.length <= 12 ? 'clamp(46px,13vw,66px)' : t.length <= 20 ? 'clamp(38px,10.5vw,54px)' : t.length <= 30 ? 'clamp(32px,8.5vw,44px)' : 'clamp(28px,7.5vw,36px)');
+  // Asingkan "bin/binti ..." ke baris kecil di bawah nama utama
+  const splitNm = t => { const m = t.match(/^(.*?)\s+(bin|binti|bte|bt)\s+(.+)$/i); return m ? [m[1], m[2].toLowerCase() + ' ' + m[3]] : [t, '']; };
+  const nameBlock = (id, ph) => { const [a, b] = splitNm(D(id) || ph); return `<span class="n1" style="${nf(a)}">${esc(a)}</span>${b ? `<span class="ns">${esc(b)}</span>` : ''}`; };
   const rgb = hex2rgb(th.p);
   const kod = f('kodAcara') || 'ACARA001';
   const scr = /^https:\/\/script\.google\.com\//.test(f('scriptUrl')) ? f('scriptUrl') : '';
@@ -1645,23 +1656,23 @@ function buildCard() {
   /* Kulit */
   let cover = '';
   if (S.evType === 'kahwin') {
-    cover = `<div class="cn"><span class="n1">${F('namaPP') || 'Pengantin Perempuan'}</span><span class="ns">${F('subNP')}</span><span class="amp">&amp;</span><span class="n1">${F('namaPL') || 'Pengantin Lelaki'}</span><span class="ns">${F('subNL')}</span></div><p class="ctag">~ Walimatulurus ~</p>`;
+    cover = `<div class="cn"><span class="n1" style="${nf(D('namaPP') || 'Pengantin Perempuan')}">${F('namaPP') || 'Pengantin Perempuan'}</span><span class="ns">${F('subNP')}</span><span class="amp">&amp;</span><span class="n1" style="${nf(D('namaPL') || 'Pengantin Lelaki')}">${F('namaPL') || 'Pengantin Lelaki'}</span><span class="ns">${F('subNL')}</span></div><p class="ctag">~ Walimatulurus ~</p>`;
   } else if (S.evType === 'harijadi') {
-    cover = `<div class="cn"><span class="n1" style="font-size:clamp(44px,12vw,66px)">${F('namaInd') || 'Nama'}</span>${f('umur') ? `<span class="ns">🎂 Tahun Ke-${F('umur')}</span>` : ''}</div><p class="ctag">${F('tajuk') || '🎉 Selamat Hari Jadi!'}</p>`;
+    cover = `<div class="cn">${nameBlock('namaInd', 'Nama')}${f('umur') ? `<span class="ns">🎂 Tahun Ke-${F('umur')}</span>` : ''}</div><p class="ctag">${F('tajuk') || '🎉 Selamat Hari Jadi!'}</p>`;
   } else if (S.evType === 'akikah') {
-    cover = `<div class="cn"><span class="n1" style="font-size:clamp(44px,12vw,66px)">${F('namaBayi') || 'Nama Bayi'}</span>${f('namaAyah') && f('namaIbu') ? `<span class="ns">${f('jantina') === 'Perempuan' ? 'Puteri' : 'Putera'} ${F('namaAyah')} &amp; ${F('namaIbu')}</span>` : ''}</div><p class="ctag">🍼 Majlis Akikah / Cukur Jambul</p>`;
+    cover = `<div class="cn">${nameBlock('namaBayi', 'Nama Bayi')}${f('namaAyah') && f('namaIbu') ? `<span class="ns">${f('jantina') === 'Perempuan' ? 'Puteri' : 'Putera'} ${F('namaAyah')} &amp; ${F('namaIbu')}</span>` : ''}</div><p class="ctag">🍼 Majlis Akikah / Cukur Jambul</p>`;
   } else if (S.evType === 'perpisahan') {
-    cover = `<div class="cn"><p style="font-family:var(--fh);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${F('jenisAc') || 'Majlis Perpisahan'}</p><span class="n1" style="font-size:clamp(38px,10vw,62px)">${F('namaInd') || 'Nama Individu'}</span>${f('jawatan') ? `<span class="ns">${F('jawatan')}</span>` : ''}${f('tempKerja') ? `<span class="ns">${F('tempKerja')}</span>` : ''}${f('tempohKhidmat') ? `<span style="font-family:var(--fh);font-size:13px;color:var(--acc);display:block;margin-top:8px">⏳ ${F('tempohKhidmat')}</span>` : ''}</div><p class="ctag">~ ${F('namaOrg') || 'Jemputan Hadir'} ~</p>`;
+    cover = `<div class="cn"><p style="font-family:var(--fh);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${F('jenisAc') || 'Majlis Perpisahan'}</p>${nameBlock('namaInd', 'Nama Individu')}${f('jawatan') ? `<span class="ns">${F('jawatan')}</span>` : ''}${f('tempKerja') ? `<span class="ns">${F('tempKerja')}</span>` : ''}${f('tempohKhidmat') ? `<span style="font-family:var(--fh);font-size:13px;color:var(--acc);display:block;margin-top:8px">⏳ ${F('tempohKhidmat')}</span>` : ''}</div><p class="ctag">~ ${F('namaOrg') || 'Jemputan Hadir'} ~</p>`;
   } else if (S.evType === 'apresiasi') {
-    cover = `<div class="cn"><p style="font-family:var(--fh);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${F('anjuran')}</p><p style="font-family:var(--fh);font-size:20px;color:rgba(255,254,249,.85);margin-bottom:18px">${F('tajukMajlis') || 'Tajuk Majlis'}</p>${f('namaInd') ? `<span class="n1" style="font-size:clamp(36px,10vw,58px)">${F('namaInd')}</span>` : ''}</div><p class="ctag">🏆 Majlis Apresiasi &amp; Penghargaan</p>`;
+    cover = `<div class="cn"><p style="font-family:var(--fh);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--acc);margin-bottom:14px">${F('anjuran')}</p><p style="font-family:var(--fh);font-size:20px;color:rgba(255,254,249,.85);margin-bottom:18px">${F('tajukMajlis') || 'Tajuk Majlis'}</p>${f('namaInd') ? nameBlock('namaInd', '') : ''}</div><p class="ctag">🏆 Majlis Apresiasi &amp; Penghargaan</p>`;
   } else if (S.evType === 'graduasi') {
-    cover = `<div class="cn"><p style="font-size:28px;margin-bottom:10px">🎓</p><span class="n1" style="font-size:clamp(40px,11vw,64px)">${F('namaInd') || 'Nama Graduan'}</span>${f('pengajian') ? `<span class="ns">${F('pengajian')}</span>` : ''}${f('universiti') ? `<span style="font-family:var(--fh);font-size:12px;color:var(--acc);display:block;margin-top:6px">🏛️ ${F('universiti')}</span>` : ''}</div><p class="ctag">~ Majlis Konvokesyen ~</p>`;
+    cover = `<div class="cn"><p style="font-size:28px;margin-bottom:10px">🎓</p>${nameBlock('namaInd', 'Nama Graduan')}${f('pengajian') ? `<span class="ns">${F('pengajian')}</span>` : ''}${f('universiti') ? `<span style="font-family:var(--fh);font-size:12px;color:var(--acc);display:block;margin-top:6px">🏛️ ${F('universiti')}</span>` : ''}</div><p class="ctag">~ Majlis Konvokesyen ~</p>`;
   } else {
-    cover = `<div class="cn">${f('tajukMajlis') ? `<p style="font-family:var(--fh);font-size:clamp(20px,6vw,36px);font-weight:600;color:var(--w);line-height:1.3">${F('tajukMajlis')}</p>` : ''}${f('subTajuk') ? `<p style="font-family:var(--ft);font-size:28px;color:var(--acc);margin-top:10px">${F('subTajuk')}</p>` : ''}${f('namaInd') ? `<span class="n1" style="font-size:clamp(34px,9vw,56px);margin-top:12px">${F('namaInd')}</span>` : ''}</div><p class="ctag">${f('penganjur') ? '~ ' + F('penganjur') + ' ~' : '~ Jemputan Hadir ~'}</p>`;
+    cover = `<div class="cn">${f('tajukMajlis') ? `<p style="font-family:var(--fh);font-size:clamp(20px,6vw,36px);font-weight:600;color:var(--w);line-height:1.3">${F('tajukMajlis')}</p>` : ''}${f('subTajuk') ? `<p style="font-family:var(--ft);font-size:28px;color:var(--acc);margin-top:10px">${F('subTajuk')}</p>` : ''}${f('namaInd') ? nameBlock('namaInd', '') : ''}</div><p class="ctag">${f('penganjur') ? '~ ' + F('penganjur') + ' ~' : '~ Jemputan Hadir ~'}</p>`;
   }
 
   /* Teks jemputan */
-  const big = (t, extra) => `<span style="font-family:var(--ft);font-size:34px;color:var(--txt);display:block;line-height:1.3">${t}${extra || ''}</span>`;
+  const big = (t, extra) => `<span style="font-family:var(--ft);font-size:${t.length > 40 ? '24px' : t.length > 26 ? '28px' : '34px'};color:var(--txt);display:block;line-height:1.3">${t}${extra || ''}</span>`;
   let jTxt = '';
   if (S.evType === 'kahwin') {
     jTxt = `Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke majlis perkahwinan anak kami:<br/><br/>${big((F('namaPP') || '-') + ' &amp; ' + (F('namaPL') || '-'))}<span style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--p)">~ Walimatulurus ~</span>`;
@@ -1752,7 +1763,7 @@ body{font-family:var(--fb);background:var(--bgd);color:var(--txt);min-height:100
 .plt:hover,.plt.act{background:rgba(${rgb},.2);color:var(--pl)}
 .cov{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;position:relative}
 .bsm{font-family:var(--fh);font-size:20px;color:var(--acc);margin-bottom:20px;opacity:0;animation:fid 1s ease .3s forwards;letter-spacing:1px}
-.n1{font-family:var(--ft);font-size:clamp(52px,15vw,76px);color:var(--w);text-shadow:0 2px 20px rgba(${rgb},.5);line-height:1.1;display:block}
+.n1{font-family:var(--ft);font-size:clamp(46px,13vw,66px);color:var(--w);text-shadow:0 2px 14px rgba(${rgb},.35);line-height:1.2;display:block;overflow-wrap:break-word;max-width:100%}
 .ns{font-family:var(--fh);font-size:12px;color:var(--acc);letter-spacing:2.5px;text-transform:uppercase;display:block;margin:3px 0 6px}
 .amp{font-family:var(--ft);font-size:40px;color:var(--p);display:block;margin:4px 0}
 .cn{opacity:0;animation:fi 1.2s ease .9s forwards}
