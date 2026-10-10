@@ -337,7 +337,7 @@ table.dt tr:last-child td{border-bottom:none}
       <div class="pers-box wide">
         <div class="ph">🎵 Lagu Latar Belakang</div>
         <div class="mu-lib" id="muLib"></div>
-        <p class="hint">Lagu terbina dalam ialah instrumental ringkas yang dijana terus oleh pelayar (tiada fail audio, tiada hak cipta rakaman). Lagu pertama yang dipilih dimainkan automatik apabila tetamu mula menyentuh skrin.</p>
+        <p class="hint">Lagu terbina dalam ialah instrumental ringkas yang dijana terus oleh pelayar (tiada fail audio, tiada hak cipta rakaman). Lagu pertama yang dipilih dimainkan automatik apabila tetamu menekan butang Buka Kad.</p>
         <div class="divider"></div>
         <div class="ph" style="font-size:12px;color:var(--text3)">+ Link Lagu Sendiri (URL terus ke fail .mp3 / .ogg / .m4a)</div>
         <div class="mu-manual">
@@ -1219,7 +1219,7 @@ function renderStep2() {
     if (el && typeof val === 'string') el.value = val;
   });
   const su = g('f_scriptUrl');
-  if (su && !su.value) su.value = lsGet('mkj_script') || DEFAULT_SCRIPT;
+  if (su && !su.value) su.value = lsGet('mkj_script_v2') || DEFAULT_SCRIPT;
 
   const td = g('f_tarikh');
   if (td) td.addEventListener('change', () => {
@@ -1277,8 +1277,8 @@ function collectForm() {
     S.data.kodAcara = S.data.kodAcara.toUpperCase().replace(/[^A-Z0-9_-]/g, '');
     const k = g('f_kodAcara'); if (k) k.value = S.data.kodAcara;
   }
-  if (!S.data.scriptUrl && g('f_scriptUrl')) { S.data.scriptUrl = lsGet('mkj_script') || DEFAULT_SCRIPT; g('f_scriptUrl').value = S.data.scriptUrl; }
-  if (S.data.scriptUrl) lsSet('mkj_script', S.data.scriptUrl);
+  if (!S.data.scriptUrl && g('f_scriptUrl')) { S.data.scriptUrl = lsGet('mkj_script_v2') || DEFAULT_SCRIPT; g('f_scriptUrl').value = S.data.scriptUrl; }
+  if (S.data.scriptUrl) lsSet('mkj_script_v2', S.data.scriptUrl);
 }
 
 function validateStep2() {
@@ -1498,12 +1498,6 @@ function cardRuntime(C) {
     mB.addEventListener('click', function () { if (playing) { stopAll(); ui(); } else play(cur >= 0 ? cur : 0); });
     mB2.addEventListener('click', function () { mL.classList.toggle('show'); });
     document.addEventListener('click', function (e) { if (!mW.contains(e.target)) mL.classList.remove('show'); });
-    var first = function (e) {
-      if (mW.contains(e.target)) return;
-      document.removeEventListener('pointerdown', first);
-      if (!playing && cur < 0) play(0);
-    };
-    document.addEventListener('pointerdown', first);
     ui();
   }
 
@@ -1536,30 +1530,99 @@ function cardRuntime(C) {
       .then(function () { btn.disabled = false; btn.textContent = '💌 Hantar RSVP'; });
   });
 
-  function addUW(nm, tx) {
-    var w = $('uW'), p = w.querySelector('p'); if (p) p.remove();
+  var EMPTY = 'Belum ada ucapan lagi. Jadilah yang pertama! 💌';
+  function fmtWhen(v) {
+    if (!v) return '';
+    var s = String(v);
+    if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+      var d = new Date(s);
+      if (!isNaN(d.getTime())) return d.toLocaleString('ms-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+    return s;
+  }
+  function addUW(nm, tx, when, top) {
+    var w = $('uW');
     var d = document.createElement('div'); d.className = 'ui';
     var a = document.createElement('div'); a.className = 'un'; a.textContent = nm || '-';
+    var t = document.createElement('div'); t.className = 'ud'; t.textContent = when || '';
     var b = document.createElement('div'); b.className = 'ut'; b.textContent = '💬 ' + (tx || '');
-    d.appendChild(a); d.appendChild(b); w.insertBefore(d, w.firstChild);
+    d.appendChild(a); if (when) d.appendChild(t); d.appendChild(b);
+    if (top) w.insertBefore(d, w.firstChild); else w.appendChild(d);
+    $('uStat').textContent = '💌 ' + w.children.length + ' ucapan';
+  }
+  function renderWall(list) {
+    var w = $('uW'); w.innerHTML = '';
+    if (!list.length) { $('uStat').textContent = EMPTY; return; }
+    list.slice().reverse().slice(0, 50).forEach(function (d) { addUW(d['Nama'], d['Ucapan/Pesanan'], fmtWhen(d['Timestamp']), false); });
+  }
+  function loadU() {
+    var st = $('uStat');
+    if (!C.scr || !C.kod) { if (!$('uW').children.length) st.textContent = EMPTY; return; }
+    fetch(C.scr + '?kod=' + encodeURIComponent(C.kod) + '&jenis=ucapan&_=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.result === 'success') renderWall(j.data || []); else throw new Error('gagal'); })
+      .catch(function () { if (!$('uW').children.length) st.textContent = '⚠️ Ucapan tidak dapat dimuatkan buat masa ini. Tekan "Muat semula ucapan".'; });
   }
   $('uF').addEventListener('submit', function (e) {
     e.preventDefault();
     var msg = $('uMsg'), btn = $('uBtn'), nm = $('uN').value.trim(), tx = $('uT').value.trim();
     if (!nm || !tx) return;
     var d = { kodAcara: C.kod, jenisAcara: C.jenis, jenisData: 'ucapan', nama: nm, ucapan: tx };
-    var ok = function () { addUW(nm, tx); show(msg, '✅ Ucapan anda telah dihantar!', true); $('uF').reset(); setTimeout(function () { msg.style.display = 'none'; }, 3000); };
+    var ok = function () { addUW(nm, tx, 'Baru sahaja', true); if (!DEMO) setTimeout(loadU, 2500); show(msg, '✅ Ucapan anda telah dihantar!', true); $('uF').reset(); setTimeout(function () { msg.style.display = 'none'; }, 3000); };
     if (DEMO) { ok(); return; }
     btn.disabled = true;
     post(d).then(ok).catch(function () { show(msg, '❌ Ralat rangkaian. Sila cuba lagi.', false); }).then(function () { btn.disabled = false; });
   });
 
-  if (C.scr && C.kod) {
-    fetch(C.scr + '?kod=' + encodeURIComponent(C.kod) + '&jenis=ucapan')
-      .then(function (r) { return r.json(); })
-      .then(function (j) { if (j && j.data && j.data.length) j.data.slice(-30).forEach(function (d) { addUW(d['Nama'], d['Ucapan/Pesanan']); }); })
-      .catch(function () {});
+  $('uRef').addEventListener('click', loadU);
+  loadU();
+  setInterval(function () { if (!document.hidden) loadU(); }, 60000);
+
+  /* Pintu "Buka Kad" + auto-skrol */
+  var gate = $('gate'), asB = $('asB'), auto = false, raf = 0, last = 0, acc = 0, touched = false;
+  var SPEED = 38; // piksel sesaat
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function atEnd() { return window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2; }
+  function tick(ts) {
+    if (!auto) return;
+    if (!last) last = ts;
+    var dt = Math.min(ts - last, 100); last = ts;
+    acc += SPEED * dt / 1000;
+    var px = Math.floor(acc);
+    if (px >= 1) { acc -= px; window.scrollBy(0, px); }
+    if (atEnd()) { stopAuto(); return; }
+    raf = requestAnimationFrame(tick);
   }
+  function startAuto() {
+    if (auto) return;
+    auto = true; last = 0; acc = 0;
+    document.documentElement.style.scrollBehavior = 'auto';
+    asB.textContent = '⏸'; asB.title = 'Henti auto-skrol';
+    raf = requestAnimationFrame(tick);
+  }
+  function stopAuto() { auto = false; cancelAnimationFrame(raf); asB.textContent = '⏬'; asB.title = 'Auto-skrol'; }
+  function openCard() {
+    gate.classList.add('hide');
+    document.body.classList.remove('locked'); document.body.classList.add('open');
+    setTimeout(function () { gate.style.display = 'none'; }, 900);
+    window.scrollTo(0, 0);
+    asB.style.display = 'flex';
+    if (T.length && typeof play === 'function') play(0);
+    ['touchstart', 'wheel', 'mousedown', 'keydown'].forEach(function (name) {
+      window.addEventListener(name, function (e) {
+        if (asB.contains(e.target)) return;
+        touched = true; if (auto) stopAuto();
+      }, { passive: true });
+    });
+    if (!reduce) setTimeout(function () { if (!touched) startAuto(); }, 3500);
+  }
+  asB.addEventListener('click', function () {
+    if (auto) { stopAuto(); return; }
+    touched = true;
+    if (atEnd()) { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); }
+    startAuto();
+  });
+  $('openBtn').addEventListener('click', openCard);
 }
 
 function buildCard() {
@@ -1758,13 +1821,32 @@ body{font-family:var(--fb);background:var(--bgd);color:var(--txt);min-height:100
 .er{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.3)}
 .nt{display:none;text-align:center;font-size:12px;color:var(--txtl);background:rgba(${rgb},.08);border:1px dashed rgba(${rgb},.3);border-radius:10px;padding:8px 10px;margin-bottom:12px;font-family:var(--fb)}
 .ft{text-align:center;padding:36px 24px 20px;color:var(--acc);font-family:var(--fh);font-size:13px;line-height:1.9}
+body.locked{overflow:hidden;height:100vh}
+body:not(.open) .cov *{animation-play-state:paused}
+.gate{position:fixed;inset:0;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;background:radial-gradient(ellipse at top,rgba(${rgb},.18) 0%,transparent 60%),linear-gradient(135deg,${th.bgd} 0%,${th.bg} 50%,${th.bgd} 100%);transition:opacity .8s ease,visibility .8s}
+.gate.hide{opacity:0;visibility:hidden;pointer-events:none}
+.gate .g1{font-family:var(--fh);font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--acc);margin-bottom:18px}
+.gate .g2{font-family:var(--ft);font-size:clamp(44px,13vw,64px);color:var(--w);line-height:1.15;margin-bottom:8px;text-shadow:0 2px 20px rgba(${rgb},.5)}
+.gate .g3{font-family:var(--fh);font-size:16px;color:var(--acc);margin-bottom:36px;letter-spacing:1px}
+.gate .btn{max-width:240px;padding:15px 20px;font-size:15px;animation:pulse 2.2s infinite;border-radius:50px}
+.gate .gh{margin-top:18px;font-size:11px;color:var(--acc);opacity:.7;font-family:var(--fb)}
+.asb{position:fixed;left:16px;bottom:16px;top:auto;right:auto;z-index:998;display:none;width:42px;height:42px;font-size:16px}
+.ud{font-size:10px;color:var(--txtl);opacity:.75;margin-bottom:4px;font-family:var(--fb);letter-spacing:.3px}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 @keyframes fid{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
 @keyframes fiu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes bn{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 </style>
 </head>
-<body>
+<body class="locked">
+<div class="gate" id="gate">
+  <div class="g1">Jemputan Istimewa</div>
+  <div class="g2">Anda Dijemput</div>
+  <div class="g3">${esc(ev.desc)}</div>
+  <button class="btn bp" id="openBtn" type="button">💌 Buka Kad</button>
+  <div class="gh">Tekan untuk membuka jemputan</div>
+</div>
+<button class="mb asb" id="asB" type="button" title="Auto-skrol">⏬</button>
 ${musicUI}
 <div class="pbg"><div class="con">
 
@@ -1822,7 +1904,9 @@ ${conHTML ? `<div class="sc" id="sC"><div class="sl">📞 Hubungi Kami</div><div
 <div class="sc" id="sU">
   <div class="sl">💬 ${esc(ev.ucapan || 'Ucapan')}</div>
   <div class="nt" id="uDemo">Mod pratonton: ucapan tidak disimpan kerana URL Google Script belum diisi.</div>
-  <div class="uw" id="uW"><p style="text-align:center;font-family:var(--fh);font-size:14px;color:var(--txtl);padding:20px">Belum ada ucapan lagi. Jadilah yang pertama! 💌</p></div>
+  <div id="uStat" style="text-align:center;font-family:var(--fh);font-size:14px;color:var(--txtl);margin-bottom:10px">⏳ Memuatkan ucapan...</div>
+  <div class="uw" id="uW"></div>
+  <div style="text-align:center"><button type="button" id="uRef" class="btn bo" style="width:auto;padding:8px 18px;font-size:12px">🔄 Muat semula ucapan</button></div>
   <form class="rf" style="margin-top:12px" id="uF">
     <div class="fl"><label for="uN">Nama Anda</label><input type="text" id="uN" class="fc" placeholder="Nama anda" maxlength="80" required></div>
     <div class="fl"><label for="uT">${esc(ev.ucapan || 'Ucapan')}</label><textarea id="uT" class="fc" rows="3" maxlength="500" placeholder="Taip ucapan anda di sini..." required></textarea></div>
@@ -1899,7 +1983,7 @@ async function loadDash() {
   const url = g('dScriptUrl').value.trim(), kod = g('dKod').value.trim().toUpperCase(), key = g('dKey').value;
   if (!url || !kod) { toast('Sila isi URL Script dan Kod Acara', 'err'); return; }
   if (!key) { toast('Sila isi Kata Laluan Admin', 'err'); return; }
-  lsSet('mkj_script', url);
+  lsSet('mkj_script_v2', url);
   g('dashData').style.display = 'none'; g('dashEmpty').style.display = 'none';
   try {
     const r = await fetch(url + (url.indexOf('?') >= 0 ? '&' : '?') + 'kod=' + encodeURIComponent(kod) + '&key=' + encodeURIComponent(key));
@@ -1954,7 +2038,7 @@ function expCSV() {
    INIT
 ================================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  g('dScriptUrl').value = lsGet('mkj_script') || DEFAULT_SCRIPT;
+  g('dScriptUrl').value = lsGet('mkj_script_v2') || DEFAULT_SCRIPT;
   goSection('hero');
 });
 </script>
