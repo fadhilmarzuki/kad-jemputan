@@ -1691,7 +1691,7 @@ function buildCard() {
   if (S.evType === 'kahwin') {
     cover = `<div class="cn"><span class="n1" style="${nf(D('namaPP') || 'Pengantin Perempuan')}">${F('namaPP') || 'Pengantin Perempuan'}</span><span class="ns">${F('subNP')}</span><span class="amp">&amp;</span><span class="n1" style="${nf(D('namaPL') || 'Pengantin Lelaki')}">${F('namaPL') || 'Pengantin Lelaki'}</span><span class="ns">${F('subNL')}</span></div><p class="ctag">~ Walimatulurus ~</p>`;
   } else if (S.evType === 'harijadi') {
-    cover = `<div class="cn">${nameBlock('namaInd', 'Nama')}${f('umur') ? `<span class="ns">🎂 Yang Ke-${F('umur')}</span>` : ''}</div><p class="ctag">${F('tajuk') || '🎉 Selamat Hari Jadi!'}</p>`;
+    cover = `<div class="cn">${nameBlock('namaInd', 'Nama')}${f('umur') ? `<span class="ns">🎂 Ulang Tahun Kelahiran Yang Ke-${F('umur')}</span>` : ''}</div><p class="ctag">${F('tajuk') || '🎉 Selamat Hari Jadi!'}</p>`;
   } else if (S.evType === 'akikah') {
     cover = `<div class="cn">${nameBlock('namaBayi', 'Nama Bayi')}${f('namaAyah') && f('namaIbu') ? `<span class="ns">${f('jantina') === 'Perempuan' ? 'Puteri' : 'Putera'} ${F('namaAyah')} &amp; ${F('namaIbu')}</span>` : ''}</div><p class="ctag">🍼 Majlis Akikah / Cukur Jambul</p>`;
   } else if (S.evType === 'perpisahan') {
