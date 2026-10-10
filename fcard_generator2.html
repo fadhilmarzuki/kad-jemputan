@@ -976,6 +976,33 @@ const EV = {
   }
 };
 
+/* Teks kad yang boleh diubah oleh pengguna (nilai lalai ikut jenis majlis) */
+const TXT_DEFAULT = {
+  kahwin:     { j: "Dengan penuh kesyukuran ke hadrat Ilahi, kami sekeluarga berbesar hati menjemput Dato' / Datin / Tuan / Puan / Encik / Cik sekeluarga hadir menyerikan majlis kami:",
+                d: "“Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya.” (Surah Ar-Rum: 21)" },
+  harijadi:   { j: "Dengan penuh kegembiraan, kami menjemput Tuan / Puan / Encik / Cik sekeluarga hadir ke majlis sambutan hari jadi:",
+                d: "Semoga dipanjangkan umur, murah rezeki dan sentiasa dalam lindungan Allah SWT." },
+  akikah:     { j: "Dengan penuh kesyukuran atas kurniaan cahaya mata, kami menjemput Tuan / Puan / Encik / Cik sekeluarga hadir ke Majlis Akikah / Cukur Jambul:",
+                d: "Semoga anak ini membesar menjadi insan yang soleh / solehah, berbakti kepada agama, ibu bapa dan negara." },
+  perpisahan: { j: "Dengan penuh penghargaan, kami menjemput Tuan / Puan / Encik / Cik hadir ke majlis meraikan:",
+                d: "Jasa dan pengorbananmu akan sentiasa dikenang. Semoga berjaya dan bahagia di fasa kehidupan yang seterusnya." },
+  apresiasi:  { j: "Sebagai tanda penghargaan atas sumbangan dan dedikasi, kami menjemput Tuan / Puan / Encik / Cik hadir ke:",
+                d: "Terima kasih atas dedikasi dan komitmen yang diberikan. Usaha anda amat dihargai." },
+  graduasi:   { j: "Dengan penuh kesyukuran, kami menjemput Tuan / Puan / Encik / Cik hadir meraikan kejayaan:",
+                d: "Selamat maju jaya! Semoga ilmu yang diperoleh membawa manfaat kepada diri, keluarga dan masyarakat." },
+  lain:       { j: "Dengan hormatnya, kami menjemput Tuan / Puan / Encik / Cik hadir ke majlis kami:",
+                d: "Kehadiran dan doa restu Tuan / Puan amatlah kami hargai." },
+};
+Object.keys(EV).forEach(k => {
+  const ev = EV[k];
+  ev.defJ = TXT_DEFAULT[k].j; ev.defD = TXT_DEFAULT[k].d;
+  const i = ev.groups.findIndex(gr => /RSVP/.test(gr.ttl));
+  ev.groups.splice(i < 0 ? ev.groups.length : i, 0, { ttl: '✍️ Teks Kad (boleh diubah)', fields: [
+    { id: 'jemputanTxt', lbl: 'Teks Ucapan Jemputan', type: 'ta', full: true },
+    { id: 'doaTxt', lbl: 'Doa / Pantun / Mutiara Kata Penutup (Footer) — kosongkan jika tidak mahu', type: 'ta', full: true },
+  ]});
+});
+
 const TH = {
   emas:   {nm:'Emas Krim',   p:'#b8860b',pl:'#d4a017',pd:'#8b6508',acc:'#c9a84c',bg:'#0f0a02',bgd:'#1a1208',card:'rgba(255,252,240,.92)',txt:'#3d2b00',txtl:'#6b5230'},
   ros:    {nm:'Ros Merah',   p:'#be123c',pl:'#e11d48',pd:'#9f1239',acc:'#f43f5e',bg:'#0f0209',bgd:'#1a0a0e',card:'rgba(255,240,244,.92)',txt:'#3d0010',txtl:'#7f1d1d'},
@@ -1214,6 +1241,8 @@ function renderStep2() {
     renderAcRows(gi);
   });
 
+  if (S.data.jemputanTxt === undefined) S.data.jemputanTxt = ev.defJ;
+  if (S.data.doaTxt === undefined) S.data.doaTxt = ev.defD;
   Object.entries(S.data).forEach(([id, val]) => {
     const el = g('f_' + id);
     if (el && typeof val === 'string') el.value = val;
@@ -1241,8 +1270,12 @@ function renderField(fl) {
   }
   const extra = fl.id === 'kodAcara'
     ? `<button class="btn-add" type="button" onclick="genKod()" style="align-self:flex-start">🎲 Jana kod rawak</button><span class="hint">Huruf besar &amp; nombor sahaja. Kod ini mengikat kad dengan data RSVP/ucapan dalam Google Sheet.</span>` : '';
-  return `<div class="${cls}"><label class="fgl">${fl.lbl}${req}</label>${inp}${extra}</div>`;
+  const txtBtn = (fl.id === 'jemputanTxt' || fl.id === 'doaTxt')
+    ? `<button class="btn-add" type="button" onclick="resetTxt('${fl.id}')" style="align-self:flex-start">↺ Guna teks lalai</button><span class="hint">Ayat boleh diubah sesuka hati. Baris baharu dikekalkan dalam kad.</span>` : '';
+  return `<div class="${cls}"><label class="fgl">${fl.lbl}${req}</label>${inp}${extra}${txtBtn}</div>`;
 }
+
+function resetTxt(id) { g('f_' + id).value = id === 'jemputanTxt' ? EV[S.evType].defJ : EV[S.evType].defD; }
 
 function genKod() {
   const al = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1673,17 +1706,20 @@ function buildCard() {
 
   /* Teks jemputan */
   const big = (t, extra) => `<span style="font-family:var(--ft);font-size:${t.length > 40 ? '24px' : t.length > 26 ? '28px' : '34px'};color:var(--txt);display:block;line-height:1.3">${t}${extra || ''}</span>`;
-  let jTxt = '';
+  const nl = t => esc(t).replace(/\n/g, '<br/>');
+  const jIntro = nl(f('jemputanTxt') || ev.defJ);
+  let jName = '';
   if (S.evType === 'kahwin') {
-    jTxt = `Dengan penuh kesyukuran ke hadrat Ilahi, kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke majlis perkahwinan anak kami:<br/><br/>${big((F('namaPP') || '-') + ' &amp; ' + (F('namaPL') || '-'))}<span style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--p)">~ Walimatulurus ~</span>`;
+    jName = big((F('namaPP') || '-') + ' &amp; ' + (F('namaPL') || '-')) + '<span style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--p)">~ Walimatulurus ~</span>';
   } else if (S.evType === 'harijadi') {
-    jTxt = `Dengan gembiranya kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke majlis sambutan hari jadi:<br/><br/>${big(F('namaInd') || '-', f('umur') ? `<br/><span style="font-size:14px;font-family:var(--fb)">Tahun Ke-${F('umur')}</span>` : '')}`;
+    jName = big(F('namaInd') || '-', f('umur') ? `<br/><span style="font-size:14px;font-family:var(--fb)">Tahun Ke-${F('umur')}</span>` : '');
   } else if (S.evType === 'akikah') {
-    jTxt = `Dengan sukacitanya kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> ke Majlis Akikah / Cukur Jambul:<br/><br/>${big(F('namaBayi') || '-')}`;
+    jName = big(F('namaBayi') || '-');
   } else {
     const nm = F('namaInd') || F('tajukMajlis');
-    jTxt = `Kami menjemput <strong>Tuan/Puan/Encik/Cik</strong> hadir ke <em>${esc(ev.desc)}</em>:<br/><br/>${nm ? big(nm) : ''}`;
+    jName = nm ? big(nm) : '';
   }
+  const jTxt = jIntro + (jName ? '<br/><br/>' + jName : '');
 
   /* Hubungi */
   const ci = (ico, role, nm, tel, wa) => {
@@ -1831,6 +1867,7 @@ body{font-family:var(--fb);background:var(--bgd);color:var(--txt);min-height:100
 .ok{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.3)}
 .er{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.3)}
 .nt{display:none;text-align:center;font-size:12px;color:var(--txtl);background:rgba(${rgb},.08);border:1px dashed rgba(${rgb},.3);border-radius:10px;padding:8px 10px;margin-bottom:12px;font-family:var(--fb)}
+.doa{font-family:var(--fh);font-style:italic;font-size:15px;line-height:1.8;color:var(--w);opacity:.88;max-width:380px;margin:0 auto 22px}
 .ft{text-align:center;padding:36px 24px 20px;color:var(--acc);font-family:var(--fh);font-size:13px;line-height:1.9}
 body.locked{overflow:hidden;height:100vh}
 body:not(.open) .cov *{animation-play-state:paused}
@@ -1873,7 +1910,6 @@ ${imgHTML}
 <div class="sc" id="sJ">
   <div class="sl">📜 Jemputan</div>
   <p style="font-family:var(--fh);font-size:16px;line-height:1.85;color:var(--txtl);text-align:center">${jTxt}</p>
-  <p style="font-family:var(--fh);font-size:15px;color:var(--txtl);text-align:center;margin-top:12px">Kehadiran dan doa restu Tuan/Puan amatlah kami hargai.</p>
 </div>
 
 <div class="sc" id="sT">
@@ -1927,6 +1963,7 @@ ${conHTML ? `<div class="sc" id="sC"><div class="sl">📞 Hubungi Kami</div><div
 </div>
 
 <div class="ft">
+  ${f('doaTxt') ? `<p class="doa">${nl(f('doaTxt'))}</p>` : ''}
   <div class="gdv" style="justify-content:center;margin:0 auto 16px"><div class="ln"></div><div class="di"></div><div class="ln r"></div></div>
   <strong>${ftNm}</strong>
   <p style="margin-top:10px;font-size:12px;opacity:.5">Dijana oleh <em>MyKadJemputan</em></p>
